@@ -39,3 +39,19 @@ import VectorSLT
 #print axioms VectorSLT.omega_near
 #print axioms VectorSLT.propLprime
 #print axioms VectorSLT.propLprime_population
+-- Brief 02, checkpoint 1
+-- L3
+#print axioms VectorSLT.bordered_det
+#print axioms VectorSLT.null_direction
+-- L2
+#print axioms VectorSLT.layer_conj
+#print axioms VectorSLT.prefixNet_conj
+#print axioms VectorSLT.shear_normalize
+#print axioms VectorSLT.net_Tfun
+#print axioms VectorSLT.lintegral_linearEquiv
+#print axioms VectorSLT.propLprime_shear
+-- L1
+#print axioms VectorSLT.net_basePos
+#print axioms VectorSLT.Zpos_one_lower
+#print axioms VectorSLT.separation
+#print axioms VectorSLT.separation_tendsto

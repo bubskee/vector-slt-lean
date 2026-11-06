@@ -5,3 +5,6 @@ import VectorSLT.LeadingRow
 import VectorSLT.LeadingModel
 import VectorSLT.ErrorBound
 import VectorSLT.FullNetwork
+import VectorSLT.E0Identity
+import VectorSLT.Normalization
+import VectorSLT.Separation

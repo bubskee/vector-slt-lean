@@ -17,5 +17,8 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `LeadingModel.lean` | C: two rows plus four active coordinates, `≥ c N⁻⁴ log⁴ N` | `leadingModel_lower` |
 | `ErrorBound.lean` | D: sup-norm network error on the lower region | `err_bound` |
 | `FullNetwork.lean` | D: Proposition L′, full network | `propLprime`, `propLprime_population` |
+| `E0Identity.lean` | L3: bordered determinant and null direction | `bordered_det`, `null_direction` |
+| `Normalization.lean` | L2: Theorem H §2, (H2) and (H3); L′ for every two-nonzero-row shear target | `shear_normalize`, `propLprime_shear` |
+| `Separation.lean` | L1: `Z_{N,1}/Z_{N,4} ≥ c log⁴N`, with Theorem K as the named hypothesis `ThmK` | `separation`, `separation_tendsto` |
 
 Every audited declaration depends only on `propext`, `Classical.choice` and `Quot.sound`.
