@@ -55,3 +55,31 @@ import VectorSLT
 #print axioms VectorSLT.Zpos_one_lower
 #print axioms VectorSLT.separation
 #print axioms VectorSLT.separation_tendsto
+-- Brief 02, checkpoint 2
+-- L4 (namespace SLT, Mathlib only)
+#print axioms SLT.Z_ge_V
+#print axioms SLT.laplaceLower_of_volume
+#print axioms SLT.Z_eq_layercake
+#print axioms SLT.gammaLog_lt_top
+#print axioms SLT.Z_le_of_volume
+#print axioms SLT.laplaceUpper_of_volume
+#print axioms SLT.Z_comparable
+#print axioms SLT.LaplaceLower.of_le_mul
+#print axioms SLT.LaplaceUpper.of_mul_le
+#print axioms SLT.HasLaplacePair.of_comparable
+#print axioms SLT.Z_prior_comparable
+#print axioms SLT.HasLaplacePair.of_prior
+#print axioms SLT.Z_prod
+#print axioms SLT.HasLaplacePair.prod
+#print axioms SLT.monomial_hasLaplacePair
+#print axioms VectorSLT.leadingModel_laplaceLower
+#print axioms VectorSLT.row_laplaceLower
+#print axioms VectorSLT.position_one_laplaceLower
+#print axioms VectorSLT.ThmK.hasLaplacePair
+-- L5
+#print axioms VectorSLT.error_isPoly
+#print axioms VectorSLT.evalBox_injective
+#print axioms VectorSLT.l2_le_sup
+#print axioms VectorSLT.popLossA_le_moments
+#print axioms VectorSLT.propLprime_moments
+#print axioms VectorSLT.separation_moments

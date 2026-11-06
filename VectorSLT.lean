@@ -8,3 +8,8 @@ import VectorSLT.FullNetwork
 import VectorSLT.E0Identity
 import VectorSLT.Normalization
 import VectorSLT.Separation
+import VectorSLT.SLT.Laplace
+import VectorSLT.SLT.Monomial
+import VectorSLT.Pairs
+import VectorSLT.PolyModel
+import VectorSLT.GeneralInput
