@@ -22,6 +22,9 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `SLT/Laplace.lean` | L4: Mathlib-only SLT layer: layer cake, volume ⇒ Laplace (both directions), comparability, products, `HasLaplacePair` | `Z_eq_layercake`, `laplaceLower_of_volume`, `laplaceUpper_of_volume`, `HasLaplacePair.prod` |
 | `SLT/Monomial.lean` | L4: the 1-D monomial pair `(1/(2k), 1)` | `monomial_hasLaplacePair` |
 | `SLT/NormalCrossing.lean`, `SLT/NormalCrossingD.lean` | L4: the d-variable normal-crossing lemma, `λ = min (hᵢ+1)/(2kᵢ)` and `m = #argmin` | `normalCrossing`, `normalCrossing_Z` |
+| `SLT/Toolkit.lean` | L6 stage 1: affine lintegral substitution, Laplace from sublevel sets (M4.3), radial split (M5.3) | `lintegral_comp_affine`, `lintegral_exp_neg_le_tsum`, `radial_split` |
+| `SLT/InvSqrt.lean` | L6 stage 1: `∫_I |f|^{-1/2} ≤ 4√|I|` when `|f'| ≥ 1` | `lintegral_isqrt_comp_le` |
+| `LemmaM3.lean` | L6 stage 1: Lemma M3 (uniform integrability) | `lemmaM3` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |

@@ -16,3 +16,6 @@ import VectorSLT.GeneralInput
 import VectorSLT.SLT.NormalCrossing
 import VectorSLT.SLT.NormalCrossingD
 import VectorSLT.Gaussian
+import VectorSLT.SLT.Toolkit
+import VectorSLT.SLT.InvSqrt
+import VectorSLT.LemmaM3

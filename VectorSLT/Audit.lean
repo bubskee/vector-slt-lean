@@ -96,3 +96,14 @@ import VectorSLT
 #print axioms VectorSLT.stdGauss2_moments
 #print axioms VectorSLT.propLprime_gaussian
 #print axioms VectorSLT.separation_gaussian
+-- L6 stage 1
+#print axioms SLT.lintegral_comp_affine
+#print axioms SLT.setLIntegral_comp_affine_le
+#print axioms SLT.lintegral_exp_neg_le_tsum
+#print axioms SLT.lintegral_exp_neg_le_of_sublevel
+#print axioms SLT.lintegral_min_rsq_inv
+#print axioms SLT.radial_split
+#print axioms SLT.lintegral_Icc_isqrt
+#print axioms SLT.expand_of_deriv
+#print axioms SLT.lintegral_isqrt_comp_le
+#print axioms VectorSLT.lemmaM3
