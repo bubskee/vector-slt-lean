@@ -83,3 +83,16 @@ import VectorSLT
 #print axioms VectorSLT.popLossA_le_moments
 #print axioms VectorSLT.propLprime_moments
 #print axioms VectorSLT.separation_moments
+-- Plan (a): d-variable normal crossing (namespace SLT, Mathlib only)
+#print axioms SLT.NCBound.step_lt
+#print axioms SLT.NCBound.step_eq
+#print axioms SLT.NCBound.step_gt
+#print axioms SLT.NCBound.base
+#print axioms SLT.ncZ_succ
+#print axioms SLT.ncZ_bound
+#print axioms SLT.normalCrossing
+#print axioms SLT.normalCrossing_Z
+-- Plan (b): Gaussian inputs
+#print axioms VectorSLT.stdGauss2_moments
+#print axioms VectorSLT.propLprime_gaussian
+#print axioms VectorSLT.separation_gaussian

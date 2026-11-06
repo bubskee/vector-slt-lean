@@ -21,6 +21,8 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `Normalization.lean` | L2: Theorem H §2, (H2) and (H3); L′ for every two-nonzero-row shear target | `shear_normalize`, `propLprime_shear` |
 | `SLT/Laplace.lean` | L4: Mathlib-only SLT layer: layer cake, volume ⇒ Laplace (both directions), comparability, products, `HasLaplacePair` | `Z_eq_layercake`, `laplaceLower_of_volume`, `laplaceUpper_of_volume`, `HasLaplacePair.prod` |
 | `SLT/Monomial.lean` | L4: the 1-D monomial pair `(1/(2k), 1)` | `monomial_hasLaplacePair` |
+| `SLT/NormalCrossing.lean`, `SLT/NormalCrossingD.lean` | L4: the d-variable normal-crossing lemma, `λ = min (hᵢ+1)/(2kᵢ)` and `m = #argmin` | `normalCrossing`, `normalCrossing_Z` |
+| `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |
 | `GeneralInput.lean` | L5: (G↑) for every input law with finite 162nd moments; L′ and the separation without compact support | `l2_le_sup`, `propLprime_moments`, `separation_moments` |

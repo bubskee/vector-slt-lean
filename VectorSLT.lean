@@ -13,3 +13,6 @@ import VectorSLT.SLT.Monomial
 import VectorSLT.Pairs
 import VectorSLT.PolyModel
 import VectorSLT.GeneralInput
+import VectorSLT.SLT.NormalCrossing
+import VectorSLT.SLT.NormalCrossingD
+import VectorSLT.Gaussian
