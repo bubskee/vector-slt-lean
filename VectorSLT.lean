@@ -33,3 +33,5 @@ import VectorSLT.ShearUpper
 import VectorSLT.TwoSidedLaws
 import VectorSLT.LowerPositions
 import VectorSLT.MainTheorem
+import VectorSLT.InverseCriterion
+import VectorSLT.InvertibleSeparation

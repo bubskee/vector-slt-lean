@@ -181,3 +181,16 @@ import VectorSLT
 #print axioms VectorSLT.mainTheorem_shear
 #print axioms VectorSLT.mainTheorem_shear_ratio
 #print axioms VectorSLT.mainTheorem_shear_gaussian
+-- brief 03, O5 (Candidate 1)
+#print axioms VectorSLT.inverse_criterion
+#print axioms VectorSLT.rank_one_criterion
+#print axioms VectorSLT.shear_inverse
+#print axioms VectorSLT.shear_inverse'
+#print axioms VectorSLT.hasDerivAt_Vmap_line
+#print axioms VectorSLT.deriv_criterion
+-- brief 03, O5 (Candidate 2)
+#print axioms VectorSLT.Vmap_surj
+#print axioms VectorSLT.vanish_of_dense
+#print axioms VectorSLT.sep_scale
+#print axioms VectorSLT.sepMap_kernel
+#print axioms VectorSLT.sepMap_injective

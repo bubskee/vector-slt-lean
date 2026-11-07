@@ -39,6 +39,8 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `TwoSidedLaws.lean` | Brief 03, O2: the two-sided bound without compact support; the Gaussian density bound | `ZN1_two_sided_moments`, `ZN1_two_sided_gaussian` |
 | `LowerPositions.lean` | Brief 03, O3: `c N⁻⁴ ≤ Z_{N,j}` at every position (anisotropic raw box); `ThmN`; pairs `(4,1)` at positions 2–4 | `Zpos_lower_N4`, `middle_position_pair`, `position_four_pair` |
 | `MainTheorem.lean` | Brief 03, O4: the `Fin 4 → Matrix` restatement and the paper-facing position table | `rawEquiv`, `net_eq_network`, `mainTheorem_shear` |
+| `InverseCriterion.lean` | Brief 03, O5, Candidate 1: `B V_B ≡ 0 ⇔ F_{-B} ∘ F_B = id`; rank-one shear form; derivative form | `inverse_criterion`, `rank_one_criterion`, `deriv_criterion`, `shear_inverse` |
+| `InvertibleSeparation.lean` | Brief 03, O5, Candidate 2: cubic/quintic separation through an invertible active block (function-level, degree-3/5 homogeneous maps) | `sepMap_kernel`, `sepMap_injective` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |
