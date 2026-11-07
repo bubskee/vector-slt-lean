@@ -4,7 +4,7 @@ L4: the `d`-variable normal-crossing lemma, by induction over `Fin (d+1)`.
 import VectorSLT.SLT.NormalCrossing
 import VectorSLT.SLT.Laplace
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Filter Real
 
@@ -200,4 +200,4 @@ theorem normalCrossing_Z {d : ℕ} (k : Fin (d + 1) → ℕ) (h : Fin (d + 1) �
     rw [← ENNReal.ofReal_mul this, mul_comm]
   rw [e]; exact normalCrossing k h hk hh
 
-end SLT
+end VectorSLT.SLT

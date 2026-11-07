@@ -1,5 +1,5 @@
 /-
-L6 stage 1: integrals of `|f|^{-1/2}` (namespace `SLT`, Mathlib only).
+L6 stage 1: integrals of `|f|^{-1/2}` (namespace `VectorSLT.SLT`, Mathlib only).
 
 `|·|^{-1/2}` is taken in `ℝ≥0∞`, so it is `∞` at zeros. The key 1-D fact (replacing the
 paper's monotone substitution, decomposition M3.2): if `|f'| ≥ 1` on an interval, then `f`
@@ -9,7 +9,7 @@ expands distances, so `|f(x)| ≥ |x - m|` at a minimizer `m` of `|f|`, and
 import VectorSLT.SLT.Toolkit
 import VectorSLT.SLT.NormalCrossing
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Filter Real
 
@@ -169,4 +169,4 @@ theorem lintegral_isqrt_comp_le {f : ℝ → ℝ} {p q : ℝ} (hpq : p ≤ q)
     ∫⁻ x in Icc p q, isqrt (f x) ≤ ENNReal.ofReal (4 * √(q - p)) :=
   lintegral_isqrt_of_expand hpq hc fun _ hx _ hy => expand_of_deriv hc hd hx hy
 
-end SLT
+end VectorSLT.SLT

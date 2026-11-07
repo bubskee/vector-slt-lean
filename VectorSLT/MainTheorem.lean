@@ -61,7 +61,7 @@ theorem popLossA_eq_network (μ : Measure (Fin 2 → ℝ)) (A : Matrix (Fin 2) (
 
 theorem hasLaplacePair_45 {Zf : ℝ → ENNReal} {c C N₀ : ℝ} (hc : 0 < c)
     (h : ∀ N, N₀ ≤ N → ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤ Zf N ∧
-      Zf N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)) : SLT.HasLaplacePair Zf 4 5 := by
+      Zf N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)) : VectorSLT.SLT.HasLaplacePair Zf 4 5 := by
   refine ⟨⟨c, hc, max N₀ 1, fun N hN => ?_⟩, ⟨C, max N₀ 1, fun N hN => ?_⟩⟩ <;>
   · have hN0 : 0 < N := lt_of_lt_of_le one_pos ((le_max_right _ _).trans hN)
     rw [show (-4 : ℝ) = -((4 : ℕ) : ℝ) by norm_num, rpow_neg_natCast_eq hN0]
@@ -93,8 +93,8 @@ theorem mainTheorem_shear {A : Matrix (Fin 2) (Fin 2) ℝ} (hA : ShearTarget A) 
       0 ≤ π₁ → (∀ θ, φ θ ≤ ENNReal.ofReal π₁) →
       (∀ θ, χ θ ≤ 1) → (∀ θ, r < ‖θ‖ → χ θ = 0) →
       ThmK μ A φ χ → ThmN μ A φ χ →
-      SLT.HasLaplacePair (Zpos μ A φ χ 0) 4 5 ∧ SLT.HasLaplacePair (Zpos μ A φ χ 1) 4 1 ∧
-        SLT.HasLaplacePair (Zpos μ A φ χ 2) 4 1 ∧ SLT.HasLaplacePair (Zpos μ A φ χ 3) 4 1 := by
+      VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ 0) 4 5 ∧ VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ 1) 4 1 ∧
+        VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ 2) 4 1 ∧ VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ 3) 4 1 := by
   obtain ⟨r, hr, h1⟩ := ZN1_two_sided_moments hA
   refine ⟨r, hr, ?_⟩
   intro μ _ hmom lo hi hlh μ₀ hμ₀ hμ φ χ φ₀ χ₀ π₁ hφ₀ hχ₀ hφl hχl hπ₁ hφ hχ hχs hK hN
@@ -171,10 +171,10 @@ theorem mainTheorem_shear_gaussian {A : Matrix (Fin 2) (Fin 2) ℝ} (hA : ShearT
       0 ≤ π₁ → (∀ θ, φ θ ≤ ENNReal.ofReal π₁) →
       (∀ θ, χ θ ≤ 1) → (∀ θ, r < ‖θ‖ → χ θ = 0) →
       ThmK stdGauss2 A φ χ → ThmN stdGauss2 A φ χ →
-      SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 0) 4 5 ∧
-        SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 1) 4 1 ∧
-        SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 2) 4 1 ∧
-        SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 3) 4 1 := by
+      VectorSLT.SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 0) 4 5 ∧
+        VectorSLT.SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 1) 4 1 ∧
+        VectorSLT.SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 2) 4 1 ∧
+        VectorSLT.SLT.HasLaplacePair (Zpos stdGauss2 A φ χ 3) 4 1 := by
   obtain ⟨r, hr, h⟩ := mainTheorem_shear hA
   exact ⟨r, hr, fun φ χ φ₀ χ₀ π₁ => h stdGauss2 (fun i => stdGauss2_moments _ i)
     (lo := fun _ => -1) (hi := fun _ => 1) (fun _ => by norm_num) (pow_pos cG_pos 2)

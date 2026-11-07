@@ -9,7 +9,7 @@ import VectorSLT.SLT.InvSqrt
 
 namespace VectorSLT
 
-open MeasureTheory Set Filter SLT
+open MeasureTheory Set Filter VectorSLT.SLT
 
 /-- The constant of Lemma M3. -/
 noncomputable def M3const : ℝ := 16 * √5 + 64 * (7 / 10 : ℝ) ^ (-(1 / 2 : ℝ)) * √(3 / 10)

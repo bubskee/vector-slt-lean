@@ -13,7 +13,7 @@ import VectorSLT.Separation
 
 namespace VectorSLT
 
-open MeasureTheory Set SLT
+open MeasureTheory Set VectorSLT.SLT
 
 /-! ### Explicit coordinates -/
 

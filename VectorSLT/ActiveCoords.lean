@@ -10,7 +10,7 @@ import VectorSLT.LemmaM4
 
 namespace VectorSLT
 
-open MeasureTheory Set SLT
+open MeasureTheory Set VectorSLT.SLT
 
 /-- The active `α`-interval `[1 - ε₁, 1 + ε₁]`, `ε₁ = 1/100`. -/
 def Iα : Set ℝ := Icc (99 / 100) (101 / 100)

@@ -1,5 +1,5 @@
 /-
-L6 stage 1: general one-dimensional tools (namespace `SLT`, Mathlib only).
+L6 stage 1: general one-dimensional tools (namespace `VectorSLT.SLT`, Mathlib only).
 
 * `lintegral_comp_affine`: `∫ f(a x + b) dx = |a|⁻¹ ∫ f` (mathlib has this only for Bochner
   integrals);
@@ -10,7 +10,7 @@ L6 stage 1: general one-dimensional tools (namespace `SLT`, Mathlib only).
 -/
 import Mathlib
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Filter Real
 
@@ -206,4 +206,4 @@ theorem radial_split {ε : ℝ} (hε : 0 < ε) :
         nlinarith
     _ = _ := by ring
 
-end SLT
+end VectorSLT.SLT

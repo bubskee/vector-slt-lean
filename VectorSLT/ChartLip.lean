@@ -10,7 +10,7 @@ import VectorSLT.LemmaM5
 
 namespace VectorSLT
 
-open Set SLT
+open Set VectorSLT.SLT
 
 /-- `f` is bounded by `B` and `L`-Lipschitz on `S`. -/
 def LB (f : ℝ → ℝ) (S : Set ℝ) (B L : ℝ) : Prop :=

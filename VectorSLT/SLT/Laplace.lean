@@ -1,5 +1,5 @@
 /-
-L4: learning-coefficient basics, independent of ResNets (namespace `SLT`, Mathlib only).
+L4: learning-coefficient basics, independent of ResNets (namespace `VectorSLT.SLT`, Mathlib only).
 
 For a measure `ν` (prior × cutoff, as a measure) and a loss `K`,
   `Z(N) = ∫ e^{-N K} dν`, `V(t) = ν{K ≤ t}`.
@@ -7,7 +7,7 @@ For a measure `ν` (prior × cutoff, as a measure) and a loss `K`,
 -/
 import Mathlib
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Filter Real
 
@@ -445,4 +445,4 @@ theorem laplaceUpper_of_volume {ν : Measure α} [SFinite ν] {K : α → ℝ} (
       ≤ C * N ^ (-lam) * (2 ^ (m - 1) * Real.log N ^ (m - 1)) * I.toReal := by gcongr
     _ = _ := by ring
 
-end SLT
+end VectorSLT.SLT

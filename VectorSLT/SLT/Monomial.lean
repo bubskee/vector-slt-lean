@@ -5,7 +5,7 @@ L4, an end-to-end use of the volume ⇒ Laplace API: the one-variable monomial
 -/
 import VectorSLT.SLT.Laplace
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Real
 
@@ -51,4 +51,4 @@ theorem monomial_hasLaplacePair {k : ℕ} (hk : 1 ≤ k) :
     rw [volume_monomial_sublevel hk ht, Nat.sub_self, pow_zero, mul_one, one_mul]
     exact ENNReal.ofReal_le_ofReal (min_le_right _ _)
 
-end SLT
+end VectorSLT.SLT

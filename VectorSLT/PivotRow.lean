@@ -11,7 +11,7 @@ import VectorSLT.ChartLip
 
 namespace VectorSLT
 
-open MeasureTheory Set SLT
+open MeasureTheory Set VectorSLT.SLT
 
 /-- Amplitude vectors, pivot first: `(a_p, (a_i, a_j))`. -/
 abbrev T3 := ℝ × ℝ × ℝ

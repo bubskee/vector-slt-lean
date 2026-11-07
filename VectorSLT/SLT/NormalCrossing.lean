@@ -10,7 +10,7 @@ Proof: Fubini peels off one coordinate at a time. The 1-D step
 -/
 import Mathlib
 
-namespace SLT
+namespace VectorSLT.SLT
 
 open MeasureTheory Set Filter Real
 
@@ -675,4 +675,4 @@ theorem NCBound.base {h : ℝ} {k : ℕ} (hh : -1 < h) (hk : 1 ≤ k) :
     (exp_neg_upper hpos) hh hk (by linarith)
   exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (by linarith))
 
-end SLT
+end VectorSLT.SLT

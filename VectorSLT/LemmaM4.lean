@@ -13,7 +13,7 @@ import VectorSLT.SLT.InvSqrt
 
 namespace VectorSLT
 
-open MeasureTheory Set Filter Matrix SLT
+open MeasureTheory Set Filter Matrix VectorSLT.SLT
 
 /-! ### The slice algebra (decomposition A2, A3) -/
 

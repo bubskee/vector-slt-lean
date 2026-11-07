@@ -346,7 +346,7 @@ def ThmN (μ : Measure (Fin 2 → ℝ)) (A : Matrix (Fin 2) (Fin 2) ℝ) (φ χ 
 /-- Turn `c N⁻⁴ ≤ Z ≤ C N⁻⁴` into `HasLaplacePair Z 4 1`. -/
 theorem hasLaplacePair_41 {Zf : ℝ → ENNReal} {c C N₁ N₂ : ℝ} (hc : 0 < c)
     (hlo : ∀ N, N₁ ≤ N → ENNReal.ofReal (c * N⁻¹ ^ 4) ≤ Zf N)
-    (hhi : ∀ N, N₂ ≤ N → Zf N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)) : SLT.HasLaplacePair Zf 4 1 := by
+    (hhi : ∀ N, N₂ ≤ N → Zf N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)) : VectorSLT.SLT.HasLaplacePair Zf 4 1 := by
   refine ⟨⟨c, hc, max N₁ 1, fun N hN => ?_⟩, ⟨C, max N₂ 1, fun N hN => ?_⟩⟩ <;>
   · have hN0 : 0 < N := lt_of_lt_of_le one_pos ((le_max_right _ _).trans hN)
     simp only [Nat.sub_self, pow_zero, mul_one]
@@ -360,7 +360,7 @@ theorem position_four_pair {μ : Measure (Fin 2 → ℝ)} [IsFiniteMeasure μ]
     (hφ₀ : 0 < φ₀) (hχ₀ : 0 < χ₀)
     (hφ : ∀ᶠ θ in 𝓝 (basePos A 3), ENNReal.ofReal φ₀ ≤ φ θ)
     (hχ : ∀ᶠ θ in 𝓝 0, ENNReal.ofReal χ₀ ≤ χ θ) (hK : ThmKUpper μ A φ χ) :
-    SLT.HasLaplacePair (Zpos μ A φ χ 3) 4 1 := by
+    VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ 3) 4 1 := by
   obtain ⟨c, hc, N₁, hlo⟩ := Zpos_lower_N4 μ hmom A 3 φ χ hφ₀ hχ₀ hφ hχ
   obtain ⟨C, N₂, hhi⟩ := hK
   exact hasLaplacePair_41 hc hlo hhi
@@ -372,7 +372,7 @@ theorem middle_position_pair {μ : Measure (Fin 2 → ℝ)} [IsFiniteMeasure μ]
     (hφ₀ : 0 < φ₀) (hχ₀ : 0 < χ₀) (p : Fin 4) (hp : p = 1 ∨ p = 2)
     (hφ : ∀ᶠ θ in 𝓝 (basePos A p), ENNReal.ofReal φ₀ ≤ φ θ)
     (hχ : ∀ᶠ θ in 𝓝 0, ENNReal.ofReal χ₀ ≤ χ θ) (hN : ThmN μ A φ χ) :
-    SLT.HasLaplacePair (Zpos μ A φ χ p) 4 1 := by
+    VectorSLT.SLT.HasLaplacePair (Zpos μ A φ χ p) 4 1 := by
   obtain ⟨c, hc, N₁, hlo⟩ := Zpos_lower_N4 μ hmom A p φ χ hφ₀ hχ₀ hφ hχ
   obtain ⟨C, N₂, hhi⟩ := hN p hp
   exact hasLaplacePair_41 hc hlo hhi

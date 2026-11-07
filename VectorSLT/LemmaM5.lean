@@ -11,7 +11,7 @@ import VectorSLT.LemmaM4
 
 namespace VectorSLT
 
-open MeasureTheory Set Filter SLT
+open MeasureTheory Set Filter VectorSLT.SLT
 
 /-! ### Helpers -/
 

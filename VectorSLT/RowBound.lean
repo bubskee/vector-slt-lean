@@ -11,7 +11,7 @@ import VectorSLT.PivotRow
 
 namespace VectorSLT
 
-open MeasureTheory Set SLT
+open MeasureTheory Set VectorSLT.SLT
 
 /-! ### Coordinate permutations -/
 
