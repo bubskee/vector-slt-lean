@@ -211,3 +211,21 @@ import VectorSLT
 #print axioms VectorSLT.errP_c0
 #print axioms VectorSLT.eval_errθη
 #print axioms VectorSLT.normalize_Aeta
+-- brief 04, X4
+#print axioms VectorSLT.E1η_bound
+#print axioms VectorSLT.shiftη_bound
+#print axioms VectorSLT.err_bound_eta
+#print axioms VectorSLT.omega_err_eta
+#print axioms VectorSLT.omega_near_eta
+#print axioms VectorSLT.volume_lowerRegionG
+#print axioms VectorSLT.rowGood_G
+#print axioms VectorSLT.rowGood_cube
+#print axioms VectorSLT.lower_of_region
+#print axioms VectorSLT.log_hiE_ge
+#print axioms VectorSLT.X4_lower
+#print axioms VectorSLT.X4_lower_segment
+#print axioms VectorSLT.X4_at_zero
+#print axioms VectorSLT.popLossA_le_moments_unif
+#print axioms VectorSLT.X4_lower_population
+#print axioms VectorSLT.X4_lower_gaussian
+#print axioms VectorSLT.X4_lower_compact

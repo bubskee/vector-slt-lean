@@ -43,6 +43,9 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `InvertibleSeparation.lean` | Brief 03, O5, Candidate 2: cubic/quintic separation through an invertible active block (function-level, degree-3/5 homogeneous maps) | `sepMap_kernel`, `sepMap_injective` |
 | `SepNorm.lean` | Brief 03, F1: `H₃²`, `H₅²` as normed spaces (box sup norm); `Φ_A` on `Mat₂ ⊕ H₃² ⊕ H₅² ⊕ H₃² ⊕ H₅²` has a positive smallest singular value; absorption step of (12) | `sepLin_injective`, `sepLin_lower`, `sep_absorb` |
 | `EtaTarget.lean` | Brief 04, X1: the near-shear family `A_η`; Lemma X2 (cubic coefficients, every degree ≠ 3 coefficient and `Z_k` unchanged); Proposition X1 (`β₀ > 0` branch) | `Aeta`, `errPη_c2`, `errPη_coeff_ne3`, `normalize_Aeta` |
+| `EtaError.lean` | Brief 04, X4: Lemma L′3 for `A_η` (bounds on `αν² − η²`, `ν³ − η³`; the difference argument for `Δ₀`) | `E1η_bound`, `shiftη_bound`, `err_bound_eta` |
+| `EtaLower.lean` | Brief 04, X4: **`Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, `c`, `N₀` independent of `|η| ≤ 1/10`** | `X4_lower`, `X4_lower_segment`, `Leta` |
+| `EtaPopulation.lean` | Brief 04, X4 for the population loss: moment laws, Gaussian, compact support | `X4_lower_population`, `X4_lower_gaussian`, `X4_lower_compact` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |

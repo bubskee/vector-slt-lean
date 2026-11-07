@@ -37,3 +37,6 @@ import VectorSLT.InverseCriterion
 import VectorSLT.InvertibleSeparation
 import VectorSLT.SepNorm
 import VectorSLT.EtaTarget
+import VectorSLT.EtaError
+import VectorSLT.EtaLower
+import VectorSLT.EtaPopulation
