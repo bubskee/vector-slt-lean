@@ -155,3 +155,9 @@ import VectorSLT
 #print axioms VectorSLT.toM2_mem_UM
 #print axioms VectorSLT.theoremM_raw
 #print axioms VectorSLT.ZN1_two_sided
+-- brief 03, O1
+#print axioms VectorSLT.integrable_lossInt
+#print axioms VectorSLT.density_map
+#print axioms VectorSLT.loss_compare
+#print axioms VectorSLT.theoremM_shear
+#print axioms VectorSLT.ZN1_two_sided_shear
