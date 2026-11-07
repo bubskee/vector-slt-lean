@@ -41,6 +41,7 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `MainTheorem.lean` | Brief 03, O4: the `Fin 4 → Matrix` restatement and the paper-facing position table | `rawEquiv`, `net_eq_network`, `mainTheorem_shear` |
 | `InverseCriterion.lean` | Brief 03, O5, Candidate 1: `B V_B ≡ 0 ⇔ F_{-B} ∘ F_B = id`; rank-one shear form; derivative form | `inverse_criterion`, `rank_one_criterion`, `deriv_criterion`, `shear_inverse` |
 | `InvertibleSeparation.lean` | Brief 03, O5, Candidate 2: cubic/quintic separation through an invertible active block (function-level, degree-3/5 homogeneous maps) | `sepMap_kernel`, `sepMap_injective` |
+| `SepNorm.lean` | Brief 03, F1: `H₃²`, `H₅²` as normed spaces (box sup norm); `Φ_A` on `Mat₂ ⊕ H₃² ⊕ H₅² ⊕ H₃² ⊕ H₅²` has a positive smallest singular value; absorption step of (12) | `sepLin_injective`, `sepLin_lower`, `sep_absorb` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |

@@ -194,3 +194,8 @@ import VectorSLT
 #print axioms VectorSLT.sep_scale
 #print axioms VectorSLT.sepMap_kernel
 #print axioms VectorSLT.sepMap_injective
+-- brief 03, filler F1
+#print axioms VectorSLT.eval_smul_hom
+#print axioms VectorSLT.sepLin_injective
+#print axioms VectorSLT.sepLin_lower
+#print axioms VectorSLT.sep_absorb
