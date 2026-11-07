@@ -30,3 +30,4 @@ import VectorSLT.RowBound
 import VectorSLT.ActiveCoords
 import VectorSLT.TheoremM
 import VectorSLT.ShearUpper
+import VectorSLT.TwoSidedLaws

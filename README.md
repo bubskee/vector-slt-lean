@@ -36,6 +36,7 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `ActiveCoords.lean` | L6 stage 3, F1–F3: ν Gaussian, α ↦ α³, translation to c₃ | `active_bound`, `cube_subst` |
 | `TheoremM.lean` | L6 stage 3, F5/F6 + assembly: **Theorem M** `Z_{N,1} ≤ C N⁻⁴ (log N)⁴`, and `Z_{N,1} ≍ N⁻⁴ (log N)⁴` | `theoremM`, `theoremM_raw`, `ZN1_two_sided` |
 | `ShearUpper.lean` | Brief 03, O1: Theorem M and `Z_{N,1} ≍ N⁻⁴ log⁴ N` at every two-nonzero-row shear target | `theoremM_shear`, `ZN1_two_sided_shear` |
+| `TwoSidedLaws.lean` | Brief 03, O2: the two-sided bound without compact support; the Gaussian density bound | `ZN1_two_sided_moments`, `ZN1_two_sided_gaussian` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |

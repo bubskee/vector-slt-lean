@@ -161,3 +161,8 @@ import VectorSLT
 #print axioms VectorSLT.loss_compare
 #print axioms VectorSLT.theoremM_shear
 #print axioms VectorSLT.ZN1_two_sided_shear
+-- brief 03, O2
+#print axioms VectorSLT.ZN1_two_sided_moments
+#print axioms VectorSLT.gauss1_lower
+#print axioms VectorSLT.stdGauss2_density
+#print axioms VectorSLT.ZN1_two_sided_gaussian
