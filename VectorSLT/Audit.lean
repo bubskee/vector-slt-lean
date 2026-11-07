@@ -173,3 +173,11 @@ import VectorSLT
 #print axioms VectorSLT.Zpos_lower_N4
 #print axioms VectorSLT.position_four_pair
 #print axioms VectorSLT.middle_position_pair
+-- brief 03, O4
+#print axioms VectorSLT.rawEquiv
+#print axioms VectorSLT.net_eq_network
+#print axioms VectorSLT.rawW_basePos
+#print axioms VectorSLT.popLossA_eq_network
+#print axioms VectorSLT.mainTheorem_shear
+#print axioms VectorSLT.mainTheorem_shear_ratio
+#print axioms VectorSLT.mainTheorem_shear_gaussian

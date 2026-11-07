@@ -38,10 +38,29 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `ShearUpper.lean` | Brief 03, O1: Theorem M and `Z_{N,1} ≍ N⁻⁴ log⁴ N` at every two-nonzero-row shear target | `theoremM_shear`, `ZN1_two_sided_shear` |
 | `TwoSidedLaws.lean` | Brief 03, O2: the two-sided bound without compact support; the Gaussian density bound | `ZN1_two_sided_moments`, `ZN1_two_sided_gaussian` |
 | `LowerPositions.lean` | Brief 03, O3: `c N⁻⁴ ≤ Z_{N,j}` at every position (anisotropic raw box); `ThmN`; pairs `(4,1)` at positions 2–4 | `Zpos_lower_N4`, `middle_position_pair`, `position_four_pair` |
+| `MainTheorem.lean` | Brief 03, O4: the `Fin 4 → Matrix` restatement and the paper-facing position table | `rawEquiv`, `net_eq_network`, `mainTheorem_shear` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |
 | `GeneralInput.lean` | L5: (G↑) for every input law with finite 162nd moments; L′ and the separation without compact support | `l2_le_sup`, `propLprime_moments`, `separation_moments` |
 | `Separation.lean` | L1: `Z_{N,1}/Z_{N,4} ≥ c log⁴N`, with Theorem K as the named hypothesis `ThmK` | `separation`, `separation_tendsto` |
+
+## Coverage of the depth-four shear table
+
+Each row below is either **Lean-certified** or **conditional on a named hypothesis**. The setting for every row:
+- target: every rank-one shear `A = a vᵀ` with both rows nonzero;
+- input law: finite 162nd moments and a density bounded below on some box (standard Gaussian included);
+- prior: bounded, and bounded below near the base point;
+- cutoff: at most 1, bounded below near 0, and supported in a ball of radius `r(A)`.
+
+| Position | Pair | Lower half | Upper half | Lean |
+|---|---|---|---|---|
+| 1 | (4,5) | Lean-certified (Proposition L′) | Lean-certified (Theorem M) | `ZN1_two_sided_moments` |
+| 2 | (4,1) | Lean-certified | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
+| 3 | (4,1) | Lean-certified | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
+| 4 | (4,1) | Lean-certified | conditional on `ThmKUpper` (Theorem K) | `position_four_pair` |
+| all | table | — | conditional on `ThmK`, `ThmN` | `mainTheorem_shear`, `mainTheorem_shear_ratio` |
+
+`ThmK` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and neither is proved here.
 
 Every audited declaration depends only on `propext`, `Classical.choice` and `Quot.sound`.
