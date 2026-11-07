@@ -36,3 +36,4 @@ import VectorSLT.MainTheorem
 import VectorSLT.InverseCriterion
 import VectorSLT.InvertibleSeparation
 import VectorSLT.SepNorm
+import VectorSLT.EtaTarget

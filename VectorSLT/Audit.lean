@@ -199,3 +199,15 @@ import VectorSLT
 #print axioms VectorSLT.sepLin_injective
 #print axioms VectorSLT.sepLin_lower
 #print axioms VectorSLT.sep_absorb
+-- brief 04, X1
+#print axioms VectorSLT.layer_Aeta
+#print axioms VectorSLT.toM2_basePos_Aeta
+#print axioms VectorSLT.errPη_coeff_ne3
+#print axioms VectorSLT.errPη_s5
+#print axioms VectorSLT.errPη_c3
+#print axioms VectorSLT.errPη_c2
+#print axioms VectorSLT.errPη_c1
+#print axioms VectorSLT.errPη_c0
+#print axioms VectorSLT.errP_c0
+#print axioms VectorSLT.eval_errθη
+#print axioms VectorSLT.normalize_Aeta
