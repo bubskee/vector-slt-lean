@@ -166,3 +166,10 @@ import VectorSLT
 #print axioms VectorSLT.gauss1_lower
 #print axioms VectorSLT.stdGauss2_density
 #print axioms VectorSLT.ZN1_two_sided_gaussian
+-- brief 03, O3
+#print axioms VectorSLT.traj
+#print axioms VectorSLT.volume_pBox
+#print axioms VectorSLT.err_box
+#print axioms VectorSLT.Zpos_lower_N4
+#print axioms VectorSLT.position_four_pair
+#print axioms VectorSLT.middle_position_pair
