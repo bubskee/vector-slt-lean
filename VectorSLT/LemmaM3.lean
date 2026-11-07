@@ -28,16 +28,20 @@ theorem abs_ge_of_outer7 {x : ℝ} (hx : x ∈ outer7) : 7 / 10 ≤ |x| := by
   · rw [abs_of_pos (by linarith [h.1])]; exact h.1
   · rw [abs_of_neg (by linarith [h.2])]; linarith [h.2]
 
-/-- `∫_{outer7} |f|^{-1/2} ≤ 8 √0.3` when `|f'| ≥ 1` on `0.7 < |x| < 1`. -/
-theorem lintegral_outer7_isqrt {f : ℝ → ℝ} (hc : Continuous f)
-    (hd : ∀ x, 7 / 10 < |x| → |x| < 1 → ∃ d, HasDerivAt f d x ∧ 1 ≤ |d|) :
+/-- Expansion `|f y - f x| ≥ |y - x|` on each of the two outer intervals. -/
+def OuterExp (f : ℝ → ℝ) : Prop :=
+  (∀ x ∈ Icc (7 / 10 : ℝ) 1, ∀ y ∈ Icc (7 / 10 : ℝ) 1, |y - x| ≤ |f y - f x|) ∧
+  (∀ x ∈ Icc (-1 : ℝ) (-(7 / 10)), ∀ y ∈ Icc (-1 : ℝ) (-(7 / 10)), |y - x| ≤ |f y - f x|)
+
+/-- `∫_{outer7} |f|^{-1/2} ≤ 8 √0.3` for `f` continuous on `[-1,1]` and expanding on the
+outer intervals. -/
+theorem lintegral_outer7_isqrt' {f : ℝ → ℝ} (hc : ContinuousOn f (Icc (-1) 1))
+    (hx : OuterExp f) :
     ∫⁻ x in outer7, isqrt (f x) ≤ ENNReal.ofReal (8 * √(3 / 10)) := by
-  have h1 := lintegral_isqrt_comp_le (f := f) (p := 7 / 10) (q := 1) (by norm_num) hc.continuousOn
-    fun x hx => hd x (by rw [abs_of_pos (by linarith [hx.1])]; exact hx.1)
-      (by rw [abs_of_pos (by linarith [hx.1])]; exact hx.2)
-  have h2 := lintegral_isqrt_comp_le (f := f) (p := -1) (q := -(7 / 10)) (by norm_num)
-    hc.continuousOn fun x hx => hd x (by rw [abs_of_neg (by linarith [hx.2])]; linarith [hx.2])
-      (by rw [abs_of_neg (by linarith [hx.2])]; linarith [hx.1])
+  have h1 := lintegral_isqrt_of_expand (f := f) (p := 7 / 10) (q := 1) (by norm_num)
+    (hc.mono (Icc_subset_Icc (by norm_num) le_rfl)) hx.1
+  have h2 := lintegral_isqrt_of_expand (f := f) (p := -1) (q := -(7 / 10)) (by norm_num)
+    (hc.mono (Icc_subset_Icc le_rfl (by norm_num))) hx.2
   norm_num at h1 h2
   calc ∫⁻ x in outer7, isqrt (f x)
       ≤ (∫⁻ x in Icc (7 / 10) 1, isqrt (f x)) + ∫⁻ x in Icc (-1) (-(7 / 10)), isqrt (f x) :=
@@ -48,20 +52,34 @@ theorem lintegral_outer7_isqrt {f : ℝ → ℝ} (hc : Continuous f)
         · convert h2 using 3; norm_num
     _ = _ := by rw [← ENNReal.ofReal_add (by positivity) (by positivity)]; ring_nf
 
-/-- **Lemma M3.** -/
-theorem lemmaM3 (E : ℝ × ℝ → ℝ) (hE : Continuous E)
+theorem outerExp_of_deriv {f : ℝ → ℝ} (hc : ContinuousOn f (Icc (-1) 1))
+    (hd : ∀ x, 7 / 10 < |x| → |x| < 1 → ∃ d, HasDerivAt f d x ∧ 1 ≤ |d|) : OuterExp f := by
+  constructor
+  · intro x hx y hy
+    exact expand_of_deriv (hc.mono (Icc_subset_Icc (by norm_num) le_rfl))
+      (fun z hz => hd z (by rw [abs_of_pos (by linarith [hz.1])]; exact hz.1)
+        (by rw [abs_of_pos (by linarith [hz.1])]; exact hz.2)) hx hy
+  · intro x hx y hy
+    exact expand_of_deriv (hc.mono (Icc_subset_Icc le_rfl (by norm_num)))
+      (fun z hz => hd z (by rw [abs_of_neg (by linarith [hz.2])]; linarith [hz.2])
+        (by rw [abs_of_neg (by linarith [hz.2])]; linarith [hz.1])) hx hy
+
+/-- **Lemma M3, core form.** The hypotheses are exactly what the proof consumes:
+measurability, continuity on the relevant slices, closeness to `E₀`, and expansion
+`|E(y) - E(x)| ≥ |y - x|` along the named variable on the outer intervals. -/
+theorem lemmaM3_core (E : ℝ × ℝ → ℝ) (hEm : Measurable E)
+    (hca : ∀ q, |q| ≤ 1 → ContinuousOn (fun a => E (q, a)) (Icc (-1) 1))
+    (hcq : ∀ a, |a| < 7 / 10 → ContinuousOn (fun q => E (q, a)) (Icc (-1) 1))
     (hclose : ∀ q a : ℝ, |q| ≤ 1 → |a| ≤ 1 → |E (q, a) - (1 + q ^ 3 + a ^ 3)| ≤ 1 / 10)
-    (hda : ∀ q, |q| ≤ 1 → ∀ a, 7 / 10 < |a| → |a| < 1 →
-      ∃ d, HasDerivAt (fun a' => E (q, a')) d a ∧ 1 ≤ |d|)
-    (hdq : ∀ a, |a| < 7 / 10 → ∀ q, 7 / 10 < |q| → |q| < 1 →
-      ∃ d, HasDerivAt (fun q' => E (q', a)) d q ∧ 1 ≤ |d|) :
+    (hxa : ∀ q, |q| ≤ 1 → OuterExp fun a => E (q, a))
+    (hxq : ∀ a, |a| < 7 / 10 → OuterExp fun q => E (q, a)) :
     ∫⁻ p in Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1, isqrt p.1 * isqrt p.2 * isqrt (E p) ≤
       ENNReal.ofReal M3const := by
   set H : ℝ × ℝ → ENNReal := fun p => isqrt p.1 * isqrt p.2 * isqrt (E p)
   have hHm : Measurable H := by
     have := measurable_isqrt
     exact ((this.comp measurable_fst).mul (this.comp measurable_snd)).mul
-      (this.comp hE.measurable)
+      (this.comp hEm)
   set c7 := (7 / 10 : ℝ) ^ (-(1 / 2 : ℝ))
   have hc7 : ∀ x : ℝ, 7 / 10 ≤ |x| → isqrt x ≤ ENNReal.ofReal c7 :=
     fun x hx => isqrt_le_of_le (by norm_num) hx
@@ -139,11 +157,11 @@ theorem lemmaM3 (E : ℝ × ℝ → ℝ) (hE : Continuous E)
                   gcongr; exact hc7 a (abs_ge_of_outer7 ha)
             _ = isqrt q * ENNReal.ofReal c7 * ∫⁻ a in outer7, isqrt (E (q, a)) :=
                 lintegral_const_mul _ (measurable_isqrt.comp
-                  (hE.comp (Continuous.prodMk_right q)).measurable)
+                  (hEm.comp (measurable_const.prodMk measurable_id)))
             _ ≤ _ := by
                 rw [mul_assoc, ENNReal.ofReal_mul (by positivity)]
                 gcongr
-                exact lintegral_outer7_isqrt (hE.comp (Continuous.prodMk_right q)) (hda q hq1)
+                exact lintegral_outer7_isqrt' (hca q hq1) (hxa q hq1)
       _ = (∫⁻ q in Icc (-1 : ℝ) 1, isqrt q) * ENNReal.ofReal (c7 * (8 * √(3 / 10))) :=
           lintegral_mul_const' _ _ ENNReal.ofReal_ne_top
       _ ≤ ENNReal.ofReal 4 * ENNReal.ofReal (c7 * (8 * √(3 / 10))) := by
@@ -164,11 +182,11 @@ theorem lemmaM3 (E : ℝ × ℝ → ℝ) (hE : Continuous E)
                   gcongr; exact hc7 q (abs_ge_of_outer7 hq)
             _ = isqrt a * ENNReal.ofReal c7 * ∫⁻ q in outer7, isqrt (E (q, a)) :=
                 lintegral_const_mul _ (measurable_isqrt.comp
-                  (hE.comp (Continuous.prodMk_left a)).measurable)
+                  (hEm.comp (measurable_id.prodMk measurable_const)))
             _ ≤ _ := by
                 rw [mul_assoc, ENNReal.ofReal_mul (by positivity)]
                 gcongr
-                exact lintegral_outer7_isqrt (hE.comp (Continuous.prodMk_left a)) (hdq a ha7)
+                exact lintegral_outer7_isqrt' (hcq a ha7) (hxq a ha7)
       _ = (∫⁻ a in I1, isqrt a) * ENNReal.ofReal (c7 * (8 * √(3 / 10))) :=
           lintegral_mul_const' _ _ ENNReal.ofReal_ne_top
       _ ≤ ENNReal.ofReal 4 * ENNReal.ofReal (c7 * (8 * √(3 / 10))) := by
@@ -187,5 +205,19 @@ theorem lemmaM3 (E : ℝ × ℝ → ℝ) (hE : Continuous E)
         rw [← ENNReal.ofReal_add (by positivity) (by positivity),
           ← ENNReal.ofReal_add (by positivity) (by positivity)]
         unfold M3const; congr 1; ring
+
+/-- **Lemma M3** (derivative form, as in stage 1). -/
+theorem lemmaM3 (E : ℝ × ℝ → ℝ) (hE : Continuous E)
+    (hclose : ∀ q a : ℝ, |q| ≤ 1 → |a| ≤ 1 → |E (q, a) - (1 + q ^ 3 + a ^ 3)| ≤ 1 / 10)
+    (hda : ∀ q, |q| ≤ 1 → ∀ a, 7 / 10 < |a| → |a| < 1 →
+      ∃ d, HasDerivAt (fun a' => E (q, a')) d a ∧ 1 ≤ |d|)
+    (hdq : ∀ a, |a| < 7 / 10 → ∀ q, 7 / 10 < |q| → |q| < 1 →
+      ∃ d, HasDerivAt (fun q' => E (q', a)) d q ∧ 1 ≤ |d|) :
+    ∫⁻ p in Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1, isqrt p.1 * isqrt p.2 * isqrt (E p) ≤
+      ENNReal.ofReal M3const :=
+  lemmaM3_core E hE.measurable (fun q _ => (hE.comp (Continuous.prodMk_right q)).continuousOn)
+    (fun a _ => (hE.comp (Continuous.prodMk_left a)).continuousOn) hclose
+    (fun q hq => outerExp_of_deriv (hE.comp (Continuous.prodMk_right q)).continuousOn (hda q hq))
+    (fun a ha => outerExp_of_deriv (hE.comp (Continuous.prodMk_left a)).continuousOn (hdq a ha))
 
 end VectorSLT

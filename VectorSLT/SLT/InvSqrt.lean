@@ -108,16 +108,17 @@ theorem expand_of_deriv {f : ℝ → ℝ} {p q : ℝ} (hc : ContinuousOn f (Icc 
   rw [hslope, abs_div, abs_of_pos hyx, le_div_iff₀ hyx] at h1
   rw [abs_of_pos hyx]; linarith
 
-/-- **1-D bound (M3.2)**: if `|f'| ≥ 1` on `(p,q)` and `f` is continuous on `[p,q]`, then
-`∫_{[p,q]} |f|^{-1/2} ≤ 4 √(q-p)`, uniformly in `f`. -/
-theorem lintegral_isqrt_comp_le {f : ℝ → ℝ} {p q : ℝ} (hpq : p ≤ q)
-    (hc : ContinuousOn f (Icc p q)) (hd : ∀ x ∈ Ioo p q, ∃ d, HasDerivAt f d x ∧ 1 ≤ |d|) :
+/-- **1-D bound, expansion form**: if `f` is continuous on `[p,q]` and expanding
+(`|f y - f x| ≥ |y - x|`), then `∫_{[p,q]} |f|^{-1/2} ≤ 4 √(q-p)`, uniformly in `f`. -/
+theorem lintegral_isqrt_of_expand {f : ℝ → ℝ} {p q : ℝ} (hpq : p ≤ q)
+    (hc : ContinuousOn f (Icc p q))
+    (hexp' : ∀ x ∈ Icc p q, ∀ y ∈ Icc p q, |y - x| ≤ |f y - f x|) :
     ∫⁻ x in Icc p q, isqrt (f x) ≤ ENNReal.ofReal (4 * √(q - p)) := by
   obtain ⟨m, hm, hmin⟩ := (isCompact_Icc (a := p) (b := q)).exists_isMinOn
     (nonempty_Icc.mpr hpq) hc.abs
   have hkey : ∀ x ∈ Icc p q, |x - m| ≤ |f x| := by
     intro x hx
-    have hexp := expand_of_deriv hc hd hm hx
+    have hexp := hexp' m hm x hx
     have hfm : |f m| ≤ |f x| := isMinOn_iff.mp hmin x hx
     -- `f x` and `f m` have the same sign (else a zero lies between, forcing `f m = 0`)
     by_cases hs : 0 ≤ f x * f m
@@ -160,5 +161,12 @@ theorem lintegral_isqrt_comp_le {f : ℝ → ℝ} {p q : ℝ} (hpq : p ≤ q)
   calc ∫⁻ x in Icc p q, isqrt (f x) ≤ ∫⁻ x in Icc p q, isqrt (x - m) :=
         setLIntegral_mono' measurableSet_Icc fun x hx => isqrt_anti (hkey x hx)
     _ ≤ _ := lintegral_isqrt_sub hm
+
+/-- **1-D bound (M3.2)**: if `|f'| ≥ 1` on `(p,q)` and `f` is continuous on `[p,q]`, then
+`∫_{[p,q]} |f|^{-1/2} ≤ 4 √(q-p)`, uniformly in `f`. -/
+theorem lintegral_isqrt_comp_le {f : ℝ → ℝ} {p q : ℝ} (hpq : p ≤ q)
+    (hc : ContinuousOn f (Icc p q)) (hd : ∀ x ∈ Ioo p q, ∃ d, HasDerivAt f d x ∧ 1 ≤ |d|) :
+    ∫⁻ x in Icc p q, isqrt (f x) ≤ ENNReal.ofReal (4 * √(q - p)) :=
+  lintegral_isqrt_of_expand hpq hc fun _ hx _ hy => expand_of_deriv hc hd hx hy
 
 end SLT

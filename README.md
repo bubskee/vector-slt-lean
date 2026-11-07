@@ -25,6 +25,16 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `SLT/Toolkit.lean` | L6 stage 1: affine lintegral substitution, Laplace from sublevel sets (M4.3), radial split (M5.3) | `lintegral_comp_affine`, `lintegral_exp_neg_le_tsum`, `radial_split` |
 | `SLT/InvSqrt.lean` | L6 stage 1: `∫_I |f|^{-1/2} ≤ 4√|I|` when `|f'| ≥ 1` | `lintegral_isqrt_comp_le` |
 | `LemmaM3.lean` | L6 stage 1: Lemma M3 (uniform integrability) | `lemmaM3` |
+| `GramLower.lean` | L6 stage 2: every linear functional on degree-`≤ d` polynomials is bounded by `L²` on a box | `linear_le_L2` |
+| `LemmaM1.lean` | L6 stage 2: Lemma M1 (`c₃, c₂, c₁, Z`) from the `(s,t)` polynomial model | `errP_c3`, `errP_s5` |
+| `Gdown.lean` | L6 stage 2: (G↓) for laws with a density bounded below on a box | `Gdown` |
+| `LemmaM4.lean` | L6 stage 3: Lemma M4 (one row at frozen amplitudes), slice algebra (M9) | `lemmaM4`, `det_Mt`, `slice_bound` |
+| `LemmaM5.lean` | L6 stage 3: Lemma M5 (amplitude integral of one row, pivot chart) | `lemmaM5`, `inner_bound` |
+| `ChartLip.lean` | L6 stage 3, F4: bounded-Lipschitz calculus; `E(M9) - E₀` small and 0.47-Lipschitz ⇒ Lemma M3 | `EM9_pert`, `m3Int_of_LB` |
+| `PivotRow.lean` | L6 stage 3, F4/F5: one row, pivot first (M4 + M3 + M5) for weights with O(ε³) variation | `pivotRow`, `m3Int_Echart` |
+| `RowBound.lean` | L6 stage 3, F5: one row in actual coordinates (three pivots), explicit (M6) weights | `rowBound`, `rowBound_M6` |
+| `ActiveCoords.lean` | L6 stage 3, F1–F3: ν Gaussian, α ↦ α³, translation to c₃ | `active_bound`, `cube_subst` |
+| `TheoremM.lean` | L6 stage 3, F5/F6 + assembly: **Theorem M** `Z_{N,1} ≤ C N⁻⁴ (log N)⁴`, and `Z_{N,1} ≍ N⁻⁴ (log N)⁴` | `theoremM`, `theoremM_raw`, `ZN1_two_sided` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |

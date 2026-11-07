@@ -107,3 +107,51 @@ import VectorSLT
 #print axioms SLT.expand_of_deriv
 #print axioms SLT.lintegral_isqrt_comp_le
 #print axioms VectorSLT.lemmaM3
+-- L6 stage 2
+#print axioms VectorSLT.toL2_injective
+#print axioms VectorSLT.linear_le_L2
+#print axioms VectorSLT.cube_decomp
+#print axioms VectorSLT.row_cube
+#print axioms VectorSLT.stP_decomp
+#print axioms VectorSLT.errP_c3
+#print axioms VectorSLT.errP_c2
+#print axioms VectorSLT.errP_c1
+#print axioms VectorSLT.errP_s5
+#print axioms VectorSLT.eval_errθ
+#print axioms VectorSLT.Gdown
+-- L6 stage 3, M4
+#print axioms VectorSLT.det_Mt
+#print axioms VectorSLT.slice_reduction
+#print axioms VectorSLT.Mt_entries
+#print axioms VectorSLT.slice_bound
+#print axioms VectorSLT.lemmaM4
+#print axioms VectorSLT.lemmaM4_trivial
+-- L6 stage 3, M5
+#print axioms VectorSLT.setLIntegral_Icc_scale
+#print axioms VectorSLT.isqrt_mul
+#print axioms VectorSLT.inner_bound
+#print axioms VectorSLT.setLIntegral_Icc_even_le
+#print axioms VectorSLT.lemmaM5
+-- L6 stage 3, F1–F6
+#print axioms SLT.lintegral_isqrt_of_expand
+#print axioms VectorSLT.lemmaM3_core
+#print axioms VectorSLT.EM9_pert
+#print axioms VectorSLT.m3Int_of_LB
+#print axioms VectorSLT.m3Int_Echart
+#print axioms VectorSLT.pivotRow
+#print axioms VectorSLT.rowBound
+#print axioms VectorSLT.rowBound_M6
+#print axioms VectorSLT.nu_int
+#print axioms VectorSLT.cube_subst
+#print axioms VectorSLT.transl_bound
+#print axioms VectorSLT.active_bound
+#print axioms VectorSLT.sum_coeffs_eq
+#print axioms VectorSLT.A1_core
+#print axioms VectorSLT.TMx_le_SMx
+#print axioms VectorSLT.two_rows
+#print axioms VectorSLT.J_bound
+#print axioms VectorSLT.UM_bound
+#print axioms VectorSLT.theoremM
+#print axioms VectorSLT.toM2_mem_UM
+#print axioms VectorSLT.theoremM_raw
+#print axioms VectorSLT.ZN1_two_sided
