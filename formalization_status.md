@@ -6,7 +6,7 @@ Mathematical source: `cubic-chaos`, read-only, at the commits named in each brie
 
 Paper 2's main theorem gives the pairs (λ, m) for every rank-one shear with both rows nonzero, by position. The position-one pair (4,5) is fully certified in Lean. So are the lower halves at every position. The upper halves at positions 2–4 depend on Theorems N and K. These enter only as the named hypotheses `ThmN` and `ThmK`/`ThmKUpper`, and neither is proved here. This file records the certified statements and their exact assumptions.
 
-**Indexing.** Lean positions are `p : Fin 4`, so Lean `p = 0, 1, 2, 3` are the paper's positions 1, 2, 3, 4. Raw parameters are `θ : Raw16`, four 2×2 matrices; `rawEquiv : Raw16 ≃ (Fin 4 → Matrix (Fin 2) (Fin 2) ℝ)` and `net_eq_network` identify them with the paper's network `F_{B₄} ∘ ⋯ ∘ F_{B₁}`, `F_B(z) = z + (Bz)^{⊙3}`.
+**Indexing.** Lean positions are `p : Fin 4`, so Lean `p = 0, 1, 2, 3` are the paper's positions 1, 2, 3, 4. Raw parameters are `θ : Raw16`, four 2×2 matrices; `rawEquiv : Raw16 ≃ (Fin 4 → Matrix (Fin 2) (Fin 2) ℝ)` and `net_eq_network` identify them with the paper's network `F_{W₄} ∘ ⋯ ∘ F_{W₁}` on `(W₁, …, W₄)`, `F_W(z) = z + (Wz)^{⊙3}`. `rawEquiv` is a relabelling of the sixteen coordinates; Lean does not state that it is measure-preserving, and the certified statements are all on `Raw16` with Lebesgue measure.
 
 ## Shared hypotheses
 

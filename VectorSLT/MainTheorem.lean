@@ -2,7 +2,7 @@
 Brief 03, O4: the paper-facing main theorem and the `Fin 4 → Matrix` restatement.
 
 * `rawEquiv`: the sixteen raw weights `Raw16` are exactly the paper's four `2×2` matrices
-  `(B₁, B₂, B₃, B₄)` in application order; `net θ = network (rawW θ)`, and the base point at
+  `(W₁, W₂, W₃, W₄)` in application order; `net θ = network (rawW θ)`, and the base point at
   position `p` is `Pi.single p A`.
 * `mainTheorem_shear`: the depth-four position table `(4,5), (4,1), (4,1), (4,1)` for every
   two-nonzero-row shear target, with Theorem K and Theorem N as the only named hypotheses.
@@ -15,7 +15,7 @@ open MeasureTheory Set Filter Topology
 
 /-! ### The raw-weight network of the paper -/
 
-/-- The paper's raw-weight list `(B₁, B₂, B₃, B₄)`, in application order (Lean `0..3`). -/
+/-- The paper's raw-weight list `(W₁, W₂, W₃, W₄)`, in application order (Lean `0..3`). -/
 def rawW (θ : Raw16) : Fin 4 → Matrix (Fin 2) (Fin 2) ℝ := fun q => weights θ q
 
 /-- Inverse: read the sixteen raw coordinates off four matrices. -/
@@ -33,7 +33,7 @@ def rawEquiv : Raw16 ≃ (Fin 4 → Matrix (Fin 2) (Fin 2) ℝ) where
     funext q i j
     fin_cases q <;> fin_cases i <;> fin_cases j <;> rfl
 
-/-- **The Lean network is the paper's raw-weight network** `F_{B₄} ∘ F_{B₃} ∘ F_{B₂} ∘ F_{B₁}`. -/
+/-- **The Lean network is the paper's raw-weight network** `F_{W₄} ∘ F_{W₃} ∘ F_{W₂} ∘ F_{W₁}`. -/
 theorem net_eq_network (θ : Raw16) : net θ = network (rawW θ) := by
   unfold net network
   refine prefixNet_congr _ _ 4 fun q hq => ?_

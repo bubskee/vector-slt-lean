@@ -17,7 +17,8 @@ scaling `x ↦ r x`, `r → ∞` (`u = r⁻² → 0⁺`) instead of polynomial g
 * degree 5: `T₋ + DV_A S₋ = 0`, so `DV_A S₋ = 0`, so `S₋ = 0`;
 * degree 3: `L_A(Δ) + S₋ = 0`, so `L_A(Δ) = 0`, so `Δ = 0`.
 The paper's subsequent norm lower bound (positive smallest singular value of this fixed linear
-map on the 44-dimensional space) is not formalized here.
+map on the 44-dimensional space) is formalized separately as `sepLin_lower` in SepNorm.lean,
+with the absorption step `sep_absorb`.
 -/
 import VectorSLT.InverseCriterion
 

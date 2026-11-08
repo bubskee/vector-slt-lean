@@ -15,7 +15,13 @@ open MeasureTheory Set Filter Topology
 /-- One row of the three inactive blocks, two triples: `((ρ₁,ρ₂,ρ₃)_{col 0}, (ρ₁,ρ₂,ρ₃)_{col 1})`. -/
 abbrev Row := (ℝ × ℝ × ℝ) × (ℝ × ℝ × ℝ)
 /-- The sixteen raw weights at depth four, width two:
-`(((M₀₀, M₀₁), (M₁₀, M₁₁)), (row 0 of B₁B₂B₃, row 1 of B₁B₂B₃))`, with Lebesgue measure. -/
+`(((M₀₀, M₀₁), (M₁₀, M₁₁)), (row 0 of W₂W₃W₄, row 1 of W₂W₃W₄))`, with Lebesgue measure.
+
+Block naming follows the paper's `W₁, …, W₄` (by position, in application order). The active
+block `M` is `W₁`. The inactive slots hold `W₂, W₃, W₄`: entry `(k, j)` of `W_{i+2}` is
+`tri ρ i` for `i = 0, 1, 2`, where `ρ` is the column-`j` triple of row `k`; e.g. entry
+`(0, 1)` of `W_{i+2}` is `tri θ.2.1.2 i` (index `0 ↦ .1`, `1 ↦ .2`), as in `weights` below. `rawEquiv` (MainTheorem.lean) is the
+identification with `(W₁, …, W₄)`. -/
 abbrev Raw16 := ((ℝ × ℝ) × (ℝ × ℝ)) × (Row × Row)
 
 /-- Component `i ∈ {0,1,2}` of a triple. -/
@@ -25,12 +31,12 @@ def tri (v : ℝ × ℝ × ℝ) : ℕ → ℝ
   | _ => v.2.2
 
 /-- The four weight matrices of a raw parameter, in application order: `W 0 = M` (active,
-position one), `W (i+1) = B_{i+1}`, whose row `k` is `(ρₖ.1 i, ρₖ.2 i)`. -/
+position one, paper `W₁`), `W (i+1)` = paper `W_{i+2}`, whose row `k` is `(ρₖ.1 i, ρₖ.2 i)`. -/
 def weights (θ : Raw16) : ℕ → Matrix (Fin 2) (Fin 2) ℝ
   | 0 => !![θ.1.1.1, θ.1.1.2; θ.1.2.1, θ.1.2.2]
   | i + 1 => !![tri θ.2.1.1 i, tri θ.2.1.2 i; tri θ.2.2.1 i, tri θ.2.2.2 i]
 
-/-- The depth-four network `h_θ = F_{B₃} ∘ F_{B₂} ∘ F_{B₁} ∘ F_M`. -/
+/-- The depth-four network `h_θ = F_{W₄} ∘ F_{W₃} ∘ F_{W₂} ∘ F_{W₁}` (`W₁ = M` active). -/
 def net (θ : Raw16) : (Fin 2 → ℝ) → (Fin 2 → ℝ) := prefixNet (weights θ) 4
 
 /-- The base point: active matrix `A₀`, inactive blocks zero. -/
@@ -423,8 +429,9 @@ theorem inv_rpow_tenth_le {N M : ℝ} (hM : 0 < M) (hN : M ^ 10 ≤ N) :
 
 Setting: width two, depth four, all sixteen raw weights free (`Raw16`, Lebesgue measure),
 active block at position one, target `F_{A₀}` with `A₀ = [[1,-1],[1,-1]]` (the normalized
-rank-one shear with both rows nonzero; the reduction to `A₀` is Theorem H §2 and is not
-formalized). Hypotheses, the two easy directions of results §0 in compact-input form:
+rank-one shear with both rows nonzero; the reduction to `A₀` is Theorem H §2, formalized as
+`shear_normalize` in Normalization.lean, and `propLprime_shear` there transfers this bound to
+every such target). Hypotheses, the two easy directions of results §0 in compact-input form:
 
 * **(G↑)**: `K θ ≤ Λ M²` whenever every output error is at most `M` on the input box
   `|xᵢ| ≤ R` (e.g. the population loss of an input law supported in the box, `Λ = 2`);

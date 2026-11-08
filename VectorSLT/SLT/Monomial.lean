@@ -1,7 +1,8 @@
 /-
 L4, an end-to-end use of the volume ⇒ Laplace API: the one-variable monomial
 `K(x) = x^{2k}` on `(0,1]` with Lebesgue measure has pair `(1/(2k), 1)`.
-(The full normal-crossing lemma in `d` variables is not formalized.)
+(The full normal-crossing lemma in `d` variables is `normalCrossing` / `normalCrossing_Z` in
+SLT/NormalCrossingD.lean.)
 -/
 import VectorSLT.SLT.Laplace
 

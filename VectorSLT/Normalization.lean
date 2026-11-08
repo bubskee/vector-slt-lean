@@ -142,7 +142,7 @@ theorem shear_normalize {A : Matrix (Fin 2) (Fin 2) ℝ} (hA : ShearTarget A) :
 
 /-! ### The induced linear map on the sixteen raw weights -/
 
-/-- Entry `(i,j)` of all four matrices: `(M_{ij}, ((B₁)_{ij}, (B₂)_{ij}, (B₃)_{ij}))`. -/
+/-- Entry `(i,j)` of all four matrices: `((W₁)_{ij}, ((W₂)_{ij}, (W₃)_{ij}, (W₄)_{ij}))`. -/
 def ent (θ : Raw16) (i j : Fin 2) : ℝ × (ℝ × ℝ × ℝ) :=
   (![![θ.1.1.1, θ.1.1.2], ![θ.1.2.1, θ.1.2.2]] i j, ![![θ.2.1.1, θ.2.1.2], ![θ.2.2.1, θ.2.2.2]] i j)
 

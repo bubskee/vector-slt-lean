@@ -6,13 +6,13 @@ Paper model (cubic-chaos @ 34c531e, `results.md` §0):
 
 Brief (lean_brief_vector_01.md, milestone A): at width n and depth D,
   (G_D x)_k = x_k + ∑_{i=1}^{D} (ρ_i^{(k)} · G_{i-1} x)^3,
-where ρ_i^{(k)} is row k of B_i and G_0 = id, G_i = F_{B_i} ∘ G_{i-1}.
+where ρ_i^{(k)} is row k of W_i and G_0 = id, G_i = F_{W_i} ∘ G_{i-1} (the brief writes B_i).
 
 Lean conventions:
 * a state of width `n` is `Fin n → ℝ`; a weight matrix is `Matrix (Fin n) (Fin n) ℝ`;
 * row k of `B` is `B k : Fin n → ℝ`, and `ρ · z` is `dotProduct`;
 * the Hadamard cube `(Bz)^{⊙3}` is the pointwise power `(B *ᵥ z) ^ 3` in the Pi type;
-* layers are indexed from 0: Lean's `W i` is the paper's `B_{i+1}`,
+* layers are indexed from 0: Lean's `W i` is the paper's `W_{i+1}`,
   and `prefixNet W i` is the paper's `G_i` (the first `i` layers).
 -/
 import Mathlib
@@ -134,7 +134,7 @@ theorem inactive_row_coords (a b : ℝ) (z : Fin 2 → ℝ) :
   simp [dotProduct, Fin.sum_univ_two]; ring
 
 /-- **(M2), Lean form.** At width two and depth four, with the active block first
-(`W 0 = M`) followed by `W 1, W 2, W 3` (paper: `B₁, B₂, B₃`), output `k` minus the target
+(`W 0 = M`, paper `W₁`) followed by `W 1, W 2, W 3` (paper: `W₂, W₃, W₄`), output `k` minus the target
 output `F_{A₀,k}` is the sum of four cubes `λ_i^{(k)} = ρ_i^{(k)} · G_{i-1}` minus `s³`. -/
 theorem M2_error (W : ℕ → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2) :
     prefixNet W 4 x k - layer A0 x k =
