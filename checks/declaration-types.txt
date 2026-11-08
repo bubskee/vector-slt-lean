@@ -1,0 +1,39 @@
+Declaration-type comparison, brief 05 release pass.
+Method: checks/TypeDump.lean lists every non-internal constant from a VectorSLT.* module with its
+module, kind, Expr hash of its type and the raw Expr text of its type. It was run on 2d545cd
+(before) and on the release-pass tree (after); the two dumps were compared by name.
+Before dump sha256: 19d908bdd72a25bd003fd7e6232fe50df00e9836e814f909f3b4d61733f3d66b
+After  dump sha256: 2cba67ee55cae15b404d0f179fbe3b41de0e034d2023f5f2f98a4b357707ea8d
+
+before: 958 declarations; after: 971
+identical (module, kind, type hash, type text): 958
+changed: 0 []
+removed: 0 []
+added: 13
+  VectorSLT.vector_E0_bordered_det (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_any_position_lower (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_near_shear_lower (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_near_shear_lower_gaussian (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_near_shear_normal_form (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_main_theorem (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_main_theorem_gaussian (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_main_theorem_ratio (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_normal_form (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_position_one_exact (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_position_one_exact_gaussian (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_position_one_lower (VectorSLT.PaperNames, theorem)
+  VectorSLT.vector_shear_position_one_upper (VectorSLT.PaperNames, theorem)
+  alias vector_shear_main_theorem = mainTheorem_shear: type identical
+  alias vector_shear_main_theorem_ratio = mainTheorem_shear_ratio: type identical
+  alias vector_shear_main_theorem_gaussian = mainTheorem_shear_gaussian: type identical
+  alias vector_shear_position_one_lower = propLprime_moments: type identical
+  alias vector_shear_position_one_upper = theoremM_shear: type identical
+  alias vector_shear_position_one_exact = ZN1_two_sided_moments: type identical
+  alias vector_shear_position_one_exact_gaussian = ZN1_two_sided_gaussian: type identical
+  alias vector_any_position_lower = Zpos_lower_N4: type identical
+  alias vector_near_shear_lower = X4_lower_population: type identical
+  alias vector_near_shear_lower_gaussian = X4_lower_gaussian: type identical
+  alias vector_near_shear_normal_form = normalize_Aeta: type identical
+  alias vector_shear_normal_form = shear_normalize: type identical
+  alias vector_E0_bordered_det = bordered_det: type identical
+aliases with type identical to the original: 13/13

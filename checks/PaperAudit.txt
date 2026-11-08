@@ -1,0 +1,899 @@
+def VectorSLT.SLT.Z.{u_1} : {α : Type u_1} →
+  [inst : MeasurableSpace α] → MeasureTheory.Measure α → (α → ℝ) → ℝ → ENNReal :=
+fun {α} [MeasurableSpace α] ν K N => ∫⁻ (x : α), ENNReal.ofReal (Real.exp (-(N * K x))) ∂ν
+def VectorSLT.SLT.LaplaceLower : (ℝ → ENNReal) → ℝ → ℕ → Prop :=
+fun Zf lam m => ∃ c, 0 < c ∧ ∃ N₀, ∀ (N : ℝ), N₀ ≤ N → ENNReal.ofReal (c * N ^ (-lam) * Real.log N ^ (m - 1)) ≤ Zf N
+def VectorSLT.SLT.LaplaceUpper : (ℝ → ENNReal) → ℝ → ℕ → Prop :=
+fun Zf lam m => ∃ C N₀, ∀ (N : ℝ), N₀ ≤ N → Zf N ≤ ENNReal.ofReal (C * N ^ (-lam) * Real.log N ^ (m - 1))
+def VectorSLT.SLT.HasLaplacePair : (ℝ → ENNReal) → ℝ → ℕ → Prop :=
+fun Zf lam m => VectorSLT.SLT.LaplaceLower Zf lam m ∧ VectorSLT.SLT.LaplaceUpper Zf lam m
+def VectorSLT.layer : {n : ℕ} → Matrix (Fin n) (Fin n) ℝ → (Fin n → ℝ) → Fin n → ℝ :=
+fun {n} B z => z + B.mulVec z ^ 3
+def VectorSLT.net : VectorSLT.Raw16 → (Fin 2 → ℝ) → Fin 2 → ℝ :=
+fun θ => VectorSLT.prefixNet (VectorSLT.weights θ) 4
+def VectorSLT.popLossA : MeasureTheory.Measure (Fin 2 → ℝ) → Matrix (Fin 2) (Fin 2) ℝ → VectorSLT.Raw16 → ℝ :=
+fun μ A θ => ∫ (x : Fin 2 → ℝ), ∑ k, (VectorSLT.net θ x k - VectorSLT.layer A x k) ^ 2 ∂μ
+def VectorSLT.Zpos : MeasureTheory.Measure (Fin 2 → ℝ) →
+  Matrix (Fin 2) (Fin 2) ℝ → (VectorSLT.Raw16 → ENNReal) → (VectorSLT.Raw16 → ENNReal) → Fin 4 → ℝ → ENNReal :=
+fun μ A φ χ p N =>
+  ∫⁻ (θ : VectorSLT.Raw16),
+    ENNReal.ofReal (Real.exp (-(N * VectorSLT.popLossA μ A θ))) * (φ θ * χ (θ - VectorSLT.basePos A p))
+def VectorSLT.basePos : Matrix (Fin 2) (Fin 2) ℝ → Fin 4 → VectorSLT.Raw16 :=
+fun A p =>
+  VectorSLT.ofEnt fun i j =>
+    (if p = 0 then A i j else 0, if p = 1 then A i j else 0, if p = 2 then A i j else 0, if p = 3 then A i j else 0)
+def VectorSLT.ShearTarget : Matrix (Fin 2) (Fin 2) ℝ → Prop :=
+fun A => ∃ a v, (∀ (i j : Fin 2), A i j = a i * v j) ∧ a 0 ≠ 0 ∧ a 1 ≠ 0 ∧ v ≠ 0 ∧ v 0 * a 0 ^ 3 + v 1 * a 1 ^ 3 = 0
+def VectorSLT.ThmK : MeasureTheory.Measure (Fin 2 → ℝ) →
+  Matrix (Fin 2) (Fin 2) ℝ → (VectorSLT.Raw16 → ENNReal) → (VectorSLT.Raw16 → ENNReal) → Prop :=
+fun μ A φ χ =>
+  ∃ c C N₀,
+    0 < c ∧
+      ∀ (N : ℝ),
+        N₀ ≤ N →
+          ENNReal.ofReal (c * N⁻¹ ^ 4) ≤ VectorSLT.Zpos μ A φ χ 3 N ∧
+            VectorSLT.Zpos μ A φ χ 3 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)
+def VectorSLT.ThmKUpper : MeasureTheory.Measure (Fin 2 → ℝ) →
+  Matrix (Fin 2) (Fin 2) ℝ → (VectorSLT.Raw16 → ENNReal) → (VectorSLT.Raw16 → ENNReal) → Prop :=
+fun μ A φ χ => ∃ C N₀, ∀ (N : ℝ), N₀ ≤ N → VectorSLT.Zpos μ A φ χ 3 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)
+def VectorSLT.ThmN : MeasureTheory.Measure (Fin 2 → ℝ) →
+  Matrix (Fin 2) (Fin 2) ℝ → (VectorSLT.Raw16 → ENNReal) → (VectorSLT.Raw16 → ENNReal) → Prop :=
+fun μ A φ χ =>
+  ∀ (p : Fin 4), p = 1 ∨ p = 2 → ∃ C N₀, ∀ (N : ℝ), N₀ ≤ N → VectorSLT.Zpos μ A φ χ p N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)
+def VectorSLT.Aeta : ℝ → Matrix (Fin 2) (Fin 2) ℝ :=
+fun η => !![1, -1 + η; 1, -1 + η]
+def VectorSLT.Meta : ℝ → ℝ → ℝ :=
+fun η N => if η = 0 then N else min N |η|⁻¹
+def VectorSLT.Leta : ℝ → ℝ → ℝ :=
+fun η N => Real.log (VectorSLT.Meta η N)
+@VectorSLT.mainTheorem_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ (p : Fin 4),
+                                ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.ThmK μ A φ χ →
+                                          VectorSLT.ThmN μ A φ χ →
+                                            VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 0) 4 5 ∧
+                                              VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 1) 4 1 ∧
+                                                VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 2) 4 1 ∧
+                                                  VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 3) 4 1
+@VectorSLT.mainTheorem_shear_ratio : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ (p : Fin 4),
+                                ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.ThmK μ A φ χ →
+                                          VectorSLT.ThmN μ A φ χ →
+                                            ∀ (p : Fin 4),
+                                              p ≠ 0 →
+                                                Filter.Tendsto
+                                                  (fun N => VectorSLT.Zpos μ A φ χ 0 N / VectorSLT.Zpos μ A φ χ p N)
+                                                  Filter.atTop (nhds ⊤)
+@VectorSLT.mainTheorem_shear_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ (p : Fin 4), ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  0 ≤ π₁ →
+                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                          VectorSLT.ThmK VectorSLT.stdGauss2 A φ χ →
+                            VectorSLT.ThmN VectorSLT.stdGauss2 A φ χ →
+                              VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0) 4 5 ∧
+                                VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 1) 4 1 ∧
+                                  VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 2) 4 1 ∧
+                                    VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 3) 4 1
+@VectorSLT.propLprime_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ {R Λ π₀ : ℝ},
+      0 < π₀ →
+        ∀ (K : VectorSLT.Raw16 → ℝ),
+          (∀ (θ : VectorSLT.Raw16) (M : ℝ),
+              0 ≤ M →
+                (∀ (x : Fin 2 → ℝ),
+                    (∀ (i : Fin 2), |x i| ≤ R) → ∀ (k : Fin 2), |VectorSLT.net θ x k - VectorSLT.layer A x k| ≤ M) →
+                  K θ ≤ Λ * M ^ 2) →
+            ∀ (π : VectorSLT.Raw16 → ENNReal),
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.baseA A), ENNReal.ofReal π₀ ≤ π θ) →
+                ∃ c,
+                  0 < c ∧
+                    ∃ N₀,
+                      ∀ (N : ℝ),
+                        N₀ ≤ N →
+                          ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                            ∫⁻ (θ : VectorSLT.Raw16), ENNReal.ofReal (Real.exp (-(N * K θ))) * π θ
+@VectorSLT.propLprime_moments : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+      (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+        ∀ {π₀ : ℝ},
+          0 < π₀ →
+            ∀ (π : VectorSLT.Raw16 → ENNReal),
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.baseA A), ENNReal.ofReal π₀ ≤ π θ) →
+                ∃ c,
+                  0 < c ∧
+                    ∃ N₀,
+                      ∀ (N : ℝ),
+                        N₀ ≤ N →
+                          ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                            ∫⁻ (θ : VectorSLT.Raw16), ENNReal.ofReal (Real.exp (-(N * VectorSLT.popLossA μ A θ))) * π θ
+@VectorSLT.propLprime_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ {π₀ : ℝ},
+      0 < π₀ →
+        ∀ (π : VectorSLT.Raw16 → ENNReal),
+          (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.baseA A), ENNReal.ofReal π₀ ≤ π θ) →
+            ∃ c,
+              0 < c ∧
+                ∃ N₀,
+                  ∀ (N : ℝ),
+                    N₀ ≤ N →
+                      ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                        ∫⁻ (θ : VectorSLT.Raw16),
+                          ENNReal.ofReal (Real.exp (-(N * VectorSLT.popLossA VectorSLT.stdGauss2 A θ))) * π θ
+@VectorSLT.shear_normalize : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A → ∃ d b, (∀ (i : Fin 2), d i ≠ 0) ∧ VectorSLT.actW d b A = VectorSLT.A0
+VectorSLT.theoremM : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                0 ≤ π₁ →
+                  (∀ (θ : VectorSLT.Raw16),
+                      φ θ * χ (θ - VectorSLT.basePos VectorSLT.A0 0) ≤
+                        (VectorSLT.toM2 ⁻¹' VectorSLT.UM).indicator (fun x => ENNReal.ofReal π₁) θ) →
+                    ∃ C N₀,
+                      ∀ (N : ℝ),
+                        N₀ ≤ N → VectorSLT.Zpos μ VectorSLT.A0 φ χ 0 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.theoremM_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                        0 ≤ π₁ →
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                ∃ C N₀,
+                                  ∀ (N : ℝ),
+                                    N₀ ≤ N → VectorSLT.Zpos μ A φ χ 0 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.ZN1_two_sided : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsProbabilityMeasure μ] {R : ℝ},
+  (∀ᵐ (x : Fin 2 → ℝ) ∂μ, ∀ (i : Fin 2), |x i| ≤ R) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                0 < φ₀ →
+                  0 < χ₀ →
+                    (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos VectorSLT.A0 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                      (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                        0 ≤ π₁ →
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), 1 / 200 < ‖θ‖ → χ θ = 0) →
+                                ∃ c C N₀,
+                                  0 < c ∧
+                                    ∀ (N : ℝ),
+                                      N₀ ≤ N →
+                                        ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                            VectorSLT.Zpos μ VectorSLT.A0 φ χ 0 N ∧
+                                          VectorSLT.Zpos μ VectorSLT.A0 φ χ 0 N ≤
+                                            ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.ZN1_two_sided_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsProbabilityMeasure μ] {R : ℝ},
+          (∀ᵐ (x : Fin 2 → ℝ) ∂μ, ∀ (i : Fin 2), |x i| ≤ R) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        ∃ c C N₀,
+                                          0 < c ∧
+                                            ∀ (N : ℝ),
+                                              N₀ ≤ N →
+                                                ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                                    VectorSLT.Zpos μ A φ χ 0 N ∧
+                                                  VectorSLT.Zpos μ A φ χ 0 N ≤
+                                                    ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.ZN1_two_sided_moments : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        ∃ c C N₀,
+                                          0 < c ∧
+                                            ∀ (N : ℝ),
+                                              N₀ ≤ N →
+                                                ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                                    VectorSLT.Zpos μ A φ χ 0 N ∧
+                                                  VectorSLT.Zpos μ A φ χ 0 N ≤
+                                                    ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.ZN1_two_sided_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  0 ≤ π₁ →
+                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                          ∃ c C N₀,
+                            0 < c ∧
+                              ∀ (N : ℝ),
+                                N₀ ≤ N →
+                                  ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                      VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0 N ∧
+                                    VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0 N ≤
+                                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.Gdown : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∃ κ,
+                0 < κ ∧
+                  ∀ (θ : VectorSLT.Raw16),
+                    κ *
+                        ∑ k,
+                          (VectorSLT.c3M θ k ^ 2 + VectorSLT.c2M θ k ^ 2 + VectorSLT.c1M θ k ^ 2 +
+                            VectorSLT.ZM θ k ^ 2) ≤
+                      VectorSLT.popLossA μ VectorSLT.A0 θ
+VectorSLT.Zpos_lower_N4 : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ (A : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4) (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+            (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+              ∃ c, 0 < c ∧ ∃ N₀, ∀ (N : ℝ), N₀ ≤ N → ENNReal.ofReal (c * N⁻¹ ^ 4) ≤ VectorSLT.Zpos μ A φ χ p N
+@VectorSLT.middle_position_pair : ∀ {μ : MeasureTheory.Measure (Fin 2 → ℝ)} [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {A : Matrix (Fin 2) (Fin 2) ℝ} {φ χ : VectorSLT.Raw16 → ENNReal} {φ₀ χ₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          ∀ (p : Fin 4),
+            p = 1 ∨ p = 2 →
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  VectorSLT.ThmN μ A φ χ → VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ p) 4 1
+@VectorSLT.position_four_pair : ∀ {μ : MeasureTheory.Measure (Fin 2 → ℝ)} [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {A : Matrix (Fin 2) (Fin 2) ℝ} {φ χ : VectorSLT.Raw16 → ENNReal} {φ₀ χ₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 3), ENNReal.ofReal φ₀ ≤ φ θ) →
+            (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+              VectorSLT.ThmKUpper μ A φ χ → VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 3) 4 1
+@VectorSLT.separation : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ {R : ℝ} (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsProbabilityMeasure μ],
+      (∀ᵐ (x : Fin 2 → ℝ) ∂μ, ∀ (i : Fin 2), |x i| ≤ R) →
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  VectorSLT.ThmKUpper μ A φ χ →
+                    ∃ c,
+                      0 < c ∧
+                        ∃ N₁,
+                          ∀ (N : ℝ),
+                            N₁ ≤ N →
+                              ENNReal.ofReal (c * Real.log N ^ 4) * VectorSLT.Zpos μ A φ χ 3 N ≤
+                                VectorSLT.Zpos μ A φ χ 0 N
+@VectorSLT.separation_moments : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+      (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  VectorSLT.ThmKUpper μ A φ χ →
+                    ∃ c,
+                      0 < c ∧
+                        ∃ N₁,
+                          ∀ (N : ℝ),
+                            N₁ ≤ N →
+                              ENNReal.ofReal (c * Real.log N ^ 4) * VectorSLT.Zpos μ A φ χ 3 N ≤
+                                VectorSLT.Zpos μ A φ χ 0 N
+@VectorSLT.separation_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+            (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+              VectorSLT.ThmKUpper VectorSLT.stdGauss2 A φ χ →
+                ∃ c,
+                  0 < c ∧
+                    ∃ N₁,
+                      ∀ (N : ℝ),
+                        N₁ ≤ N →
+                          ENNReal.ofReal (c * Real.log N ^ 4) * VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 3 N ≤
+                            VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0 N
+@VectorSLT.inverse_criterion : ∀ {n : ℕ} (B : Matrix (Fin n) (Fin n) ℝ),
+  (∀ (x : Fin n → ℝ), B.mulVec (VectorSLT.Vmap B x) = 0) ↔
+    ∀ (x : Fin n → ℝ), VectorSLT.layer (-B) (VectorSLT.layer B x) = x
+VectorSLT.rank_one_criterion : ∀ (B : Matrix (Fin 2) (Fin 2) ℝ),
+  (∀ (x : Fin 2 → ℝ), B.mulVec (VectorSLT.Vmap B x) = 0) ↔
+    ∃ u v, (∀ (i j : Fin 2), B i j = u i * v j) ∧ v 0 * u 0 ^ 3 + v 1 * u 1 ^ 3 = 0
+@VectorSLT.shear_inverse : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A → ∀ (x : Fin 2 → ℝ), VectorSLT.layer (-A) (VectorSLT.layer A x) = x
+VectorSLT.deriv_criterion : ∀ (B : Matrix (Fin 2) (Fin 2) ℝ),
+  (∀ (x : Fin 2 → ℝ), VectorSLT.DVmap B x (VectorSLT.Vmap B x) = 0) ↔
+    ∀ (x : Fin 2 → ℝ), B.mulVec (VectorSLT.Vmap B x) = 0
+@VectorSLT.sepMap_injective : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 →
+    ∀ {Δ Δ' : Matrix (Fin 2) (Fin 2) ℝ} {Sm Tm Sp Tp Sm' Tm' Sp' Tp' : (Fin 2 → ℝ) → Fin 2 → ℝ},
+      VectorSLT.HomDeg 3 Sm →
+        VectorSLT.HomDeg 5 Tm →
+          VectorSLT.HomDeg 3 Sp →
+            VectorSLT.HomDeg 5 Tp →
+              VectorSLT.HomDeg 3 Sm' →
+                VectorSLT.HomDeg 5 Tm' →
+                  VectorSLT.HomDeg 3 Sp' →
+                    VectorSLT.HomDeg 5 Tp' →
+                      (∀ (x : Fin 2 → ℝ),
+                          VectorSLT.sepMap A Δ Sm Tm Sp Tp x = VectorSLT.sepMap A Δ' Sm' Tm' Sp' Tp' x) →
+                        Δ = Δ' ∧ Sm = Sm' ∧ Tm = Tm' ∧ Sp = Sp' ∧ Tp = Tp'
+@VectorSLT.sepLin_lower : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 → ∃ σ, 0 < σ ∧ ∀ (v : VectorSLT.SepDom), σ * ‖v‖ ≤ ‖(VectorSLT.sepLin A) v‖
+@VectorSLT.sep_absorb : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 →
+    ∃ σ,
+      0 < σ ∧
+        ∀ (C η : ℝ),
+          C * η ≤ σ / 2 →
+            ∀ (v : VectorSLT.SepDom) (E : C(↑VectorSLT.ubox, Fin 2 → ℝ)),
+              ‖E‖ ≤ C * η * ‖v‖ → σ / 2 * ‖v‖ ≤ ‖(VectorSLT.sepLin A) v + E‖
+@VectorSLT.bordered_det : ∀ {n : ℕ} (a : Fin n → ℝ), -(VectorSLT.bordered a).det = (∏ i, a i) * ∑ i, a i ^ 3
+@VectorSLT.null_direction : ∀ {n : ℕ} (a : Fin n → ℝ) (s t c : ℝ),
+  ∑ i, (a i * s + c * a i * t) ^ 3 = (∑ i, a i ^ 3) * (s + c * t) ^ 3
+@VectorSLT.normalize_Aeta : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ} {a v : Fin 2 → ℝ},
+  (∀ (i j : Fin 2), A i j = a i * v j) →
+    a 0 ≠ 0 →
+      a 1 ≠ 0 →
+        0 < v 0 * a 0 ^ 3 →
+          ∃ d,
+            (∀ (i : Fin 2), d i ≠ 0) ∧
+              VectorSLT.actW d false A = VectorSLT.Aeta ((v 0 * a 0 ^ 3 + v 1 * a 1 ^ 3) / (v 0 * a 0 ^ 3))
+VectorSLT.errPη_coeff_ne3 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2) (m : Fin 2 →₀ ℕ),
+  m 0 + m 1 ≠ 3 → (VectorSLT.errPη α ν a b η k).coeff m = (VectorSLT.errP α ν a b k).coeff m
+VectorSLT.errPη_s5 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2),
+  (VectorSLT.errPη α ν a b η k).coeff (VectorSLT.stMono 5 0) = 3 * VectorSLT.Zmom α a b k
+VectorSLT.errPη_c3 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2),
+  (VectorSLT.errPη α ν a b η k).coeff (VectorSLT.stMono 3 0) = α k ^ 3 - 1 + VectorSLT.momA (a k)
+VectorSLT.errPη_c2 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2),
+  (VectorSLT.errPη α ν a b η k).coeff (VectorSLT.stMono 2 1) = 3 * (α k ^ 2 * ν k + VectorSLT.momP1 (a k) (b k) - η)
+VectorSLT.errPη_c1 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2),
+  (VectorSLT.errPη α ν a b η k).coeff (VectorSLT.stMono 1 2) = 3 * (α k * ν k ^ 2 + VectorSLT.momP2 (a k) (b k) - η ^ 2)
+VectorSLT.errPη_c0 : ∀ (α ν : Fin 2 → ℝ) (a b : Fin 2 → ℕ → ℝ) (η : ℝ) (k : Fin 2),
+  (VectorSLT.errPη α ν a b η k).coeff (VectorSLT.stMono 0 3) = ν k ^ 3 + VectorSLT.momP3 (b k) - η ^ 3
+@VectorSLT.X4_lower : ∀ {R Λ π₀ r₀ : ℝ},
+  1 ≤ R →
+    0 < π₀ →
+      0 < r₀ →
+        ∃ c N₀,
+          0 < c ∧
+            ∀ (η : ℝ),
+              |η| ≤ 1 / 10 →
+                ∀ (K : VectorSLT.Raw16 → ℝ),
+                  (∀ (θ : VectorSLT.Raw16) (M : ℝ),
+                      0 ≤ M →
+                        (∀ (x : Fin 2 → ℝ),
+                            (∀ (i : Fin 2), |x i| ≤ R) →
+                              ∀ (k : Fin 2), |VectorSLT.net θ x k - VectorSLT.layer (VectorSLT.Aeta η) x k| ≤ M) →
+                          K θ ≤ Λ * M ^ 2) →
+                    ∀ (π : VectorSLT.Raw16 → ENNReal),
+                      (∀ (θ : VectorSLT.Raw16),
+                          dist θ (VectorSLT.basePos (VectorSLT.Aeta η) 0) < r₀ → ENNReal.ofReal π₀ ≤ π θ) →
+                        ∀ (N : ℝ),
+                          N₀ ≤ N →
+                            ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                              ∫⁻ (θ : VectorSLT.Raw16), ENNReal.ofReal (Real.exp (-(N * K θ))) * π θ
+@VectorSLT.X4_lower_segment : ∀ {R Λ π₀ r₀ : ℝ},
+  1 ≤ R →
+    0 < π₀ →
+      0 < r₀ →
+        ∀ (π : VectorSLT.Raw16 → ENNReal),
+          (∀ (η' : ℝ),
+              |η'| ≤ 1 / 10 →
+                ∀ (θ : VectorSLT.Raw16),
+                  dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal π₀ ≤ π θ) →
+            ∃ c N₀,
+              0 < c ∧
+                ∀ (η : ℝ),
+                  |η| ≤ 1 / 10 →
+                    ∀ (K : VectorSLT.Raw16 → ℝ),
+                      (∀ (θ : VectorSLT.Raw16) (M : ℝ),
+                          0 ≤ M →
+                            (∀ (x : Fin 2 → ℝ),
+                                (∀ (i : Fin 2), |x i| ≤ R) →
+                                  ∀ (k : Fin 2), |VectorSLT.net θ x k - VectorSLT.layer (VectorSLT.Aeta η) x k| ≤ M) →
+                              K θ ≤ Λ * M ^ 2) →
+                        ∀ (N : ℝ),
+                          N₀ ≤ N →
+                            ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                              ∫⁻ (θ : VectorSLT.Raw16), ENNReal.ofReal (Real.exp (-(N * K θ))) * π θ
+VectorSLT.X4_at_zero : ∀ (N : ℝ), 1 ≤ N → Real.log N ^ 4 ≤ (1 + VectorSLT.Leta 0 N) ^ 4
+VectorSLT.X4_lower_population : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ r₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          0 < r₀ →
+            (∀ (η' : ℝ),
+                |η'| ≤ 1 / 10 →
+                  ∀ (θ : VectorSLT.Raw16),
+                    dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal φ₀ ≤ φ θ) →
+              (∀ (θ : VectorSLT.Raw16), ‖θ‖ < r₀ → ENNReal.ofReal χ₀ ≤ χ θ) →
+                ∃ c N₀,
+                  0 < c ∧
+                    ∀ (η : ℝ),
+                      |η| ≤ 1 / 10 →
+                        ∀ (N : ℝ),
+                          N₀ ≤ N →
+                            ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                              VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N
+VectorSLT.X4_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ r₀ : ℝ},
+  0 < φ₀ →
+    0 < χ₀ →
+      0 < r₀ →
+        (∀ (η' : ℝ),
+            |η'| ≤ 1 / 10 →
+              ∀ (θ : VectorSLT.Raw16),
+                dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal φ₀ ≤ φ θ) →
+          (∀ (θ : VectorSLT.Raw16), ‖θ‖ < r₀ → ENNReal.ofReal χ₀ ≤ χ θ) →
+            ∃ c N₀,
+              0 < c ∧
+                ∀ (η : ℝ),
+                  |η| ≤ 1 / 10 →
+                    ∀ (N : ℝ),
+                      N₀ ≤ N →
+                        ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                          VectorSLT.Zpos VectorSLT.stdGauss2 (VectorSLT.Aeta η) φ χ 0 N
+@VectorSLT.X4_lower_compact : ∀ {R : ℝ},
+  1 ≤ R →
+    ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsProbabilityMeasure μ],
+      (∀ᵐ (x : Fin 2 → ℝ) ∂μ, ∀ (i : Fin 2), |x i| ≤ R) →
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ r₀ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              0 < r₀ →
+                (∀ (η' : ℝ),
+                    |η'| ≤ 1 / 10 →
+                      ∀ (θ : VectorSLT.Raw16),
+                        dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal φ₀ ≤ φ θ) →
+                  (∀ (θ : VectorSLT.Raw16), ‖θ‖ < r₀ → ENNReal.ofReal χ₀ ≤ χ θ) →
+                    ∃ c N₀,
+                      0 < c ∧
+                        ∀ (η : ℝ),
+                          |η| ≤ 1 / 10 →
+                            ∀ (N : ℝ),
+                              N₀ ≤ N →
+                                ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                                  VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N
+@VectorSLT.SLT.Z_eq_layercake : ∀ {α : Type u_1} [inst : MeasurableSpace α] {ν : MeasureTheory.Measure α}
+  [MeasureTheory.SFinite ν] {K : α → ℝ},
+  Measurable K →
+    (∀ (x : α), 0 ≤ K x) →
+      ∀ {N : ℝ},
+        0 < N →
+          VectorSLT.SLT.Z ν K N = ∫⁻ (s : ℝ) in Set.Ioi 0, ENNReal.ofReal (Real.exp (-s)) * VectorSLT.SLT.V ν K (s / N)
+@VectorSLT.SLT.laplaceLower_of_volume : ∀ {α : Type u_1} [inst : MeasurableSpace α] {ν : MeasureTheory.Measure α}
+  {K : α → ℝ},
+  Measurable K →
+    ∀ {lam c t₀ : ℝ} {m : ℕ},
+      0 < c →
+        0 < t₀ →
+          (∀ (t : ℝ),
+              0 < t → t ≤ t₀ → ENNReal.ofReal (c * t ^ lam * Real.log (1 / t) ^ (m - 1)) ≤ VectorSLT.SLT.V ν K t) →
+            VectorSLT.SLT.LaplaceLower (VectorSLT.SLT.Z ν K) lam m
+@VectorSLT.SLT.laplaceUpper_of_volume : ∀ {α : Type u_1} [inst : MeasurableSpace α] {ν : MeasureTheory.Measure α}
+  [MeasureTheory.SFinite ν] {K : α → ℝ},
+  Measurable K →
+    (∀ (x : α), 0 ≤ K x) →
+      ∀ {C lam : ℝ} {m : ℕ},
+        0 ≤ C →
+          0 < lam →
+            (∀ (t : ℝ), 0 < t → VectorSLT.SLT.V ν K t ≤ ENNReal.ofReal (C * t ^ lam * (1 + |Real.log t|) ^ (m - 1))) →
+              VectorSLT.SLT.LaplaceUpper (VectorSLT.SLT.Z ν K) lam m
+@VectorSLT.SLT.HasLaplacePair.of_comparable : ∀ {α : Type u_1} [inst : MeasurableSpace α] {ν : MeasureTheory.Measure α}
+  {K K' : α → ℝ} {c C lam : ℝ} {m : ℕ},
+  0 < c →
+    0 < C →
+      (∀ (x : α), c * K x ≤ K' x) →
+        (∀ (x : α), K' x ≤ C * K x) →
+          VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν K) lam m →
+            VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν K') lam m
+@VectorSLT.SLT.HasLaplacePair.of_prior : ∀ {α : Type u_1} [inst : MeasurableSpace α] {ν ν' : MeasureTheory.Measure α}
+  {K : α → ℝ} {c C lam : ℝ} {m : ℕ},
+  0 < c →
+    ENNReal.ofReal c • ν ≤ ν' →
+      ν' ≤ ENNReal.ofReal C • ν →
+        VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν K) lam m →
+          VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν' K) lam m
+@VectorSLT.SLT.HasLaplacePair.prod : ∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α]
+  [inst_1 : MeasurableSpace β] {ν₁ : MeasureTheory.Measure α} {ν₂ : MeasureTheory.Measure β} [MeasureTheory.SFinite ν₂]
+  {K₁ : α → ℝ} {K₂ : β → ℝ},
+  Measurable K₁ →
+    Measurable K₂ →
+      ∀ {l₁ l₂ : ℝ} {m₁ m₂ : ℕ},
+        1 ≤ m₁ →
+          1 ≤ m₂ →
+            VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν₁ K₁) l₁ m₁ →
+              VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z ν₂ K₂) l₂ m₂ →
+                VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z (ν₁.prod ν₂) fun p => K₁ p.1 + K₂ p.2) (l₁ + l₂)
+                  (m₁ + m₂ - 1)
+@VectorSLT.SLT.monomial_hasLaplacePair : ∀ {k : ℕ},
+  1 ≤ k →
+    VectorSLT.SLT.HasLaplacePair (VectorSLT.SLT.Z (MeasureTheory.volume.restrict (Set.Ioc 0 1)) fun x => x ^ (2 * k))
+      (1 / (2 * ↑k)) 1
+@VectorSLT.SLT.normalCrossing_Z : ∀ {d : ℕ} (k : Fin (d + 1) → ℕ) (h : Fin (d + 1) → ℝ),
+  (∀ (i : Fin (d + 1)), 1 ≤ k i) →
+    (∀ (i : Fin (d + 1)), -1 < h i) →
+      VectorSLT.SLT.HasLaplacePair
+        (VectorSLT.SLT.Z
+          ((MeasureTheory.volume.restrict (Set.univ.pi fun x => Set.Ioc 0 1)).withDensity fun x =>
+            ENNReal.ofReal (∏ i, x i ^ h i))
+          fun x => ∏ i, x i ^ (2 * k i))
+        (VectorSLT.SLT.ncLam k h) (VectorSLT.SLT.ncMult k h)
+@VectorSLT.vector_shear_main_theorem : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ (p : Fin 4),
+                                ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.ThmK μ A φ χ →
+                                          VectorSLT.ThmN μ A φ χ →
+                                            VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 0) 4 5 ∧
+                                              VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 1) 4 1 ∧
+                                                VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 2) 4 1 ∧
+                                                  VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 3) 4 1
+@VectorSLT.vector_shear_main_theorem_ratio : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ (p : Fin 4),
+                                ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.ThmK μ A φ χ →
+                                          VectorSLT.ThmN μ A φ χ →
+                                            ∀ (p : Fin 4),
+                                              p ≠ 0 →
+                                                Filter.Tendsto
+                                                  (fun N => VectorSLT.Zpos μ A φ χ 0 N / VectorSLT.Zpos μ A φ χ p N)
+                                                  Filter.atTop (nhds ⊤)
+@VectorSLT.vector_shear_main_theorem_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ (p : Fin 4), ∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  0 ≤ π₁ →
+                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                          VectorSLT.ThmK VectorSLT.stdGauss2 A φ χ →
+                            VectorSLT.ThmN VectorSLT.stdGauss2 A φ χ →
+                              VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0) 4 5 ∧
+                                VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 1) 4 1 ∧
+                                  VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 2) 4 1 ∧
+                                    VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 3) 4 1
+@VectorSLT.vector_shear_position_one_lower : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+      (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+        ∀ {π₀ : ℝ},
+          0 < π₀ →
+            ∀ (π : VectorSLT.Raw16 → ENNReal),
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.baseA A), ENNReal.ofReal π₀ ≤ π θ) →
+                ∃ c,
+                  0 < c ∧
+                    ∃ N₀,
+                      ∀ (N : ℝ),
+                        N₀ ≤ N →
+                          ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                            ∫⁻ (θ : VectorSLT.Raw16), ENNReal.ofReal (Real.exp (-(N * VectorSLT.popLossA μ A θ))) * π θ
+@VectorSLT.vector_shear_position_one_upper : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                        0 ≤ π₁ →
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                ∃ C N₀,
+                                  ∀ (N : ℝ),
+                                    N₀ ≤ N → VectorSLT.Zpos μ A φ χ 0 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.vector_shear_position_one_exact : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        ∃ c C N₀,
+                                          0 < c ∧
+                                            ∀ (N : ℝ),
+                                              N₀ ≤ N →
+                                                ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                                    VectorSLT.Zpos μ A φ χ 0 N ∧
+                                                  VectorSLT.Zpos μ A φ χ 0 N ≤
+                                                    ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.vector_shear_position_one_exact_gaussian : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+          0 < φ₀ →
+            0 < χ₀ →
+              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                  0 ≤ π₁ →
+                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                          ∃ c C N₀,
+                            0 < c ∧
+                              ∀ (N : ℝ),
+                                N₀ ≤ N →
+                                  ENNReal.ofReal (c * N⁻¹ ^ 4 * Real.log N ^ 4) ≤
+                                      VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0 N ∧
+                                    VectorSLT.Zpos VectorSLT.stdGauss2 A φ χ 0 N ≤
+                                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.vector_any_position_lower : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ (A : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4) (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+            (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+              ∃ c, 0 < c ∧ ∃ N₀, ∀ (N : ℝ), N₀ ≤ N → ENNReal.ofReal (c * N⁻¹ ^ 4) ≤ VectorSLT.Zpos μ A φ χ p N
+VectorSLT.vector_near_shear_lower : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ r₀ : ℝ},
+      0 < φ₀ →
+        0 < χ₀ →
+          0 < r₀ →
+            (∀ (η' : ℝ),
+                |η'| ≤ 1 / 10 →
+                  ∀ (θ : VectorSLT.Raw16),
+                    dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal φ₀ ≤ φ θ) →
+              (∀ (θ : VectorSLT.Raw16), ‖θ‖ < r₀ → ENNReal.ofReal χ₀ ≤ χ θ) →
+                ∃ c N₀,
+                  0 < c ∧
+                    ∀ (η : ℝ),
+                      |η| ≤ 1 / 10 →
+                        ∀ (N : ℝ),
+                          N₀ ≤ N →
+                            ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                              VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N
+VectorSLT.vector_near_shear_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ r₀ : ℝ},
+  0 < φ₀ →
+    0 < χ₀ →
+      0 < r₀ →
+        (∀ (η' : ℝ),
+            |η'| ≤ 1 / 10 →
+              ∀ (θ : VectorSLT.Raw16),
+                dist θ (VectorSLT.basePos (VectorSLT.Aeta η') 0) < r₀ → ENNReal.ofReal φ₀ ≤ φ θ) →
+          (∀ (θ : VectorSLT.Raw16), ‖θ‖ < r₀ → ENNReal.ofReal χ₀ ≤ χ θ) →
+            ∃ c N₀,
+              0 < c ∧
+                ∀ (η : ℝ),
+                  |η| ≤ 1 / 10 →
+                    ∀ (N : ℝ),
+                      N₀ ≤ N →
+                        ENNReal.ofReal (c * N⁻¹ ^ 4 * (1 + VectorSLT.Leta η N) ^ 4) ≤
+                          VectorSLT.Zpos VectorSLT.stdGauss2 (VectorSLT.Aeta η) φ χ 0 N
+@VectorSLT.vector_near_shear_normal_form : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ} {a v : Fin 2 → ℝ},
+  (∀ (i j : Fin 2), A i j = a i * v j) →
+    a 0 ≠ 0 →
+      a 1 ≠ 0 →
+        0 < v 0 * a 0 ^ 3 →
+          ∃ d,
+            (∀ (i : Fin 2), d i ≠ 0) ∧
+              VectorSLT.actW d false A = VectorSLT.Aeta ((v 0 * a 0 ^ 3 + v 1 * a 1 ^ 3) / (v 0 * a 0 ^ 3))
+@VectorSLT.vector_shear_normal_form : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A → ∃ d b, (∀ (i : Fin 2), d i ≠ 0) ∧ VectorSLT.actW d b A = VectorSLT.A0
+@VectorSLT.vector_E0_bordered_det : ∀ {n : ℕ} (a : Fin n → ℝ), -(VectorSLT.bordered a).det = (∏ i, a i) * ∑ i, a i ^ 3
+'VectorSLT.mainTheorem_shear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.mainTheorem_shear_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.mainTheorem_shear_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.propLprime_shear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.propLprime_moments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.propLprime_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.shear_normalize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.theoremM' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.theoremM_shear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.ZN1_two_sided' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.ZN1_two_sided_shear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.ZN1_two_sided_moments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.ZN1_two_sided_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.Gdown' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.Zpos_lower_N4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.middle_position_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.position_four_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.separation_moments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.separation_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.inverse_criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.rank_one_criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.shear_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.deriv_criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.sepMap_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.sepLin_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.sep_absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.bordered_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.null_direction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.normalize_Aeta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_coeff_ne3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_s5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_c3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_c2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_c1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.errPη_c0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_lower_segment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_at_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_lower_population' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_lower_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X4_lower_compact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.Z_eq_layercake' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.laplaceLower_of_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.laplaceUpper_of_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.HasLaplacePair.of_comparable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.HasLaplacePair.of_prior' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.HasLaplacePair.prod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.monomial_hasLaplacePair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.SLT.normalCrossing_Z' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_main_theorem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_main_theorem_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_main_theorem_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_position_one_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_position_one_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_position_one_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_position_one_exact_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_any_position_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_near_shear_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_near_shear_lower_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_near_shear_normal_form' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_shear_normal_form' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_E0_bordered_det' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,395 @@
+⚠ [9047/9091] Built VectorSLT.Network (6.7s)
+warning: VectorSLT/Network.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [9048/9091] Built VectorSLT.E0Identity (7.3s)
+warning: VectorSLT/E0Identity.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+warning: VectorSLT/E0Identity.lean:38:4: `if_true` has been deprecated: Use `ite_true` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵t̵r̵u̵e̵i̲t̲e̲_̲t̲r̲u̲e̲
+warning: VectorSLT/E0Identity.lean:37:32: This simp argument is unused:
+  ite_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mul_ite, mul_zero, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, if_true, Finset.sum_ite_eq']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/E0Identity.lean:37:41: This simp argument is unused:
+  zero_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mul_ite, mul_zero, ite_mul, Finset.sum_ite_eq, Finset.mem_univ, if_true, Finset.sum_ite_eq']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/E0Identity.lean:37:51: This simp argument is unused:
+  Finset.sum_ite_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mul_ite, mul_zero, ite_mul, zero_mul, Finset.mem_univ, if_true, Finset.sum_ite_eq']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [9049/9091] Built VectorSLT.SLT.Laplace (7.7s)
+warning: VectorSLT/SLT/Laplace.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [9050/9091] Built VectorSLT.SLT.Toolkit (8.1s)
+warning: VectorSLT/SLT/Toolkit.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [9051/9091] Built VectorSLT.Sublevel1D (8.3s)
+warning: VectorSLT/Sublevel1D.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [9052/9091] Built VectorSLT.SLT.NormalCrossing (9.4s)
+warning: VectorSLT/SLT/NormalCrossing.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+warning: VectorSLT/SLT/NormalCrossing.lean:141:26: Variable name `hb` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hb
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: VectorSLT/SLT/NormalCrossing.lean:162:43: Variable name `hB0` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hB0
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: VectorSLT/SLT/NormalCrossing.lean:186:44: Variable name `hC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: VectorSLT/SLT/NormalCrossing.lean:439:25: Variable name `hk` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hk
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: VectorSLT/SLT/NormalCrossing.lean:648:33: Variable name `hlam` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hlam
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [9053/9091] Built VectorSLT.PolyModel (4.5s)
+✔ [9054/9091] Built VectorSLT.SLT.Monomial (4.5s)
+✔ [9055/9091] Built VectorSLT.QuadSublevel (5.5s)
+⚠ [9056/9091] Built VectorSLT.SLT.NormalCrossingD (4.8s)
+warning: VectorSLT/SLT/NormalCrossingD.lean:128:25: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/SLT/NormalCrossingD.lean:141:25: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/SLT/NormalCrossingD.lean:150:25: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+✔ [9057/9091] Built VectorSLT.SLT.InvSqrt (4.0s)
+⚠ [9058/9091] Built VectorSLT.ErrorBound (16s)
+warning: VectorSLT/ErrorBound.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+✔ [9059/9091] Built VectorSLT.LeadingRow (10s)
+✔ [9060/9091] Built VectorSLT.LemmaM3 (5.0s)
+✔ [9061/9091] Built VectorSLT.LeadingModel (4.1s)
+⚠ [9062/9091] Built VectorSLT.LemmaM4 (9.4s)
+warning: VectorSLT/LemmaM4.lean:63:6: This simp argument is unused:
+  Matrix.head_cons
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Mt, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const, mt00, mt01, mt11, L, k, bp, w, q, a', u, v, c]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:63:68: This simp argument is unused:
+  Matrix.head_fin_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Mt, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.empty_val', Matrix.cons_val_fin_one, mt00, mt01, mt11, L, k, bp, w, q, a', u, v, c]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:104:47: This simp argument is unused:
+  Matrix.head_cons
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Mt, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const, Fin.zero_eta, Fin.mk_one, Fin.isValue]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:105:29: This simp argument is unused:
+  Matrix.head_fin_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Mt, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.empty_val', Matrix.cons_val_fin_one, Fin.zero_eta, Fin.mk_one, Fin.isValue]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:175:22: This simp argument is unused:
+  ENNReal.zero_rpow_of_neg (by norm_num : -(1 / 2 : ℝ) < 0)
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:466:55: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Real.volume_Icc, Fin.prod_univ_two, zero_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM4.lean:466:65: This simp argument is unused:
+  zero_sub
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Real.volume_Icc, Fin.prod_univ_two, zero_add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [9063/9091] Built VectorSLT.ActiveCoords (4.5s)
+⚠ [9064/9091] Built VectorSLT.LemmaM5 (5.4s)
+warning: VectorSLT/LemmaM5.lean:43:10: This simp argument is unused:
+  ENNReal.zero_rpow_of_neg (by norm_num : -(1 / 2 : ℝ) < 0)
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/LemmaM5.lean:113:13: Variable name `hε` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hε
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [9065/9091] Built VectorSLT.ChartLip (3.8s)
+⚠ [9066/9091] Built VectorSLT.FullNetwork (11s)
+warning: VectorSLT/FullNetwork.lean:150:34: This simp argument is unused:
+  mem_ofPred_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [mem_Icc, ofPred_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [9067/9091] Built VectorSLT.PivotRow (3.8s)
+✔ [9068/9091] Built VectorSLT.Normalization (4.9s)
+⚠ [9069/9091] Built VectorSLT.LemmaM1 (4.8s)
+warning: VectorSLT/LemmaM1.lean:38:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/LemmaM1.lean:38:36: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/LemmaM1.lean:39:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+warning: VectorSLT/LemmaM1.lean:39:50: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+warning: VectorSLT/LemmaM1.lean:48:21: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:69:15: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+warning: VectorSLT/LemmaM1.lean:105:13: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:131:9: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:131:33: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:138:6: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/LemmaM1.lean:138:30: `if_pos` has been deprecated: Use `ite_eq_left` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵p̵o̵s̵i̲t̲e̲_̲e̲q̲_̲l̲e̲f̲t̲
+warning: VectorSLT/LemmaM1.lean:138:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+warning: VectorSLT/LemmaM1.lean:138:68: `if_neg` has been deprecated: Use `ite_eq_right` instead
+
+Hint: Replace the deprecated name:
+  i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
+warning: VectorSLT/LemmaM1.lean:195:8: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:198:8: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:204:21: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:257:75: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: VectorSLT/LemmaM1.lean:257:75: Unused tactic linter: `<;>` should be replaced with `;` or be removed.
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: VectorSLT/LemmaM1.lean:278:19: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:282:19: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:299:24: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+warning: VectorSLT/LemmaM1.lean:332:24: `MvPolynomial.coeff_add` has been deprecated: Use `AddMonoidAlgebra.coeff_add` instead
+
+Note: The updated constant has a different type:
+  ∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] (x y : AddMonoidAlgebra R M), (x + y).coeff = x.coeff + y.coeff
+instead of
+  ∀ {R : Type u} {σ : Type u_1} [inst : CommSemiring R] (m : σ →₀ ℕ) (p q : MvPolynomial σ R),
+    (p + q).coeff m = p.coeff m + q.coeff m
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
+⚠ [9070/9091] Built VectorSLT.RowBound (4.2s)
+warning: VectorSLT/RowBound.lean:132:4: This simp argument is unused:
+  true_implies
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [box3, square, pivMap, MeasurableEquiv.refl_apply, perm1_apply, perm2_apply, e2_apply,
+    mem_ofPred_eq, mem_preimage, mem_prod, mem_pi, mem_univ, forall_const, Fin.forall_fin_two, Matrix.cons_val_zero,
+    Matrix.cons_val_one, Pi.zero_apply, zero_sub, zero_add, abs_le, mem_Icc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/RowBound.lean:196:37: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: VectorSLT/RowBound.lean:196:8: Unused tactic linter: `exact Or.inr (Or.inr ⟨h2, by linarith, c3⟩)` does nothing.
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+⚠ [9071/9091] Built VectorSLT.Separation (4.0s)
+warning: VectorSLT/Separation.lean:77:5: Variable name `hM` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hM
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [9072/9091] Built VectorSLT.InverseCriterion (4.1s)
+✔ [9073/9091] Built VectorSLT.Pairs (3.7s)
+✔ [9074/9091] Built VectorSLT.InvertibleSeparation (4.2s)
+✔ [9075/9091] Built VectorSLT.GeneralInput (4.2s)
+✔ [9076/9091] Built VectorSLT.Gaussian (3.9s)
+✔ [9077/9091] Built VectorSLT.GramLower (4.5s)
+✔ [9078/9091] Built VectorSLT.SepNorm (4.5s)
+✔ [9079/9091] Built VectorSLT.Gdown (4.3s)
+✔ [9080/9091] Built VectorSLT.EtaTarget (4.0s)
+⚠ [9081/9091] Built VectorSLT.TheoremM (9.6s)
+warning: VectorSLT/TheoremM.lean:62:31: This simp argument is unused:
+  c3M
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Fin.sum_univ_two, c2M, c1M, ZM, SMx, Zmom, etaM, yM, Zr, actα, actν, inA, inB, momA, momP1, momP2,
+    P1t, P2t, cub3, tri0, tri1, tri2, Finset.sum_range_succ, Finset.sum_range_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/TheoremM.lean:62:36: This simp argument is unused:
+  c2M
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Fin.sum_univ_two, c3M, c1M, ZM, SMx, Zmom, etaM, yM, Zr, actα, actν, inA, inB, momA, momP1, momP2,
+    P1t, P2t, cub3, tri0, tri1, tri2, Finset.sum_range_succ, Finset.sum_range_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/TheoremM.lean:62:41: This simp argument is unused:
+  c1M
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Fin.sum_univ_two, c3M, c2M, ZM, SMx, Zmom, etaM, yM, Zr, actα, actν, inA, inB, momA, momP1, momP2,
+    P1t, P2t, cub3, tri0, tri1, tri2, Finset.sum_range_succ, Finset.sum_range_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/TheoremM.lean:62:46: This simp argument is unused:
+  ZM
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Fin.sum_univ_two, c3M, c2M, c1M, SMx, Zmom, etaM, yM, Zr, actα, actν, inA, inB, momA, momP1, momP2,
+    P1t, P2t, cub3, tri0, tri1, tri2, Finset.sum_range_succ, Finset.sum_range_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: VectorSLT/TheoremM.lean:215:12: Unused tactic linter: `simp only` does nothing.
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+✔ [9082/9091] Built VectorSLT.ShearUpper (4.9s)
+✔ [9083/9091] Built VectorSLT.EtaError (13s)
+✔ [9084/9091] Built VectorSLT.TwoSidedLaws (3.5s)
+✔ [9085/9091] Built VectorSLT.LowerPositions (4.9s)
+✔ [9086/9091] Built VectorSLT.MainTheorem (3.7s)
+✔ [9087/9091] Built VectorSLT.EtaLower (13s)
+✔ [9088/9091] Built VectorSLT.EtaPopulation (3.4s)
+✔ [9089/9091] Built VectorSLT.PaperNames (3.3s)
+✔ [9090/9091] Built VectorSLT (3.3s)
+Build completed successfully (9091 jobs).
+lake build  241.20s user 119.08s system 344% cpu 1:44.52 total
+exit 0

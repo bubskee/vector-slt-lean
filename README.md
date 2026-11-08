@@ -1,11 +1,11 @@
 # VectorSLT
 
-This library holds Lean 4 certificates for the first-shear-position four-logarithm lower bound of the vector (width-two cubic ResNet) SLT project. The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`).
+This library holds the Lean 4 certificates for paper 2 of the vector (width-two cubic ResNet) SLT project. Paper 2 covers rank-one shears and their position table, the invertible contrast, the E₀ identity and the near-shear lower bound X4. The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`, then the commit pinned in each brief, the last being `caccd6a`). The coverage is recorded in `formalization_status.md` and checked by `checks/`.
 
 Pins: Lean `v4.35.0` and mathlib `56a005855ea17e0b0958f73ec801ae140b0a1679`.
 
 ```bash
-lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
+lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean && lake env lean checks/PaperAudit.lean
 ```
 
 | File | Content | Headline |
@@ -46,28 +46,46 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean
 | `EtaError.lean` | Brief 04, X4: Lemma L′3 for `A_η` (bounds on `αν² − η²`, `ν³ − η³`; the difference argument for `Δ₀`) | `E1η_bound`, `shiftη_bound`, `err_bound_eta` |
 | `EtaLower.lean` | Brief 04, X4: **`Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, `c`, `N₀` independent of `|η| ≤ 1/10`** | `X4_lower`, `X4_lower_segment`, `Leta` |
 | `EtaPopulation.lean` | Brief 04, X4 for the population loss: moment laws, Gaussian, compact support | `X4_lower_population`, `X4_lower_gaussian`, `X4_lower_compact` |
+| `PaperNames.lean` | Brief 05, R3: paper-facing aliases (`alias` only; same types and proofs) | `vector_shear_main_theorem`, `vector_shear_position_one_exact`, `vector_near_shear_lower` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |
 | `GeneralInput.lean` | L5: (G↑) for every input law with finite 162nd moments; L′ and the separation without compact support | `l2_le_sup`, `propLprime_moments`, `separation_moments` |
 | `Separation.lean` | L1: `Z_{N,1}/Z_{N,4} ≥ c log⁴N`, with Theorem K as the named hypothesis `ThmK` | `separation`, `separation_tendsto` |
 
-## Coverage of the depth-four shear table
+## Coverage
 
-Each row below is either **Lean-certified** or **conditional on a named hypothesis**. The setting for every row:
+`formalization_status.md` has the full correspondence table and states every hypothesis exactly. Each row there is tagged **certified**, **conditional** on a named hypothesis, or **not formalized**. `checks/` holds the focused audit (`PaperAudit.lean`), the build and audit logs, a SHA-256 manifest of the sources, and the before/after declaration-type comparison.
+
+The depth-four shear table is stated for the following setting:
 - target: every rank-one shear `A = a vᵀ` with both rows nonzero;
 - input law: finite 162nd moments and a density bounded below on some box (standard Gaussian included);
-- prior: bounded, and bounded below near the base point;
+- prior: bounded, and bounded below near each base point;
 - cutoff: at most 1, bounded below near 0, and supported in a ball of radius `r(A)`.
+
+Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 
 | Position | Pair | Lower half | Upper half | Lean |
 |---|---|---|---|---|
-| 1 | (4,5) | Lean-certified (Proposition L′) | Lean-certified (Theorem M) | `ZN1_two_sided_moments` |
-| 2 | (4,1) | Lean-certified | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
-| 3 | (4,1) | Lean-certified | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
-| 4 | (4,1) | Lean-certified | conditional on `ThmKUpper` (Theorem K) | `position_four_pair` |
-| all | table | — | conditional on `ThmK`, `ThmN` | `mainTheorem_shear`, `mainTheorem_shear_ratio` |
+| 1 | (4,5) | certified (Theorem L′) | certified (Theorem M) | `ZN1_two_sided_moments` (`vector_shear_position_one_exact`) |
+| 2 | (4,1) | certified (O3) | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
+| 3 | (4,1) | certified (O3) | conditional on `ThmN` (Theorem N) | `middle_position_pair` |
+| 4 | (4,1) | certified (O3) | conditional on `ThmKUpper` (Theorem K) | `position_four_pair` |
+| all | table | — | conditional on `ThmK`, `ThmN` | `mainTheorem_shear` (`vector_shear_main_theorem`), `mainTheorem_shear_ratio` |
 
-`ThmK` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and neither is proved here.
+| Further result | Lean | Status |
+|---|---|---|
+| Normalization (Theorem H §2) | `shear_normalize` | certified |
+| Separation `Z_{N,1}/Z_{N,4} ≥ c log⁴ N` | `separation_moments` | conditional on `ThmKUpper` |
+| Invertible contrast (O5): inverse criterion; separation through an invertible block, `σ > 0` | `inverse_criterion`, `rank_one_criterion`, `sepMap_injective`, `sepLin_lower`, `sep_absorb` | certified |
+| Invertible contrast: network-level placement independence at depths 4 and 5 | — | not formalized |
+| E₀ identity | `bordered_det`, `null_direction` | certified |
+| X1 normal form (`β₀ > 0`), X2 coefficients | `normalize_Aeta`, `errPη_coeff_ne3`, `errPη_c2` | certified (the `β₀ < 0` swap is not formalized) |
+| X4: `Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, uniform in `\|η\| ≤ 1/10` | `X4_lower_population`, `X4_lower_gaussian` | certified |
+| X5, X6 | — | not formalized |
+| Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN` | not formalized |
+| SLT layer (normal crossings, products, comparability) | `VectorSLT.SLT.*` | certified |
 
-Every audited declaration depends only on `propext`, `Classical.choice` and `Quot.sound`.
+`ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here.
+
+Every declaration in `VectorSLT/Audit.lean` (199) and `checks/PaperAudit.lean` (63) depends on exactly `propext`, `Classical.choice` and `Quot.sound`.

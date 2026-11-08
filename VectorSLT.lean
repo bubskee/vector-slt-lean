@@ -40,3 +40,4 @@ import VectorSLT.EtaTarget
 import VectorSLT.EtaError
 import VectorSLT.EtaLower
 import VectorSLT.EtaPopulation
+import VectorSLT.PaperNames
