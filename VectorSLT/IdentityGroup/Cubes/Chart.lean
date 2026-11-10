@@ -125,10 +125,6 @@ lemma exists_symForms_mem_chartRegion {n : ℕ} (u : Fin (n + 1) → ℝ × ℝ)
 noncomputable def expG {n : ℕ} (u : Fin n → ℝ × ℝ) : ℝ≥0∞ :=
   ENNReal.ofReal (Real.exp (-cubeSumSq u))
 
-lemma measurable_cubeSumSq {n : ℕ} : Measurable (cubeSumSq (k := n)) := by
-  unfold cubeSumSq cubeSum
-  fun_prop
-
 lemma measurable_expG {n : ℕ} : Measurable (expG (n := n)) := by
   unfold expG
   exact ENNReal.measurable_ofReal.comp

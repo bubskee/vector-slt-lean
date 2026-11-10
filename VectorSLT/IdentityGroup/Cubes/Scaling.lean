@@ -28,6 +28,11 @@ lemma cubeSumSq_smul {k : ℕ} (t : ℝ) (u : Fin k → ℝ × ℝ) :
   simp only [cubeSumSq, cubeSum_smul, Finset.mul_sum]
   exact Finset.sum_congr rfl (fun _ _ => by ring)
 
+@[fun_prop]
+lemma measurable_cubeSumSq {n : ℕ} : Measurable (cubeSumSq (k := n)) := by
+  unfold cubeSumSq cubeSum
+  fun_prop
+
 lemma cubeSumSq_nonneg {k : ℕ} (u : Fin k → ℝ × ℝ) : 0 ≤ cubeSumSq u :=
   Finset.sum_nonneg (fun _ _ => sq_nonneg _)
 
