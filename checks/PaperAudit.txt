@@ -195,6 +195,142 @@ fun v =>
 def VectorSLT.LeadingMap.LamFour : (Fin 4 → ℝ) × (Fin 6 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ) → Fin 2 → ℝ :=
 { toFun := fun v x k => VectorSLT.LeadingMap.poly11 (VectorSLT.LeadingMap.coeffFour v k) (x 0 - x 1) (x 1),
   map_add' := VectorSLT.LeadingMap.LamFour._proof_1, map_smul' := VectorSLT.LeadingMap.LamFour._proof_2 }
+def VectorSLT.LossCompare.Ψ : Fin 4 → VectorSLT.Raw16 → (Fin 4 → ℝ) × (Fin 12 → ℝ) :=
+fun p θ => (VectorSLT.LossCompare.cvec θ, VectorSLT.LossCompare.wOf p θ)
+def VectorSLT.LossCompare.cvec : VectorSLT.Raw16 → Fin 4 → ℝ :=
+fun θ =>
+  ![VectorSLT.LossCompare.e30 (VectorSLT.rawW θ) 0, VectorSLT.LossCompare.e21 (VectorSLT.rawW θ) 0,
+    VectorSLT.LossCompare.e30 (VectorSLT.rawW θ) 1, VectorSLT.LossCompare.e21 (VectorSLT.rawW θ) 1]
+def VectorSLT.LossCompare.wOf : Fin 4 → VectorSLT.Raw16 → Fin 12 → ℝ :=
+fun p θ => VectorSLT.LossCompare.flat (VectorSLT.LossCompare.inact p θ)
+def VectorSLT.LossCompare.flat : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 12 → ℝ :=
+fun V n => V ⟨↑n / 4, ⋯⟩ ⟨↑n % 4 / 2, ⋯⟩ ⟨↑n % 2, ⋯⟩
+def VectorSLT.LossCompare.unflat : (Fin 12 → ℝ) → Fin 3 → Matrix (Fin 2) (Fin 2) ℝ :=
+fun ξ l i j => ξ ⟨4 * ↑l + 2 * ↑i + ↑j, ⋯⟩
+def VectorSLT.LossCompare.inact : Fin 4 → VectorSLT.Raw16 → Fin 3 → Matrix (Fin 2) (Fin 2) ℝ :=
+fun p θ => p.removeNth (VectorSLT.rawW θ)
+def VectorSLT.LossCompare.MarginData : MeasureTheory.Measure (Fin 2 → ℝ) →
+  Matrix (Fin 2) (Fin 2) ℝ →
+    (VectorSLT.Raw16 → ENNReal) → (VectorSLT.Raw16 → ENNReal) → Fin 4 → ((Fin 12 → ℝ) → ℝ) → ℝ → Prop :=
+fun μ A φ χ p G ε =>
+  ∃ Ψ' J κ,
+    Measurable Ψ' ∧
+      0 < κ ∧
+        (∀ (f : (Fin 4 → ℝ) × (Fin 12 → ℝ) → ENNReal),
+            Measurable f →
+              ∫⁻ (θ : VectorSLT.Raw16), f (Ψ' θ) * (φ θ * χ (θ - VectorSLT.basePos A p)) ≤
+                ENNReal.ofReal J * ∫⁻ (y : (Fin 4 → ℝ) × (Fin 12 → ℝ)), f y) ∧
+          ∀ (θ : VectorSLT.Raw16),
+            φ θ * χ (θ - VectorSLT.basePos A p) ≠ 0 →
+              κ * (∑ i, (Ψ' θ).1 i ^ 2 + G (Ψ' θ).2) ≤ VectorSLT.popLossA μ A θ ∧ (Ψ' θ).2 ∈ Metric.closedBall 0 (ε / 2)
+def VectorSLT.LossCompare.G4 : (Fin 12 → ℝ) → ℝ :=
+fun ξ => VectorSLT.LossCompare.H4 1 ξ
+def VectorSLT.LossCompare.H4 : ℝ → (Fin 12 → ℝ) → ℝ :=
+fun r ξ => ∑ i, VectorSLT.LossCompare.h4 r (VectorSLT.LossCompare.unflat ξ) i ^ 2
+def VectorSLT.LossCompare.h4 : ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 6 → ℝ :=
+fun r V =>
+  ![VectorSLT.LossCompare.hS5 r V, VectorSLT.LossCompare.hS4 r V, VectorSLT.LossCompare.hST r V 0,
+    VectorSLT.LossCompare.hT3 r V 0, VectorSLT.LossCompare.hST r V 1, VectorSLT.LossCompare.hT3 r V 1]
+def VectorSLT.LossCompare.hS5 : ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ :=
+fun r V =>
+  r ^ 3 * VectorSLT.LossCompare.W5 V / 3 + (1 - r ^ 3 * VectorSLT.LossCompare.Pm V 0 0) * VectorSLT.LossCompare.Dm V 0 -
+    r ^ 3 * VectorSLT.LossCompare.Pm V 0 1 * VectorSLT.LossCompare.Pm V 1 0
+def VectorSLT.LossCompare.hS4 : ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ :=
+fun r V =>
+  ((1 - r ^ 3 * VectorSLT.LossCompare.Pm V 0 0) * r ^ 3 * VectorSLT.LossCompare.W4 V +
+            9 * (1 - r ^ 3 * VectorSLT.LossCompare.Pm V 0 0) ^ 2 * VectorSLT.LossCompare.Dm V 1 -
+          9 * r ^ 3 * (1 - r ^ 3 * VectorSLT.LossCompare.Pm V 0 0) * VectorSLT.LossCompare.Pm V 0 1 *
+            VectorSLT.LossCompare.Pm V 1 1 -
+        6 * r ^ 3 * (1 - r ^ 3 * VectorSLT.LossCompare.Pm V 0 0) * VectorSLT.LossCompare.Pm V 0 1 *
+          VectorSLT.LossCompare.Dm V 0 +
+      6 * r ^ 6 * VectorSLT.LossCompare.Pm V 0 1 ^ 2 * VectorSLT.LossCompare.Pm V 1 0) /
+    9
+def VectorSLT.LossCompare.hST : ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 2 → ℝ :=
+fun r V k =>
+  r ^ 3 * VectorSLT.LossCompare.Pm V k 1 ^ 2 +
+    (1 - r ^ 3 * VectorSLT.LossCompare.Pm V k 0) * VectorSLT.LossCompare.Pm V k 2
+def VectorSLT.LossCompare.hT3 : ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 2 → ℝ :=
+fun r V k =>
+  -(r ^ 6 * VectorSLT.LossCompare.Pm V k 1 ^ 3) +
+    (1 - r ^ 3 * VectorSLT.LossCompare.Pm V k 0) ^ 2 * VectorSLT.LossCompare.Pm V k 3
+def VectorSLT.LossCompare.Pm : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 2 → ℕ → ℝ :=
+fun V k i => VectorSLT.LeadingMap.mom V Finset.univ k i
+def VectorSLT.LossCompare.Dm : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℕ → ℝ :=
+fun V i => VectorSLT.LossCompare.Pm V 0 i - VectorSLT.LossCompare.Pm V 1 i
+def VectorSLT.LossCompare.W5 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ :=
+fun V => VectorSLT.LossCompare.e50 (VectorSLT.LossCompare.ext4 V) 0
+def VectorSLT.LossCompare.W4 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ :=
+fun V => VectorSLT.LossCompare.e41 (VectorSLT.LossCompare.ext4 V) 0
+def VectorSLT.LossCompare.ext4 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 4 → Matrix (Fin 2) (Fin 2) ℝ :=
+fun V => ![V 0, V 1, V 2, 0]
+def VectorSLT.LossCompare.Gmid : Fin 4 → (Fin 12 → ℝ) → ℝ :=
+fun p ξ => VectorSLT.LossCompare.Hmid p 1 ξ
+def VectorSLT.LossCompare.Hmid : Fin 4 → ℝ → (Fin 12 → ℝ) → ℝ :=
+fun p r ξ =>
+  ∑ i, VectorSLT.LossCompare.hvec p (r ^ 3) (VectorSLT.LossCompare.cubeTab (VectorSLT.LossCompare.unflat ξ)) i ^ 2
+def VectorSLT.LossCompare.hvec : Fin 4 → ℝ → VectorSLT.LossCompare.Inact → Fin 11 → ℝ :=
+fun p s a => VectorSLT.LossCompare.Nmid fun j => VectorSLT.LossCompare.hS p s a j
+def VectorSLT.LossCompare.hS : Fin 4 → ℝ → VectorSLT.LossCompare.Inact → Fin 11 → ℝ :=
+fun p s a j =>
+  match j with
+  | 0 =>
+    (1 - s * VectorSLT.LossCompare.Pa a 0 0) * VectorSLT.LossCompare.C12 (VectorSLT.LossCompare.yTab p a) 0 +
+      s * VectorSLT.LossCompare.Pa a 0 1 ^ 2 * VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C12 x 0) 0
+  | 1 =>
+    (1 - s * VectorSLT.LossCompare.Pa a 0 0) ^ 2 * VectorSLT.LossCompare.C03 (VectorSLT.LossCompare.yTab p a) 0 -
+      s ^ 2 * VectorSLT.LossCompare.Pa a 0 1 ^ 3 *
+        VectorSLT.LossCompare.DO p s a (fun x => VectorSLT.LossCompare.C03 x 0) 0
+  | 2 =>
+    (1 - s * VectorSLT.LossCompare.Pa a 1 0) * VectorSLT.LossCompare.C12 (VectorSLT.LossCompare.yTab p a) 1 +
+      s * VectorSLT.LossCompare.Pa a 1 1 ^ 2 * VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C12 x 1) 1
+  | 3 =>
+    (1 - s * VectorSLT.LossCompare.Pa a 1 0) ^ 2 * VectorSLT.LossCompare.C03 (VectorSLT.LossCompare.yTab p a) 1 -
+      s ^ 2 * VectorSLT.LossCompare.Pa a 1 1 ^ 3 *
+        VectorSLT.LossCompare.DO p s a (fun x => VectorSLT.LossCompare.C03 x 1) 1
+  | 4 => VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C50 x 0
+  | 5 => VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C50 x 1
+  | 6 =>
+    ((1 - s * VectorSLT.LossCompare.Pa a 0 0) * VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C41 x 0) +
+      s * VectorSLT.LossCompare.Pa a 0 1 ^ 2 * VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C41 x 0) 0
+  | 7 =>
+    ((1 - s * VectorSLT.LossCompare.Pa a 1 0) * VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C41 x 1) +
+      s * VectorSLT.LossCompare.Pa a 1 1 ^ 2 * VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C41 x 1) 1
+  | 8 =>
+    ((1 - s * VectorSLT.LossCompare.Pa a 0 0) ^ 2 * (1 - s * VectorSLT.LossCompare.Pa a 1 0) *
+            VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C32 x 0) +
+          (1 - s * VectorSLT.LossCompare.Pa a 0 0) * (1 - s * VectorSLT.LossCompare.Pa a 1 0) * s *
+              VectorSLT.LossCompare.Pa a 0 1 ^ 2 *
+            VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C32 x 0) 0 +
+        (1 - s * VectorSLT.LossCompare.Pa a 0 0) ^ 2 * s * VectorSLT.LossCompare.Pa a 1 1 ^ 2 *
+          VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C32 x 0) 1 -
+      (1 - s * VectorSLT.LossCompare.Pa a 1 0) * s ^ 2 * VectorSLT.LossCompare.Pa a 0 1 ^ 3 *
+        VectorSLT.LossCompare.DO p s a (fun x => VectorSLT.LossCompare.C32 x 0) 0
+  | 9 =>
+    ((1 - s * VectorSLT.LossCompare.Pa a 1 0) ^ 2 * (1 - s * VectorSLT.LossCompare.Pa a 0 0) *
+            VectorSLT.LossCompare.qf p s a fun x => VectorSLT.LossCompare.C32 x 1) +
+          (1 - s * VectorSLT.LossCompare.Pa a 1 0) * (1 - s * VectorSLT.LossCompare.Pa a 0 0) * s *
+              VectorSLT.LossCompare.Pa a 1 1 ^ 2 *
+            VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C32 x 1) 1 +
+        (1 - s * VectorSLT.LossCompare.Pa a 1 0) ^ 2 * s * VectorSLT.LossCompare.Pa a 0 1 ^ 2 *
+          VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C32 x 1) 0 -
+      (1 - s * VectorSLT.LossCompare.Pa a 0 0) * s ^ 2 * VectorSLT.LossCompare.Pa a 1 1 ^ 3 *
+        VectorSLT.LossCompare.DO p s a (fun x => VectorSLT.LossCompare.C32 x 1) 1
+  | 10 =>
+    (1 - s * VectorSLT.LossCompare.Pa a 0 0) * VectorSLT.LossCompare.kf p s a +
+      s * VectorSLT.LossCompare.Pa a 0 1 ^ 2 * VectorSLT.LossCompare.DN p s a (fun x => VectorSLT.LossCompare.C70 x 0) 0
+def VectorSLT.LossCompare.Nmid : (Fin 11 → ℝ) → Fin 11 → ℝ :=
+fun L =>
+  have g2 := L 10 / 3;
+  have g0 := L 0 / 3 - g2;
+  have g8 := (L 6 / 3 - 2 * g2) / 3;
+  have g6 := (L 7 / 3 - 3 * g8) / 2;
+  have g4 := L 2 / 3 - g6;
+  have g3 := L 8 / 3 - 3 * (g0 - g4);
+  have g7 := L 9 / 3 - 3 * (g0 - g4);
+  have g10 := L 4 / 3;
+  ![g0, L 1 - g3, g2, g3, g4, L 3 - g7, g6, g7, g8, g10 - L 5 / 3, g10]
+def VectorSLT.LossCompare.cubeTab : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → VectorSLT.LossCompare.Inact :=
+fun V l k => VectorSLT.LeadingMap.cube (VectorSLT.LeadingMap.rowForm (V l) k)
 @VectorSLT.mainTheorem_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -1009,6 +1145,112 @@ VectorSLT.LeadingMap.net_expansion_four : ∀ (A Δ : Matrix (Fin 2) (Fin 2) ℝ
     fun ε => ε ^ 4
 VectorSLT.LeadingMap.activeCoords_eq : ∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
   VectorSLT.LeadingMap.activeCoords Δ V = VectorSLT.LeadingMap.activeLin Δ + VectorSLT.LeadingMap.activeCoords 0 V
+VectorSLT.LossCompare.change_of_variables : ∀ (p : Fin 4) {ρ : ℝ},
+  ρ ≤ 1 / 2 →
+    ∃ J,
+      0 ≤ J ∧
+        ∀ (f : (Fin 4 → ℝ) × (Fin 12 → ℝ) → ENNReal),
+          Measurable f →
+            ∫⁻ (θ : VectorSLT.Raw16),
+                f (VectorSLT.LossCompare.Ψ p θ) *
+                  (Metric.closedBall (VectorSLT.basePos VectorSLT.A0 p) ρ).indicator 1 θ ≤
+              ENNReal.ofReal J * ∫⁻ (y : (Fin 4 → ℝ) × (Fin 12 → ℝ)), f y
+VectorSLT.LossCompare.position_four_comparison : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ))
+  [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∀ (ρ : ℝ),
+                ∃ κ,
+                  0 < κ ∧
+                    ∀ θ ∈ Metric.closedBall (VectorSLT.basePos VectorSLT.A0 3) ρ,
+                      κ *
+                          (∑ i, (VectorSLT.LossCompare.Ψ 3 θ).1 i ^ 2 +
+                            VectorSLT.LossCompare.G4 (VectorSLT.LossCompare.Ψ 3 θ).2) ≤
+                        VectorSLT.popLossA μ VectorSLT.A0 θ
+VectorSLT.LossCompare.position_four_homogeneity : (∀ (r : ℝ) (ξ : Fin 12 → ℝ),
+    VectorSLT.LossCompare.G4 (r • ξ) = r ^ 6 * VectorSLT.LossCompare.H4 r ξ) ∧
+  (∀ (r : ℝ) (ξ : Fin 12 → ℝ), 0 ≤ VectorSLT.LossCompare.H4 r ξ) ∧
+    (Continuous fun q => VectorSLT.LossCompare.H4 q.1 q.2) ∧
+      ∀ (ξ : Fin 12 → ℝ),
+        VectorSLT.LossCompare.H4 0 ξ =
+          ∑ i, VectorSLT.LeadingMap.leadingMap (VectorSLT.LeadingMap.w4 (VectorSLT.LossCompare.unflat ξ)) i ^ 2
+@VectorSLT.LossCompare.position_four_marginData : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∃ c,
+      0 < c ∧
+        ∀ (ε r : ℝ),
+          0 ≤ r →
+            r ≤ c * min (1 / 2) (ε / 2) →
+              ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+                (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+                  ∀ {lo hi : Fin 2 → ℝ},
+                    (∀ (i : Fin 2), lo i < hi i) →
+                      ∀ {μ₀ : ℝ},
+                        0 < μ₀ →
+                          ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                            ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                              0 ≤ π₁ →
+                                (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                  (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                    (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                      VectorSLT.LossCompare.MarginData μ A φ χ 3 VectorSLT.LossCompare.G4 ε
+@VectorSLT.LossCompare.middle_comparison : ∀ {p : Fin 4},
+  p = 1 ∨ p = 2 →
+    ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+      (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+        ∀ {lo hi : Fin 2 → ℝ},
+          (∀ (i : Fin 2), lo i < hi i) →
+            ∀ {μ₀ : ℝ},
+              0 < μ₀ →
+                ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                  ∀ (ρ : ℝ),
+                    ∃ κ,
+                      0 < κ ∧
+                        ∀ θ ∈ Metric.closedBall (VectorSLT.basePos VectorSLT.A0 p) ρ,
+                          κ *
+                              (∑ i, (VectorSLT.LossCompare.Ψ p θ).1 i ^ 2 +
+                                VectorSLT.LossCompare.Gmid p (VectorSLT.LossCompare.Ψ p θ).2) ≤
+                            VectorSLT.popLossA μ VectorSLT.A0 θ
+VectorSLT.LossCompare.position_two_homogeneity : (∀ (r : ℝ) (ξ : Fin 12 → ℝ),
+    VectorSLT.LossCompare.Gmid 1 (r • ξ) = r ^ 6 * VectorSLT.LossCompare.Hmid 1 r ξ) ∧
+  (∀ (r : ℝ) (ξ : Fin 12 → ℝ), 0 ≤ VectorSLT.LossCompare.Hmid 1 r ξ) ∧
+    (Continuous fun q => VectorSLT.LossCompare.Hmid 1 q.1 q.2) ∧
+      ∀ (ξ : Fin 12 → ℝ),
+        VectorSLT.LossCompare.Hmid 1 0 ξ =
+          ∑ i, VectorSLT.LeadingMap.R2 (VectorSLT.LeadingMap.w2 (VectorSLT.LossCompare.unflat ξ)) i ^ 2
+VectorSLT.LossCompare.position_three_homogeneity : (∀ (r : ℝ) (ξ : Fin 12 → ℝ),
+    VectorSLT.LossCompare.Gmid 2 (r • ξ) = r ^ 6 * VectorSLT.LossCompare.Hmid 2 r ξ) ∧
+  (∀ (r : ℝ) (ξ : Fin 12 → ℝ), 0 ≤ VectorSLT.LossCompare.Hmid 2 r ξ) ∧
+    (Continuous fun q => VectorSLT.LossCompare.Hmid 2 q.1 q.2) ∧
+      ∀ (ξ : Fin 12 → ℝ),
+        VectorSLT.LossCompare.Hmid 2 0 ξ =
+          ∑ i, VectorSLT.LeadingMap.R3 (VectorSLT.LeadingMap.w3 (VectorSLT.LossCompare.unflat ξ)) i ^ 2
+@VectorSLT.LossCompare.middle_marginData : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.ShearTarget A →
+    ∀ {p : Fin 4},
+      p = 1 ∨ p = 2 →
+        ∃ c,
+          0 < c ∧
+            ∀ (ε r : ℝ),
+              0 ≤ r →
+                r ≤ c * min (1 / 2) (ε / 2) →
+                  ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+                    (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+                      ∀ {lo hi : Fin 2 → ℝ},
+                        (∀ (i : Fin 2), lo i < hi i) →
+                          ∀ {μ₀ : ℝ},
+                            0 < μ₀ →
+                              ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                                ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                                  0 ≤ π₁ →
+                                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                          VectorSLT.LossCompare.MarginData μ A φ χ p (VectorSLT.LossCompare.Gmid p) ε
 @VectorSLT.vector_shear_main_theorem : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -1383,6 +1625,14 @@ VectorSLT.vector_near_shear_upper_gaussian : ∀ (φ χ : VectorSLT.Raw16 → EN
 'VectorSLT.LeadingMap.lead_A0_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.LeadingMap.net_expansion_four' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.LeadingMap.activeCoords_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.change_of_variables' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.position_four_comparison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.position_four_homogeneity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.position_four_marginData' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.middle_comparison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.position_two_homogeneity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.position_three_homogeneity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LossCompare.middle_marginData' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]

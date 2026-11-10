@@ -1,13 +1,15 @@
-# Loss comparison at positions two to four (branch `loss-comparison`)
+# Loss comparison at positions two to four
 
 Paper 2, `paper/appendices/D_positions.tex`: D.2, Proposition N2 (first paragraph:
 `K ≍ |𝐜|² + ‖e'(0, w)‖²`; "Radial integral"), D.1 (the active coordinates `𝐜`, Proposition N1,
 Lemma N3); Appendix C ("Active change of variables"). (The first pass cited the old `E_n.tex`,
 E.1/E.2; same statements.) Lean source: `VectorSLT/LossCompare.lean` (headline restatements) and
-`VectorSLT/LossCompare/*.lean`. Audit: `VectorSLT/LossCompare/Audit.lean` (305 declarations; 304
-on `[propext, Classical.choice, Quot.sound]`, one, `rowOf`, on `[propext]` only). Nothing outside `VectorSLT/LossCompare*` was edited;
-the root `VectorSLT.lean`, `VectorSLT/Audit.lean`, `checks/` and `formalization_status.md` are
-untouched (build with `lake build VectorSLT.LossCompare.Audit`).
+`VectorSLT/LossCompare/*.lean`. Audit: the 305 declarations are in `VectorSLT/Audit.lean` (304
+on `[propext, Classical.choice, Quot.sound]`, one, `rowOf`, on `[propext]` only), and the eight
+headlines in `checks/PaperAudit.lean`. The module was written on the branch `loss-comparison`,
+where it had its own audit file and nothing outside `VectorSLT/LossCompare*` was edited. The
+release pass imported it from the root `VectorSLT.lean` and moved that audit into the library
+audit.
 
 **Status.** Items 1–3 and the packaging in `PositionMargin` form (for every shear target) are
 done at positions two, three and four (Lean `p = 1, 2, 3`). Item 4 is left to the slt-bridge zoo
@@ -120,7 +122,7 @@ for the cubic `s⁷` (`pol12` … `pol70`). This gives `ĝ_j(s a) = s h_j(s, a)`
 combination of evaluations of the same functionals (`ghat_smul`), jointly continuous, and
 `h_j(0, a) = Lw p a j`, the linear part.
 
-## Item 4: proposed for the zoo, not done here
+## Item 4: left to the slt-bridge zoo
 
 The radial split, the Gaussian factor and `laplaceUpper_of_angularMargin` are in slt-bridge
 (`SLT/Template/Margin.lean`). Re-proving them in vector-slt-lean would duplicate about 300 lines.

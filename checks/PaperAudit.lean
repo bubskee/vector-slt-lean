@@ -60,6 +60,31 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print VectorSLT.LeadingMap.LamMid
 #print VectorSLT.LeadingMap.coeffFour
 #print VectorSLT.LeadingMap.LamFour
+#print VectorSLT.LossCompare.Ψ
+#print VectorSLT.LossCompare.cvec
+#print VectorSLT.LossCompare.wOf
+#print VectorSLT.LossCompare.flat
+#print VectorSLT.LossCompare.unflat
+#print VectorSLT.LossCompare.inact
+#print VectorSLT.LossCompare.MarginData
+#print VectorSLT.LossCompare.G4
+#print VectorSLT.LossCompare.H4
+#print VectorSLT.LossCompare.h4
+#print VectorSLT.LossCompare.hS5
+#print VectorSLT.LossCompare.hS4
+#print VectorSLT.LossCompare.hST
+#print VectorSLT.LossCompare.hT3
+#print VectorSLT.LossCompare.Pm
+#print VectorSLT.LossCompare.Dm
+#print VectorSLT.LossCompare.W5
+#print VectorSLT.LossCompare.W4
+#print VectorSLT.LossCompare.ext4
+#print VectorSLT.LossCompare.Gmid
+#print VectorSLT.LossCompare.Hmid
+#print VectorSLT.LossCompare.hvec
+#print VectorSLT.LossCompare.hS
+#print VectorSLT.LossCompare.Nmid
+#print VectorSLT.LossCompare.cubeTab
 
 -- Principal declarations
 #check @VectorSLT.mainTheorem_shear
@@ -135,6 +160,14 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #check @VectorSLT.LeadingMap.lead_A0_eq_zero_iff
 #check @VectorSLT.LeadingMap.net_expansion_four
 #check @VectorSLT.LeadingMap.activeCoords_eq
+#check @VectorSLT.LossCompare.change_of_variables
+#check @VectorSLT.LossCompare.position_four_comparison
+#check @VectorSLT.LossCompare.position_four_homogeneity
+#check @VectorSLT.LossCompare.position_four_marginData
+#check @VectorSLT.LossCompare.middle_comparison
+#check @VectorSLT.LossCompare.position_two_homogeneity
+#check @VectorSLT.LossCompare.position_three_homogeneity
+#check @VectorSLT.LossCompare.middle_marginData
 
 -- Paper-facing aliases (R3)
 #check @VectorSLT.vector_shear_main_theorem
@@ -230,6 +263,14 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print axioms VectorSLT.LeadingMap.lead_A0_eq_zero_iff
 #print axioms VectorSLT.LeadingMap.net_expansion_four
 #print axioms VectorSLT.LeadingMap.activeCoords_eq
+#print axioms VectorSLT.LossCompare.change_of_variables
+#print axioms VectorSLT.LossCompare.position_four_comparison
+#print axioms VectorSLT.LossCompare.position_four_homogeneity
+#print axioms VectorSLT.LossCompare.position_four_marginData
+#print axioms VectorSLT.LossCompare.middle_comparison
+#print axioms VectorSLT.LossCompare.position_two_homogeneity
+#print axioms VectorSLT.LossCompare.position_three_homogeneity
+#print axioms VectorSLT.LossCompare.middle_marginData
 #print axioms VectorSLT.vector_shear_main_theorem
 #print axioms VectorSLT.vector_shear_main_theorem_ratio
 #print axioms VectorSLT.vector_shear_main_theorem_gaussian
