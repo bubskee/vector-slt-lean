@@ -1,6 +1,6 @@
 # VectorSLT
 
-This library holds the Lean 4 certificates for paper 2 of the vector (width-two cubic ResNet) SLT project. Paper 2 covers rank-one shears and their position table, the invertible and non-shear contrasts, the E₀ identity, and the near-shear bounds X4 (lower) and X5 (upper). The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`, then the commit pinned in each brief, the last being `caccd6a`). The coverage is recorded in `formalization_status.md` and checked by `checks/`.
+This library holds the Lean 4 certificates for paper 2 of the vector (width-two cubic ResNet) SLT project. Paper 2 covers rank-one shears and their position table, the invertible and non-shear contrasts, the E₀ identity, the near-shear bounds X4 (lower) and X5 (upper), and the leading maps of the error at positions 2–4 (Proposition N1, Lemma N3, (K-R)). The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`, then the commit pinned in each brief, the last being `caccd6a`). The coverage is recorded in `formalization_status.md` and checked by `checks/`.
 
 Pins: Lean `v4.35.0` and mathlib `56a005855ea17e0b0958f73ec801ae140b0a1679`.
 
@@ -51,6 +51,7 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean && lake e
 | `IdentityGroup/Cubes.lean`, `Cubes/*.lean` | Lemma A-cubes: upper half for `k = 1, 2, 3`, lower half for every `k`. Notes: `IdentityGroup/NOTES_cubes.md` | `cubeSumUpper_three`, `cubeSumLower` |
 | `IdentityGroup/Pairs.lean`, `Pairs/*.lean` | Proposition "non-shear rank one", Theorem "invertible active blocks" at every position, Lemma A-box upper half, each from `CubeSumUpper` | `paper_nonshear_pair`, `paper_invertible_pair`, `paper_lemAbox_upper` |
 | `IdentityGroup/Unconditional.lean` | The same with `CubeSumUpper 1, 2, 3` discharged: no hypothesis left. Notes: `IdentityGroup/NOTES_pairs.md` | `prop_nonshear_pair`, `thm_invertible_pair`, `lem_Abox_upper` |
+| `LeadingMap.lean`, `LeadingMap/*.lean` | Proposition N1, Lemma N3, (K-R): `net θ_ε = F_A + ε³ lead + O(ε⁶)` at every position; for `A₀`, the N1 table, and at positions 2–4 `lead = Λ_p(𝐜, gens_p)` with `Λ_p` linear and injective, `gens_p` the real mirrors of slt-bridge's `R2`, `R3`, `leadingMap`. Notes: `LeadingMap/NOTES_leading.md` | `leading_expansion`, `prop_N1_table`, `lemma_N3_position_two`, `eq_KR_position_four` |
 | `PaperNames.lean` | Brief 05, R3: paper-facing aliases (`alias` only; same types and proofs) | `vector_shear_main_theorem`, `vector_shear_position_one_exact`, `vector_near_shear_lower`, `vector_invertible_pair` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
@@ -97,13 +98,15 @@ Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 | X5: `Z_N(A_η) ≤ C N⁻⁴ (log N)⁴` for `\|η\| ≤ 1/200`, `N ≥ 2`, `C` chosen before `η`, cutoff radius `1/400` | `X5_upper_two` (`vector_near_shear_upper`), `X5_upper`, `X5_upper_gaussian` | certified |
 | X5 for general rank-one targets near a shear (transfer through `normalize_Aeta`) | — | not formalized |
 | X6 | — | not formalized |
+| Proposition N1: the `ε³` term of the error at every position and target, remainder `O(ε⁶)`; the N1 table at `A₀` | `leading_expansion`, `leading_term_unique`, `prop_N1_table` | certified |
+| Lemma N3 and (K-R): at positions 2–4 the `ε³` term is an injective linear image of the active coordinates and the slt-bridge generators (`R2`, `R3`, `leadingMap`) | `lemma_N3_position_two`, `lemma_N3_position_three`, `eq_KR_position_four`, `lead_A0_eq_zero_iff` | certified |
 | Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN` | not formalized |
 | Anything at depth five | — | not formalized |
 | SLT layer (normal crossings, products, comparability) | `VectorSLT.SLT.*` | certified |
 
 `ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here.
 
-Every declaration in `VectorSLT/Audit.lean` (594) and `checks/PaperAudit.lean` (82) depends only on `propext`, `Classical.choice` and `Quot.sound`: all three, except `IdentityGroup.Pairs.inact`, which depends on `propext` alone.
+Every declaration in `VectorSLT/Audit.lean` (681) and `checks/PaperAudit.lean` (91) depends only on `propext`, `Classical.choice` and `Quot.sound`: all three, except `IdentityGroup.Pairs.inact`, which depends on `propext` alone.
 
 ## License
 

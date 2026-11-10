@@ -84,6 +84,117 @@ def VectorSLT.IdentityGroup.Pairs.grpBlocks : {n : ℕ} → (Fin n → Fin 2 →
 fun {n} W i => if h : i < n then Matrix.of (W ⟨i, h⟩) else 0
 def VectorSLT.IdentityGroup.Pairs.grpJ : {n : ℕ} → (Fin n → Fin 2 → Fin 2 → ℝ) → ℝ :=
 fun {n} W => ∑ k, ‖VectorSLT.IdentityGroup.Pairs.grpErr (VectorSLT.IdentityGroup.Pairs.grpBlocks W) n k‖ ^ 2
+def VectorSLT.LeadingMap.thetaEps : Matrix (Fin 2) (Fin 2) ℝ →
+  Matrix (Fin 2) (Fin 2) ℝ → Fin 4 → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ → VectorSLT.Raw16 :=
+fun A Δ p V ε => VectorSLT.ofRawW (VectorSLT.LeadingMap.scaledBlocks A Δ p V ε)
+def VectorSLT.LeadingMap.scaledBlocks : Matrix (Fin 2) (Fin 2) ℝ →
+  Matrix (Fin 2) (Fin 2) ℝ → Fin 4 → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℝ → Fin 4 → Matrix (Fin 2) (Fin 2) ℝ :=
+fun A Δ p V ε => p.insertNth (A + ε ^ 3 • Δ) fun l => ε • V l
+def VectorSLT.LeadingMap.lead : Matrix (Fin 2) (Fin 2) ℝ →
+  Fin 4 → Matrix (Fin 2) (Fin 2) ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → (Fin 2 → ℝ) → Fin 2 → ℝ :=
+fun A p Δ V x =>
+  3 * A.mulVec x ^ 2 * Δ.mulVec x + VectorSLT.LeadingMap.dLayer A x (VectorSLT.LeadingMap.Spre p V x) +
+    VectorSLT.LeadingMap.Ssuf p V (VectorSLT.layer A x)
+def VectorSLT.LeadingMap.dLayer : Matrix (Fin 2) (Fin 2) ℝ → (Fin 2 → ℝ) → (Fin 2 → ℝ) → Fin 2 → ℝ :=
+fun A x u => u + 3 * A.mulVec x ^ 2 * A.mulVec u
+def VectorSLT.LeadingMap.Spre : Fin 4 → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → (Fin 2 → ℝ) → Fin 2 → ℝ :=
+fun p V z => ∑ l ∈ VectorSLT.LeadingMap.pre p, (V l).mulVec z ^ 3
+def VectorSLT.LeadingMap.Ssuf : Fin 4 → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → (Fin 2 → ℝ) → Fin 2 → ℝ :=
+fun p V z => ∑ l ∈ VectorSLT.LeadingMap.suf p, (V l).mulVec z ^ 3
+def VectorSLT.LeadingMap.pre : Fin 4 → Finset (Fin 3) :=
+fun p => {l | ↑l < ↑p}
+def VectorSLT.LeadingMap.suf : Fin 4 → Finset (Fin 3) :=
+fun p => {l | ↑p ≤ ↑l}
+def VectorSLT.LeadingMap.rowForm : Matrix (Fin 2) (Fin 2) ℝ → Fin 2 → ℝ × ℝ :=
+fun B k => (B k 0, B k 0 + B k 1)
+def VectorSLT.LeadingMap.mom : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Finset (Fin 3) → Fin 2 → ℕ → ℝ :=
+fun V X k i =>
+  ∑ l ∈ X, (VectorSLT.LeadingMap.rowForm (V l) k).1 ^ (3 - i) * (VectorSLT.LeadingMap.rowForm (V l) k).2 ^ i
+def VectorSLT.LeadingMap.momD : Fin 4 → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → ℕ → ℝ :=
+fun p V i =>
+  VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.pre p) 0 i -
+    VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.pre p) 1 i
+def VectorSLT.LeadingMap.poly11 : (Fin 11 → ℝ) → ℝ → ℝ → ℝ :=
+fun κ s t =>
+  κ 0 * s ^ 3 + κ 1 * s ^ 2 * t + κ 2 * s * t ^ 2 + κ 3 * t ^ 3 + κ 4 * s ^ 5 + κ 5 * s ^ 4 * t + κ 6 * s ^ 3 * t ^ 2 +
+          κ 7 * s ^ 2 * t ^ 3 +
+        κ 8 * s ^ 7 +
+      κ 9 * s ^ 6 * t +
+    κ 10 * s ^ 9
+def VectorSLT.LeadingMap.n1Coeff : Fin 4 →
+  Matrix (Fin 2) (Fin 2) ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 2 → Fin 11 → ℝ :=
+fun p Δ V k =>
+  ![3 * Δ k 0 + VectorSLT.LeadingMap.mom V Finset.univ k 0,
+    3 * (Δ k 0 + Δ k 1) + 3 * VectorSLT.LeadingMap.mom V Finset.univ k 1,
+    3 * VectorSLT.LeadingMap.mom V Finset.univ k 2, VectorSLT.LeadingMap.mom V Finset.univ k 3,
+    3 * (VectorSLT.LeadingMap.momD p V 0 + VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 1),
+    3 * (3 * VectorSLT.LeadingMap.momD p V 1 + 2 * VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 2),
+    3 * (3 * VectorSLT.LeadingMap.momD p V 2 + VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 3),
+    3 * VectorSLT.LeadingMap.momD p V 3, 3 * VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 2,
+    3 * VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 3,
+    VectorSLT.LeadingMap.mom V (VectorSLT.LeadingMap.suf p) k 3]
+def VectorSLT.LeadingMap.cube : VectorSLT.LeadingMap.Form → VectorSLT.LeadingMap.Cubic :=
+fun l => ![l.1 ^ 3, l.1 ^ 2 * l.2, l.1 * l.2 ^ 2, l.2 ^ 3]
+def VectorSLT.LeadingMap.twoCube : VectorSLT.LeadingMap.Form × VectorSLT.LeadingMap.Form → VectorSLT.LeadingMap.Cubic :=
+fun g => VectorSLT.LeadingMap.cube g.1 + VectorSLT.LeadingMap.cube g.2
+def VectorSLT.LeadingMap.rowCubic : VectorSLT.LeadingMap.Row → VectorSLT.LeadingMap.Cubic :=
+fun r => ∑ i, VectorSLT.LeadingMap.cube (r i)
+def VectorSLT.LeadingMap.leadingMap : VectorSLT.LeadingMap.Row × VectorSLT.LeadingMap.Row → Fin 6 → ℝ :=
+fun w =>
+  ![VectorSLT.LeadingMap.rowCubic w.1 0 - VectorSLT.LeadingMap.rowCubic w.2 0,
+    VectorSLT.LeadingMap.rowCubic w.1 1 - VectorSLT.LeadingMap.rowCubic w.2 1, VectorSLT.LeadingMap.rowCubic w.1 2,
+    VectorSLT.LeadingMap.rowCubic w.1 3, VectorSLT.LeadingMap.rowCubic w.2 2, VectorSLT.LeadingMap.rowCubic w.2 3]
+def VectorSLT.LeadingMap.generators : VectorSLT.LeadingMap.Cubic →
+  VectorSLT.LeadingMap.Cubic → VectorSLT.LeadingMap.Cubic → VectorSLT.LeadingMap.Cubic → Fin 11 → ℝ :=
+fun p₁ q₁ p₂ q₂ => ![p₁ 2, p₁ 3, q₁ 2, q₁ 3, p₂ 2, p₂ 3, q₂ 2, q₂ 3, p₁ 1 - p₂ 1, q₁ 1 - q₂ 1, p₁ 0 - p₂ 0 + q₁ 1]
+def VectorSLT.LeadingMap.R2 : VectorSLT.LeadingMap.Row2 × VectorSLT.LeadingMap.Row2 → Fin 11 → ℝ :=
+fun w =>
+  VectorSLT.LeadingMap.generators (VectorSLT.LeadingMap.cube w.1.1) (VectorSLT.LeadingMap.twoCube w.1.2)
+    (VectorSLT.LeadingMap.cube w.2.1) (VectorSLT.LeadingMap.twoCube w.2.2)
+def VectorSLT.LeadingMap.R3 : VectorSLT.LeadingMap.Row3 × VectorSLT.LeadingMap.Row3 → Fin 11 → ℝ :=
+fun w =>
+  VectorSLT.LeadingMap.generators (VectorSLT.LeadingMap.twoCube w.1.1) (VectorSLT.LeadingMap.cube w.1.2)
+    (VectorSLT.LeadingMap.twoCube w.2.1) (VectorSLT.LeadingMap.cube w.2.2)
+def VectorSLT.LeadingMap.w2 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) →
+  VectorSLT.LeadingMap.Row2 × VectorSLT.LeadingMap.Row2 :=
+fun V =>
+  ((VectorSLT.LeadingMap.rowForm (V 0) 0, VectorSLT.LeadingMap.rowForm (V 1) 0, VectorSLT.LeadingMap.rowForm (V 2) 0),
+    VectorSLT.LeadingMap.rowForm (V 0) 1, VectorSLT.LeadingMap.rowForm (V 1) 1, VectorSLT.LeadingMap.rowForm (V 2) 1)
+def VectorSLT.LeadingMap.w3 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) →
+  VectorSLT.LeadingMap.Row3 × VectorSLT.LeadingMap.Row3 :=
+fun V =>
+  (((VectorSLT.LeadingMap.rowForm (V 0) 0, VectorSLT.LeadingMap.rowForm (V 1) 0), VectorSLT.LeadingMap.rowForm (V 2) 0),
+    (VectorSLT.LeadingMap.rowForm (V 0) 1, VectorSLT.LeadingMap.rowForm (V 1) 1), VectorSLT.LeadingMap.rowForm (V 2) 1)
+def VectorSLT.LeadingMap.w4 : (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) →
+  VectorSLT.LeadingMap.Row × VectorSLT.LeadingMap.Row :=
+fun V => (fun l => VectorSLT.LeadingMap.rowForm (V l) 0, fun l => VectorSLT.LeadingMap.rowForm (V l) 1)
+def VectorSLT.LeadingMap.activeLin : Matrix (Fin 2) (Fin 2) ℝ ≃ₗ[ℝ] Fin 4 → ℝ :=
+{ toFun := fun Δ => ![3 * Δ 0 0, 3 * (Δ 0 0 + Δ 0 1), 3 * Δ 1 0, 3 * (Δ 1 0 + Δ 1 1)],
+  map_add' := VectorSLT.LeadingMap.activeLin._proof_3, map_smul' := VectorSLT.LeadingMap.activeLin._proof_4,
+  invFun := fun c => !![c 0 / 3, (c 1 - c 0) / 3; c 2 / 3, (c 3 - c 2) / 3],
+  left_inv := VectorSLT.LeadingMap.activeLin._proof_6, right_inv := VectorSLT.LeadingMap.activeLin._proof_7 }
+def VectorSLT.LeadingMap.activeCoords : Matrix (Fin 2) (Fin 2) ℝ → (Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) → Fin 4 → ℝ :=
+fun Δ V =>
+  ![3 * Δ 0 0 + VectorSLT.LeadingMap.mom V Finset.univ 0 0,
+    3 * (Δ 0 0 + Δ 0 1) + 3 * VectorSLT.LeadingMap.mom V Finset.univ 0 1,
+    3 * Δ 1 0 + VectorSLT.LeadingMap.mom V Finset.univ 1 0,
+    3 * (Δ 1 0 + Δ 1 1) + 3 * VectorSLT.LeadingMap.mom V Finset.univ 1 1]
+def VectorSLT.LeadingMap.coeffMid : (Fin 4 → ℝ) × (Fin 11 → ℝ) → Fin 2 → Fin 11 → ℝ :=
+fun v =>
+  ![![v.1 0, v.1 1, 3 * (v.2 0 + v.2 2), v.2 1 + v.2 3, 3 * v.2 10, 3 * (3 * v.2 8 + 2 * v.2 2),
+      3 * (3 * (v.2 0 - v.2 4) + v.2 3), 3 * (v.2 1 - v.2 5), 3 * v.2 2, 3 * v.2 3, v.2 3],
+    ![v.1 2, v.1 3, 3 * (v.2 4 + v.2 6), v.2 5 + v.2 7, 3 * (v.2 10 - v.2 9), 3 * (3 * v.2 8 + 2 * v.2 6),
+      3 * (3 * (v.2 0 - v.2 4) + v.2 7), 3 * (v.2 1 - v.2 5), 3 * v.2 6, 3 * v.2 7, v.2 7]]
+def VectorSLT.LeadingMap.LamMid : (Fin 4 → ℝ) × (Fin 11 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ) → Fin 2 → ℝ :=
+{ toFun := fun v x k => VectorSLT.LeadingMap.poly11 (VectorSLT.LeadingMap.coeffMid v k) (x 0 - x 1) (x 1),
+  map_add' := VectorSLT.LeadingMap.LamMid._proof_1, map_smul' := VectorSLT.LeadingMap.LamMid._proof_2 }
+def VectorSLT.LeadingMap.coeffFour : (Fin 4 → ℝ) × (Fin 6 → ℝ) → Fin 2 → Fin 11 → ℝ :=
+fun v =>
+  ![![v.1 0, v.1 1, 3 * v.2 2, v.2 3, 3 * v.2 0, 9 * v.2 1, 9 * (v.2 2 - v.2 4), 3 * (v.2 3 - v.2 5), 0, 0, 0],
+    ![v.1 2, v.1 3, 3 * v.2 4, v.2 5, 3 * v.2 0, 9 * v.2 1, 9 * (v.2 2 - v.2 4), 3 * (v.2 3 - v.2 5), 0, 0, 0]]
+def VectorSLT.LeadingMap.LamFour : (Fin 4 → ℝ) × (Fin 6 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ) → Fin 2 → ℝ :=
+{ toFun := fun v x k => VectorSLT.LeadingMap.poly11 (VectorSLT.LeadingMap.coeffFour v k) (x 0 - x 1) (x 1),
+  map_add' := VectorSLT.LeadingMap.LamFour._proof_1, map_smul' := VectorSLT.LeadingMap.LamFour._proof_2 }
 @VectorSLT.mainTheorem_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -850,6 +961,54 @@ VectorSLT.IdentityGroup.cubeSumLower : ∀ (k : ℕ), VectorSLT.IdentityGroup.Cu
                   ∫⁻ (W : Fin n → Fin 2 → Fin 2 → ℝ) in Metric.closedBall 0 r,
                       ENNReal.ofReal (Real.exp (-(c * N * VectorSLT.IdentityGroup.Pairs.grpJ W))) ≤
                     ENNReal.ofReal (C * N ^ (-(2 * ↑n) / 3))
+VectorSLT.LeadingMap.leading_expansion : ∀ (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
+  (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2),
+  (fun ε =>
+      VectorSLT.net (VectorSLT.LeadingMap.thetaEps A Δ p V ε) x k - VectorSLT.layer A x k -
+        ε ^ 3 * VectorSLT.LeadingMap.lead A p Δ V x k) =O[nhds 0]
+    fun ε => ε ^ 6
+VectorSLT.LeadingMap.leading_term_unique : ∀ (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
+  (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2) {L : ℝ},
+  ((fun ε => VectorSLT.net (VectorSLT.LeadingMap.thetaEps A Δ p V ε) x k - VectorSLT.layer A x k - ε ^ 3 * L) =O[nhds 0]
+      fun ε => ε ^ 4) →
+    L = VectorSLT.LeadingMap.lead A p Δ V x k
+VectorSLT.LeadingMap.prop_N1_table : ∀ (p : Fin 4) (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ)
+  (x : Fin 2 → ℝ) (k : Fin 2),
+  VectorSLT.LeadingMap.lead VectorSLT.A0 p Δ V x k =
+    VectorSLT.LeadingMap.poly11 (VectorSLT.LeadingMap.n1Coeff p Δ V k) (x 0 - x 1) (x 1)
+VectorSLT.LeadingMap.lemma_N3_position_two : (∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
+    VectorSLT.LeadingMap.lead VectorSLT.A0 1 Δ V =
+      VectorSLT.LeadingMap.LamMid
+        (VectorSLT.LeadingMap.activeCoords Δ V, VectorSLT.LeadingMap.R2 (VectorSLT.LeadingMap.w2 V))) ∧
+  Function.Injective ⇑VectorSLT.LeadingMap.LamMid ∧
+    ∀ (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ), Function.Bijective fun Δ => VectorSLT.LeadingMap.activeCoords Δ V
+VectorSLT.LeadingMap.lemma_N3_position_three : (∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
+    VectorSLT.LeadingMap.lead VectorSLT.A0 2 Δ V =
+      VectorSLT.LeadingMap.LamMid
+        (VectorSLT.LeadingMap.activeCoords Δ V, VectorSLT.LeadingMap.R3 (VectorSLT.LeadingMap.w3 V))) ∧
+  Function.Injective ⇑VectorSLT.LeadingMap.LamMid ∧
+    ∀ (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ), Function.Bijective fun Δ => VectorSLT.LeadingMap.activeCoords Δ V
+VectorSLT.LeadingMap.eq_KR_position_four : (∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
+    VectorSLT.LeadingMap.lead VectorSLT.A0 3 Δ V =
+      VectorSLT.LeadingMap.LamFour
+        (VectorSLT.LeadingMap.activeCoords Δ V, VectorSLT.LeadingMap.leadingMap (VectorSLT.LeadingMap.w4 V))) ∧
+  Function.Injective ⇑VectorSLT.LeadingMap.LamFour ∧
+    ∀ (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ), Function.Bijective fun Δ => VectorSLT.LeadingMap.activeCoords Δ V
+VectorSLT.LeadingMap.lead_A0_eq_zero_iff : ∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
+  (VectorSLT.LeadingMap.lead VectorSLT.A0 1 Δ V = 0 ↔
+      VectorSLT.LeadingMap.activeCoords Δ V = 0 ∧ VectorSLT.LeadingMap.R2 (VectorSLT.LeadingMap.w2 V) = 0) ∧
+    (VectorSLT.LeadingMap.lead VectorSLT.A0 2 Δ V = 0 ↔
+        VectorSLT.LeadingMap.activeCoords Δ V = 0 ∧ VectorSLT.LeadingMap.R3 (VectorSLT.LeadingMap.w3 V) = 0) ∧
+      (VectorSLT.LeadingMap.lead VectorSLT.A0 3 Δ V = 0 ↔
+        VectorSLT.LeadingMap.activeCoords Δ V = 0 ∧ VectorSLT.LeadingMap.leadingMap (VectorSLT.LeadingMap.w4 V) = 0)
+VectorSLT.LeadingMap.net_expansion_four : ∀ (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
+  (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2),
+  (fun ε =>
+      VectorSLT.net (VectorSLT.LeadingMap.thetaEps A Δ p V ε) x k - VectorSLT.layer A x k -
+        ε ^ 3 * VectorSLT.LeadingMap.lead A p Δ V x k) =O[nhds 0]
+    fun ε => ε ^ 4
+VectorSLT.LeadingMap.activeCoords_eq : ∀ (Δ : Matrix (Fin 2) (Fin 2) ℝ) (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ),
+  VectorSLT.LeadingMap.activeCoords Δ V = VectorSLT.LeadingMap.activeLin Δ + VectorSLT.LeadingMap.activeCoords 0 V
 @VectorSLT.vector_shear_main_theorem : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -1215,6 +1374,15 @@ VectorSLT.vector_near_shear_upper_gaussian : ∀ (φ χ : VectorSLT.Raw16 → EN
 'VectorSLT.IdentityGroup.thm_invertible_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.IdentityGroup.thm_invertible_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.IdentityGroup.lem_Abox_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.leading_expansion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.leading_term_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.prop_N1_table' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.lemma_N3_position_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.lemma_N3_position_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.eq_KR_position_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.lead_A0_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.net_expansion_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.LeadingMap.activeCoords_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]

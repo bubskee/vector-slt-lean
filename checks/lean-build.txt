@@ -1,8 +1,8 @@
-⚠ [9047/9121] Built VectorSLT.IdentityGroup.Defs (30s)
+⚠ [9047/9126] Built VectorSLT.IdentityGroup.Defs (9.0s)
 warning: VectorSLT/IdentityGroup/Defs.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9048/9121] Built VectorSLT.Network (30s)
+⚠ [9048/9126] Built VectorSLT.Network (9.4s)
 warning: VectorSLT/Network.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9049/9121] Built VectorSLT.E0Identity (31s)
+⚠ [9049/9126] Built VectorSLT.E0Identity (9.8s)
 warning: VectorSLT/E0Identity.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
 warning: VectorSLT/E0Identity.lean:38:4: `if_true` has been deprecated: Use `ite_true` instead
 
@@ -29,15 +29,15 @@ Hint: Omit it from the simp argument list.
   [apply] simp only [mul_ite, mul_zero, ite_mul, zero_mul, Finset.mem_univ, if_true, Finset.sum_ite_eq']
 
 Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
-⚠ [9050/9121] Built VectorSLT.IdentityGroup.Pairs.Absorb (31s)
+⚠ [9050/9126] Built VectorSLT.IdentityGroup.Pairs.Absorb (9.8s)
 warning: VectorSLT/IdentityGroup/Pairs/Absorb.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9051/9121] Built VectorSLT.SLT.Laplace (31s)
+⚠ [9051/9126] Built VectorSLT.SLT.Laplace (10s)
 warning: VectorSLT/SLT/Laplace.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9052/9121] Built VectorSLT.SLT.Toolkit (32s)
+⚠ [9052/9126] Built VectorSLT.SLT.Toolkit (10s)
 warning: VectorSLT/SLT/Toolkit.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9053/9121] Built VectorSLT.Sublevel1D (32s)
+⚠ [9053/9126] Built VectorSLT.Sublevel1D (10s)
 warning: VectorSLT/Sublevel1D.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-⚠ [9054/9121] Built VectorSLT.SLT.NormalCrossing (32s)
+⚠ [9054/9126] Built VectorSLT.SLT.NormalCrossing (12s)
 warning: VectorSLT/SLT/NormalCrossing.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
 warning: VectorSLT/SLT/NormalCrossing.lean:141:26: Variable name `hb` is not explicitly referenced.
 
@@ -69,10 +69,11 @@ Hint: The binding can be removed (if unused) or named `_` (if used implicitly). 
   [apply] _hlam
 
 Note: This linter can be disabled with `set_option linter.unusedVariables false`
-✔ [9055/9121] Built VectorSLT.PolyModel (5.4s)
-✔ [9056/9121] Built VectorSLT.IdentityGroup.Cubes.Scaling (5.9s)
-✔ [9057/9121] Built VectorSLT.SLT.Monomial (5.8s)
-⚠ [9058/9121] Built VectorSLT.SLT.NormalCrossingD (5.9s)
+✔ [9055/9126] Built VectorSLT.PolyModel (4.8s)
+✔ [9056/9126] Built VectorSLT.IdentityGroup.Cubes.Scaling (5.4s)
+✔ [9057/9126] Built VectorSLT.SLT.Monomial (4.9s)
+✔ [9058/9126] Built VectorSLT.QuadSublevel (6.2s)
+⚠ [9059/9126] Built VectorSLT.SLT.NormalCrossingD (5.4s)
 warning: VectorSLT/SLT/NormalCrossingD.lean:128:25: `if_pos` has been deprecated: Use `ite_eq_left` instead
 
 Hint: Replace the deprecated name:
@@ -85,17 +86,17 @@ warning: VectorSLT/SLT/NormalCrossingD.lean:150:25: `if_neg` has been deprecated
 
 Hint: Replace the deprecated name:
   i̵f̵_̵n̵e̵g̵i̲t̲e̲_̲e̲q̲_̲r̲i̲g̲h̲t̲
-✔ [9059/9121] Built VectorSLT.SLT.InvSqrt (6.2s)
-✔ [9060/9121] Built VectorSLT.QuadSublevel (6.0s)
-✔ [9061/9121] Built VectorSLT.IdentityGroup.Cubes.One (5.3s)
-⚠ [9062/9121] Built VectorSLT.ErrorBound (42s)
+✔ [9060/9126] Built VectorSLT.SLT.InvSqrt (5.6s)
+✔ [9061/9126] Built VectorSLT.IdentityGroup.Cubes.One (4.0s)
+✔ [9062/9126] Built VectorSLT.IdentityGroup.Cubes.Lower (5.3s)
+⚠ [9063/9126] Built VectorSLT.ErrorBound (20s)
 warning: VectorSLT/ErrorBound.lean: imports `Mathlib` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
-✔ [9063/9121] Built VectorSLT.IdentityGroup.Cubes.Lower (5.8s)
-✔ [9064/9121] Built VectorSLT.IdentityGroup.Cubes.Chart (7.7s)
-✔ [9065/9121] Built VectorSLT.LemmaM3 (5.5s)
-✔ [9066/9121] Built VectorSLT.LeadingRow (12s)
-✔ [9067/9121] Built VectorSLT.IdentityGroup.Cubes.Two (4.9s)
-⚠ [9068/9121] Built VectorSLT.LemmaM4 (9.9s)
+✔ [9064/9126] Built VectorSLT.IdentityGroup.Cubes.Chart (7.1s)
+✔ [9065/9126] Built VectorSLT.LeadingRow (11s)
+✔ [9066/9126] Built VectorSLT.LemmaM3 (5.2s)
+✔ [9067/9126] Built VectorSLT.IdentityGroup.Cubes.Two (4.8s)
+✔ [9068/9126] Built VectorSLT.LeadingModel (4.4s)
+⚠ [9069/9126] Built VectorSLT.LemmaM4 (9.6s)
 warning: VectorSLT/LemmaM4.lean:63:6: This simp argument is unused:
   Matrix.head_cons
 
@@ -149,10 +150,10 @@ Hint: Omit it from the simp argument list.
   [apply] simp only [Real.volume_Icc, Fin.prod_univ_two, zero_add]
 
 Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
-✔ [9069/9121] Built VectorSLT.LeadingModel (4.6s)
-✔ [9070/9121] Built VectorSLT.IdentityGroup.Cubes.Three (8.2s)
-✔ [9071/9121] Built VectorSLT.ActiveCoords (5.2s)
-⚠ [9072/9121] Built VectorSLT.LemmaM5 (6.1s)
+✔ [9070/9126] Built VectorSLT.IdentityGroup.Cubes.Three (8.1s)
+✔ [9071/9126] Built VectorSLT.ActiveCoords (5.1s)
+✔ [9072/9126] Built VectorSLT.IdentityGroup.Cubes (3.6s)
+⚠ [9073/9126] Built VectorSLT.LemmaM5 (6.0s)
 warning: VectorSLT/LemmaM5.lean:43:10: This simp argument is unused:
   ENNReal.zero_rpow_of_neg (by norm_num : -(1 / 2 : ℝ) < 0)
 
@@ -166,10 +167,9 @@ Hint: The binding can be removed (if unused) or named `_` (if used implicitly). 
   [apply] _hε
 
 Note: This linter can be disabled with `set_option linter.unusedVariables false`
-✔ [9073/9121] Built VectorSLT.IdentityGroup.Cubes (3.8s)
-✔ [9074/9121] Built VectorSLT.EtaUpper.SliceEta (6.9s)
-✔ [9075/9121] Built VectorSLT.ChartLip (4.0s)
-⚠ [9076/9121] Built VectorSLT.FullNetwork (12s)
+✔ [9074/9126] Built VectorSLT.EtaUpper.SliceEta (6.8s)
+✔ [9075/9126] Built VectorSLT.ChartLip (3.8s)
+⚠ [9076/9126] Built VectorSLT.FullNetwork (12s)
 warning: VectorSLT/FullNetwork.lean:156:34: This simp argument is unused:
   mem_ofPred_eq
 
@@ -177,9 +177,9 @@ Hint: Omit it from the simp argument list.
   [apply] simp only [mem_Icc, ofPred_and]
 
 Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
-✔ [9077/9121] Built VectorSLT.PivotRow (4.1s)
-✔ [9078/9121] Built VectorSLT.Normalization (5.0s)
-⚠ [9079/9121] Built VectorSLT.LemmaM1 (5.0s)
+✔ [9077/9126] Built VectorSLT.PivotRow (3.9s)
+✔ [9078/9126] Built VectorSLT.Normalization (4.8s)
+⚠ [9079/9126] Built VectorSLT.LemmaM1 (4.8s)
 warning: VectorSLT/LemmaM1.lean:38:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
 
 Hint: Replace the deprecated name:
@@ -321,7 +321,7 @@ instead of
     (p + q).coeff m = p.coeff m + q.coeff m
 
 Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.coeff_add` to `AddMonoidAlgebra.coeff_add x`).
-⚠ [9080/9121] Built VectorSLT.RowBound (4.4s)
+⚠ [9080/9126] Built VectorSLT.RowBound (4.1s)
 warning: VectorSLT/RowBound.lean:132:4: This simp argument is unused:
   true_implies
 
@@ -337,26 +337,26 @@ Note: This linter can be disabled with `set_option linter.unreachableTactic fals
 warning: VectorSLT/RowBound.lean:196:8: Unused tactic linter: `exact Or.inr (Or.inr ⟨h2, by linarith, c3⟩)` does nothing.
 
 Note: This linter can be disabled with `set_option linter.unusedTactic false`
-⚠ [9081/9121] Built VectorSLT.Separation (4.5s)
+⚠ [9081/9126] Built VectorSLT.Separation (4.3s)
 warning: VectorSLT/Separation.lean:77:5: Variable name `hM` is not explicitly referenced.
 
 Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
   [apply] _hM
 
 Note: This linter can be disabled with `set_option linter.unusedVariables false`
-✔ [9082/9121] Built VectorSLT.InverseCriterion (4.6s)
-✔ [9083/9121] Built VectorSLT.EtaUpper.RowBoundEta (4.6s)
-✔ [9084/9121] Built VectorSLT.Pairs (3.0s)
-✔ [9085/9121] Built VectorSLT.InvertibleSeparation (4.5s)
-✔ [9086/9121] Built VectorSLT.GeneralInput (4.5s)
-✔ [9087/9121] Built VectorSLT.Gaussian (4.3s)
-✔ [9088/9121] Built VectorSLT.SepNorm (4.0s)
-✔ [9089/9121] Built VectorSLT.GramLower (5.1s)
-✔ [9090/9121] Built VectorSLT.IdentityGroup.Pairs.GroupCubic (5.3s)
-✔ [9091/9121] Built VectorSLT.Gdown (4.4s)
-✔ [9092/9121] Built VectorSLT.EtaTarget (4.3s)
-✔ [9093/9121] Built VectorSLT.EtaUpper.GdownEta (5.1s)
-⚠ [9094/9121] Built VectorSLT.TheoremM (10s)
+✔ [9082/9126] Built VectorSLT.InverseCriterion (4.4s)
+✔ [9083/9126] Built VectorSLT.EtaUpper.RowBoundEta (4.3s)
+✔ [9084/9126] Built VectorSLT.Pairs (3.8s)
+✔ [9085/9126] Built VectorSLT.InvertibleSeparation (4.3s)
+✔ [9086/9126] Built VectorSLT.GeneralInput (4.2s)
+✔ [9087/9126] Built VectorSLT.Gaussian (4.3s)
+✔ [9088/9126] Built VectorSLT.SepNorm (4.9s)
+✔ [9089/9126] Built VectorSLT.GramLower (5.0s)
+✔ [9090/9126] Built VectorSLT.IdentityGroup.Pairs.GroupCubic (5.2s)
+✔ [9091/9126] Built VectorSLT.Gdown (4.3s)
+✔ [9092/9126] Built VectorSLT.EtaTarget (4.0s)
+✔ [9093/9126] Built VectorSLT.EtaUpper.GdownEta (4.0s)
+⚠ [9094/9126] Built VectorSLT.TheoremM (9.6s)
 warning: VectorSLT/TheoremM.lean:62:31: This simp argument is unused:
   c3M
 
@@ -396,32 +396,37 @@ Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
 warning: VectorSLT/TheoremM.lean:215:12: Unused tactic linter: `simp only` does nothing.
 
 Note: This linter can be disabled with `set_option linter.unusedTactic false`
-✔ [9095/9121] Built VectorSLT.ShearUpper (5.6s)
-✔ [9096/9121] Built VectorSLT.EtaUpper.TheoremMEta (7.3s)
-✔ [9097/9121] Built VectorSLT.EtaError (14s)
-✔ [9098/9121] Built VectorSLT.TwoSidedLaws (4.3s)
-✔ [9099/9121] Built VectorSLT.IdentityGroup.Pairs.GramDown (4.4s)
-✔ [9100/9121] Built VectorSLT.LowerPositions (5.4s)
-✔ [9101/9121] Built VectorSLT.EtaUpper.X5 (9.3s)
-✔ [9102/9121] Built VectorSLT.MainTheorem (4.6s)
-✔ [9103/9121] Built VectorSLT.IdentityGroup.Pairs.Integrate (5.0s)
-✔ [9104/9121] Built VectorSLT.EtaUpper (3.9s)
-✔ [9105/9121] Built VectorSLT.EtaLower (15s)
-✔ [9106/9121] Built VectorSLT.IdentityGroup.Pairs.Endpoint (4.4s)
-✔ [9107/9121] Built VectorSLT.IdentityGroup.Pairs.LemmaABox (4.6s)
-✔ [9108/9121] Built VectorSLT.EtaPopulation (3.9s)
-✔ [9109/9121] Built VectorSLT.IdentityGroup.Pairs.FirstPosition (4.2s)
-✔ [9110/9121] Built VectorSLT.IdentityGroup.Pairs.NonShear (4.6s)
-✔ [9111/9121] Built VectorSLT.IdentityGroup.Pairs.PolyAlgebra (4.7s)
-✔ [9112/9121] Built VectorSLT.IdentityGroup.Pairs.LastPosition (4.6s)
-✔ [9113/9121] Built VectorSLT.IdentityGroup.Pairs.Invertible (3.9s)
-✔ [9114/9121] Built VectorSLT.IdentityGroup.Pairs.OnePrefix (12s)
-✔ [9115/9121] Built VectorSLT.IdentityGroup.Pairs.Quintic (3.9s)
-✔ [9116/9121] Built VectorSLT.IdentityGroup.Pairs.TwoPrefix (7.1s)
-✔ [9117/9121] Built VectorSLT.IdentityGroup.Pairs (3.3s)
-✔ [9118/9121] Built VectorSLT.IdentityGroup.Unconditional (3.3s)
-✔ [9119/9121] Built VectorSLT.PaperNames (3.2s)
-✔ [9120/9121] Built VectorSLT (3.2s)
-Build completed successfully (9121 jobs).
-lake build  388.21s user 262.18s system 356% cpu 3:02.53 total
+✔ [9095/9126] Built VectorSLT.ShearUpper (5.5s)
+✔ [9096/9126] Built VectorSLT.EtaUpper.TheoremMEta (7.2s)
+✔ [9097/9126] Built VectorSLT.EtaError (13s)
+✔ [9098/9126] Built VectorSLT.TwoSidedLaws (4.5s)
+✔ [9099/9126] Built VectorSLT.IdentityGroup.Pairs.GramDown (4.7s)
+✔ [9100/9126] Built VectorSLT.LowerPositions (5.1s)
+✔ [9101/9126] Built VectorSLT.EtaUpper.X5 (9.2s)
+✔ [9102/9126] Built VectorSLT.MainTheorem (4.5s)
+✔ [9103/9126] Built VectorSLT.IdentityGroup.Pairs.Integrate (4.9s)
+✔ [9104/9126] Built VectorSLT.EtaUpper (3.8s)
+✔ [9105/9126] Built VectorSLT.EtaLower (15s)
+✔ [9106/9126] Built VectorSLT.IdentityGroup.Pairs.Endpoint (4.4s)
+✔ [9107/9126] Built VectorSLT.IdentityGroup.Pairs.LemmaABox (4.7s)
+✔ [9108/9126] Built VectorSLT.LeadingMap.Expansion (6.8s)
+✔ [9109/9126] Built VectorSLT.EtaPopulation (3.8s)
+✔ [9110/9126] Built VectorSLT.IdentityGroup.Pairs.FirstPosition (4.1s)
+✔ [9111/9126] Built VectorSLT.IdentityGroup.Pairs.NonShear (4.5s)
+✔ [9112/9126] Built VectorSLT.IdentityGroup.Pairs.PolyAlgebra (4.5s)
+✔ [9113/9126] Built VectorSLT.LeadingMap.Table (10s)
+✔ [9114/9126] Built VectorSLT.IdentityGroup.Pairs.LastPosition (4.6s)
+✔ [9115/9126] Built VectorSLT.LeadingMap.Generators (3.5s)
+✔ [9116/9126] Built VectorSLT.IdentityGroup.Pairs.Invertible (3.9s)
+✔ [9117/9126] Built VectorSLT.LeadingMap.Tie (9.7s)
+✔ [9118/9126] Built VectorSLT.LeadingMap (3.6s)
+✔ [9119/9126] Built VectorSLT.IdentityGroup.Pairs.OnePrefix (13s)
+✔ [9120/9126] Built VectorSLT.IdentityGroup.Pairs.Quintic (3.9s)
+✔ [9121/9126] Built VectorSLT.IdentityGroup.Pairs.TwoPrefix (7.2s)
+✔ [9122/9126] Built VectorSLT.IdentityGroup.Pairs (3.3s)
+✔ [9123/9126] Built VectorSLT.IdentityGroup.Unconditional (3.3s)
+✔ [9124/9126] Built VectorSLT.PaperNames (3.3s)
+✔ [9125/9126] Built VectorSLT (3.2s)
+Build completed successfully (9126 jobs).
+lake build  413.21s user 225.22s system 405% cpu 2:37.45 total
 exit 0
