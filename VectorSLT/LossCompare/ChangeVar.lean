@@ -128,7 +128,7 @@ theorem K4_apply (z : (ℝ × ℝ) × (ℝ × ℝ)) : K4 z = ![z.1.1, z.1.2, z.2
 /-- The intermediate coordinates: the two active rows `(α_k, ν_k)` and the inactive `w`. -/
 abbrev Yc := ((ℝ × ℝ) × (ℝ × ℝ)) × (Fin 12 → ℝ)
 
-instance : (volume : Measure Yc).IsAddHaarMeasure := by
+instance instAddHaarYc : (volume : Measure Yc).IsAddHaarMeasure := by
   rw [Measure.volume_eq_prod]; exact Measure.prod.instIsAddHaarMeasure _ _
 
 /-- Both active rows in `[1/2, 3/2] × ℝ`. -/
