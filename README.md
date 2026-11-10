@@ -102,12 +102,12 @@ Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 | Proposition N1: the `ε³` term of the error at every position and target, remainder `O(ε⁶)`; the N1 table at `A₀` | `leading_expansion`, `leading_term_unique`, `prop_N1_table` | certified |
 | Lemma N3 and (K-R): at positions 2–4 the `ε³` term is an injective linear image of the active coordinates and the slt-bridge generators (`R2`, `R3`, `leadingMap`) | `lemma_N3_position_two`, `lemma_N3_position_three`, `eq_KR_position_four`, `lead_A0_eq_zero_iff` | certified |
 | Proposition N2, first step: at positions 2–4, `κ (‖𝐜‖² + G_p(w)) ≤ K` in coordinates with a bounded change of variables, `G_p(r ξ) = r⁶ H_p(r, ξ)`, `H_p(0, ·) = ‖gens_p‖²`; for every shear target, slt-bridge's `PositionMargin` without the angular margin | `position_four_marginData`, `middle_marginData`, `position_four_homogeneity`, `position_two_homogeneity`, `position_three_homogeneity` | certified |
-| The angular margin of `H_p` (Proposition N2: stability and complex-to-real transfer) | — | not formalized |
-| Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN`; slt-bridge derives them from the angular margins of `H4`, `Hmid 1`, `Hmid 2` | not formalized |
+| The inactive bound `∫ e^{−N G_p} ≤ C N⁻²` on a ball of `ℝ¹²` (Proposition N2: stability and complex-to-real transfer) | — | not formalized |
+| Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN`; slt-bridge derives them from the inactive bounds for `G4`, `Gmid 1`, `Gmid 2` | not formalized |
 | Anything at depth five | — | not formalized |
 | SLT layer (normal crossings, products, comparability) | `VectorSLT.SLT.*` | certified |
 
-`ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here. `LossCompare` proves the elementary step towards them; what remains is the angular margin of three explicit functions, which the paper obtains from two published theorems.
+`ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here. `LossCompare` proves the elementary step towards them; what remains is a Laplace bound for three explicit polynomials on `ℝ¹²`, which the paper obtains from two published theorems.
 
 Every declaration in `VectorSLT/Audit.lean` (986) and `checks/PaperAudit.lean` (99) depends only on `propext`, `Classical.choice` and `Quot.sound`: all three, except `IdentityGroup.Pairs.inact` and `LossCompare.rowOf`, which depend on `propext` alone.
 

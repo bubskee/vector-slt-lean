@@ -12,8 +12,8 @@ release pass imported it from the root `VectorSLT.lean` and moved that audit int
 audit.
 
 **Status.** Items 1–3 and the packaging in `PositionMargin` form (for every shear target) are
-done at positions two, three and four (Lean `p = 1, 2, 3`). Item 4 is left to the slt-bridge zoo
-(sketch below). No statement of the paper turned out false; see "Departures" for what differs.
+done at positions two, three and four (Lean `p = 1, 2, 3`). Item 4 is in the slt-bridge zoo
+(see below). No statement of the paper turned out false; see "Departures" for what differs.
 History: position four on `ff34cda`; positions two and three on top of it.
 
 ## What is proved
@@ -122,47 +122,21 @@ for the cubic `s⁷` (`pol12` … `pol70`). This gives `ĝ_j(s a) = s h_j(s, a)`
 combination of evaluations of the same functionals (`ghat_smul`), jointly continuous, and
 `h_j(0, a) = Lw p a j`, the linear part.
 
-## Item 4: left to the slt-bridge zoo
+## Item 4: done in the slt-bridge zoo
 
 The radial split, the Gaussian factor and `laplaceUpper_of_angularMargin` are in slt-bridge
-(`SLT/Template/Margin.lean`). Re-proving them in vector-slt-lean would duplicate about 300 lines.
-`MarginData` makes the zoo glue a few lines (untested sketch, for `zoo/Zoo/TemplateMargin.lean`):
+(`SLT/Template/Margin.lean`). The glue is `zoo/Zoo/LossComparison.lean` there. For a shear target
+`A` and cutoffs supported in a small ball it proves `ThmN μ A φ χ`, `ThmKUpper μ A φ χ` and the
+position table from `MarginData` (here) and one hypothesis per position,
 
-```lean
-open VectorSLT.LossCompare in
-theorem positionMargin_of_marginData {μ A φ χ p} {G : (Fin 12 → ℝ) → ℝ} {s ε M : ℝ}
-    (hG : Measurable G) (hs : 2 < s) (hM : 0 ≤ M) (hA : AngularMargin G 3 s ε M)
-    (h : MarginData μ A φ χ p G ε) : PositionMargin μ A φ χ p := by
-  obtain ⟨Ψ, J, κ, hΨ, hκ, hJ, hcmp⟩ := h
-  exact ⟨Ψ, G, J, κ, s, ε, M, hΨ, hG, hκ, hs, hM, hA, hJ, hcmp⟩
+    InactiveLaplace G_p :  ∫_{‖w‖ ≤ ε/2} e^{-N G_p(w)} dw ≤ C N⁻²  on some ball of ℝ¹²,
 
-/-- The angular margin of `G₄` from the margin of `H₄` alone. -/
-theorem angularMargin_G4 {s ε M : ℝ}
-    (h : ∀ r : ℝ, 0 < r → r ≤ ε →
-      ∫⁻ ξ in shell 12, ENNReal.ofReal (VectorSLT.LossCompare.H4 r ξ) ^ (-s) ≤ ENNReal.ofReal M) :
-    AngularMargin VectorSLT.LossCompare.G4 3 s ε M :=
-  ⟨VectorSLT.LossCompare.H4, fun r _ _ ξ _ =>
-    ⟨by simpa using VectorSLT.LossCompare.G4_smul r ξ, VectorSLT.LossCompare.H4_nonneg r ξ⟩, h⟩
-
-/-- The same at positions two and three (`p = 1, 2`, `G = Gmid p`, `H = Hmid p`). -/
-theorem angularMargin_Gmid {p : Fin 4} (hp : p = 1 ∨ p = 2) {s ε M : ℝ}
-    (h : ∀ r : ℝ, 0 < r → r ≤ ε →
-      ∫⁻ ξ in shell 12, ENNReal.ofReal (VectorSLT.LossCompare.Hmid p r ξ) ^ (-s) ≤
-        ENNReal.ofReal M) :
-    AngularMargin (VectorSLT.LossCompare.Gmid p) 3 s ε M :=
-  ⟨VectorSLT.LossCompare.Hmid p, fun r _ _ ξ _ =>
-    ⟨by simpa using VectorSLT.LossCompare.Gmid_smul hp r ξ,
-      VectorSLT.LossCompare.Hmid_nonneg p r ξ⟩, h⟩
-```
-
-Then, for a shear target `A`:
-* `ThmKUpper μ A φ χ` from `position_four_marginData hA`, `measurable_G4`, `angularMargin_G4`,
-  `positionMargin_of_marginData` and `Zpos_upper_of_margin`;
-* `ThmN μ A φ χ` from `middle_marginData hA (Or.inl rfl)`, `middle_marginData hA (Or.inr rfl)`,
-  `measurable_Gmid`, `angularMargin_Gmid` and the same two zoo lemmas (`thmN_of_margin`);
-for cutoffs supported in radius `c · min(1/2, ε/2)` (one `c` per position; the main theorem would
-take the minimum of these and the `r` of `mainTheorem_shear`). The only remaining hypotheses are
-the three angular margins of `H₄ = H4`, `H₂ = Hmid 1`, `H₃ = Hmid 2` on the shell, with `s > 2`.
+for `G₂ = Gmid 1`, `G₃ = Gmid 2`, `G₄ = G4`. This is what the paper's analytic step proves: the
+stability theorem bounds the complexified integral over a polydisk of `ℂ¹²` by `C N⁻⁴`, and the
+complex-to-real transfer gives `C N⁻²` over `ℝ¹²`. slt-bridge's `AngularMargin G_p 3 s ε M` with
+`s > 2` (a real shell bound for `H_p`, uniform in the radius) implies `InactiveLaplace G_p`, but
+the paper's argument does not prove it. An earlier sketch in these notes went through
+`AngularMargin`; the zoo file keeps that route as a sufficient condition.
 
 ## Departures from the paper
 
