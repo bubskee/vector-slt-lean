@@ -9,6 +9,8 @@ import VectorSLT.MainTheorem
 import VectorSLT.TwoSidedLaws
 import VectorSLT.EtaPopulation
 import VectorSLT.E0Identity
+import VectorSLT.EtaUpper
+import VectorSLT.IdentityGroup.Unconditional
 
 namespace VectorSLT
 
@@ -54,6 +56,28 @@ alias vector_near_shear_lower_gaussian := X4_lower_gaussian
 
 /-- **Proposition X1** (`β₀ > 0` branch): normal form `A_η` for rank-one targets. -/
 alias vector_near_shear_normal_form := normalize_Aeta
+
+/-! ### Near-shear targets, upper bound (X5) -/
+
+/-- **Proposition X5:** `Z_N(A_η) ≤ C N⁻⁴ (log N)⁴` for all `N ≥ 2`, with `C` uniform in
+`|η| ≤ η₀` (`η₀ = 1/200`, cutoff radius `1/400`). -/
+alias vector_near_shear_upper := X5_upper_two
+
+/-- **Proposition X5, standard Gaussian inputs.** -/
+alias vector_near_shear_upper_gaussian := X5_upper_gaussian
+
+/-! ### Non-shear and invertible targets (Appendix A) -/
+
+/-- **Proposition "non-shear rank one":** the pair `(4,1)` at position one for a rank-one target
+with both rows nonzero that is not a shear, unconditionally. -/
+alias vector_nonshear_pair := IdentityGroup.prop_nonshear_pair
+
+/-- **Theorem "invertible active blocks":** the pair `(4,1)` at every position for `det A ≠ 0`,
+unconditionally. -/
+alias vector_invertible_pair := IdentityGroup.thm_invertible_pair
+
+/-- **Lemma A-box, upper half**, for groups of one, two or three blocks. -/
+alias vector_identity_group_upper := IdentityGroup.lem_Abox_upper
 
 /-! ### Normalization and the E₀ identity -/
 
