@@ -22,6 +22,15 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print VectorSLT.Aeta
 #print VectorSLT.Meta
 #print VectorSLT.Leta
+#print VectorSLT.IdentityGroup.cubeSum
+#print VectorSLT.IdentityGroup.cubeSumSq
+#print VectorSLT.IdentityGroup.CubeSumUpper
+#print VectorSLT.IdentityGroup.Cubes.CubeSumLower
+#print VectorSLT.IdentityGroup.Pairs.NonShearTarget
+#print VectorSLT.IdentityGroup.Pairs.grpPoly
+#print VectorSLT.IdentityGroup.Pairs.grpErr
+#print VectorSLT.IdentityGroup.Pairs.grpBlocks
+#print VectorSLT.IdentityGroup.Pairs.grpJ
 
 -- Principal declarations
 #check @VectorSLT.mainTheorem_shear
@@ -74,6 +83,20 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #check @VectorSLT.SLT.HasLaplacePair.prod
 #check @VectorSLT.SLT.monomial_hasLaplacePair
 #check @VectorSLT.SLT.normalCrossing_Z
+#check @VectorSLT.X5_upper
+#check @VectorSLT.X5_upper_two
+#check @VectorSLT.X5_upper_gaussian
+#check @VectorSLT.X5_upper_explicit
+#check @VectorSLT.X5_upper_explicit_two
+#check @VectorSLT.IdentityGroup.cubeSumUpper_one
+#check @VectorSLT.IdentityGroup.cubeSumUpper_two
+#check @VectorSLT.IdentityGroup.cubeSumUpper_three
+#check @VectorSLT.IdentityGroup.cubeSumLower
+#check @VectorSLT.IdentityGroup.prop_nonshear_upper
+#check @VectorSLT.IdentityGroup.prop_nonshear_pair
+#check @VectorSLT.IdentityGroup.thm_invertible_upper
+#check @VectorSLT.IdentityGroup.thm_invertible_pair
+#check @VectorSLT.IdentityGroup.lem_Abox_upper
 
 -- Paper-facing aliases (R3)
 #check @VectorSLT.vector_shear_main_theorem
@@ -89,6 +112,11 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #check @VectorSLT.vector_near_shear_normal_form
 #check @VectorSLT.vector_shear_normal_form
 #check @VectorSLT.vector_E0_bordered_det
+#check @VectorSLT.vector_near_shear_upper
+#check @VectorSLT.vector_near_shear_upper_gaussian
+#check @VectorSLT.vector_nonshear_pair
+#check @VectorSLT.vector_invertible_pair
+#check @VectorSLT.vector_identity_group_upper
 
 -- Axioms
 #print axioms VectorSLT.mainTheorem_shear
@@ -141,6 +169,20 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print axioms VectorSLT.SLT.HasLaplacePair.prod
 #print axioms VectorSLT.SLT.monomial_hasLaplacePair
 #print axioms VectorSLT.SLT.normalCrossing_Z
+#print axioms VectorSLT.X5_upper
+#print axioms VectorSLT.X5_upper_two
+#print axioms VectorSLT.X5_upper_gaussian
+#print axioms VectorSLT.X5_upper_explicit
+#print axioms VectorSLT.X5_upper_explicit_two
+#print axioms VectorSLT.IdentityGroup.cubeSumUpper_one
+#print axioms VectorSLT.IdentityGroup.cubeSumUpper_two
+#print axioms VectorSLT.IdentityGroup.cubeSumUpper_three
+#print axioms VectorSLT.IdentityGroup.cubeSumLower
+#print axioms VectorSLT.IdentityGroup.prop_nonshear_upper
+#print axioms VectorSLT.IdentityGroup.prop_nonshear_pair
+#print axioms VectorSLT.IdentityGroup.thm_invertible_upper
+#print axioms VectorSLT.IdentityGroup.thm_invertible_pair
+#print axioms VectorSLT.IdentityGroup.lem_Abox_upper
 #print axioms VectorSLT.vector_shear_main_theorem
 #print axioms VectorSLT.vector_shear_main_theorem_ratio
 #print axioms VectorSLT.vector_shear_main_theorem_gaussian
@@ -154,3 +196,8 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print axioms VectorSLT.vector_near_shear_normal_form
 #print axioms VectorSLT.vector_shear_normal_form
 #print axioms VectorSLT.vector_E0_bordered_det
+#print axioms VectorSLT.vector_near_shear_upper
+#print axioms VectorSLT.vector_near_shear_upper_gaussian
+#print axioms VectorSLT.vector_nonshear_pair
+#print axioms VectorSLT.vector_invertible_pair
+#print axioms VectorSLT.vector_identity_group_upper
