@@ -1,6 +1,6 @@
 # VectorSLT
 
-This library holds the Lean 4 certificates for paper 2 of the vector (width-two cubic ResNet) SLT project. Paper 2 covers rank-one shears and their position table, the invertible contrast, the E₀ identity and the near-shear lower bound X4. The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`, then the commit pinned in each brief, the last being `caccd6a`). The coverage is recorded in `formalization_status.md` and checked by `checks/`.
+This library holds the Lean 4 certificates for paper 2 of the vector (width-two cubic ResNet) SLT project. Paper 2 covers rank-one shears and their position table, the invertible and non-shear contrasts, the E₀ identity, and the near-shear bounds X4 (lower) and X5 (upper). The mathematics comes from `cubic-chaos` (commits `34c531e` and `b962be0`, then the commit pinned in each brief, the last being `caccd6a`). The coverage is recorded in `formalization_status.md` and checked by `checks/`.
 
 Pins: Lean `v4.35.0` and mathlib `56a005855ea17e0b0958f73ec801ae140b0a1679`.
 
@@ -46,7 +46,12 @@ lake exe cache get && lake build && lake env lean VectorSLT/Audit.lean && lake e
 | `EtaError.lean` | Brief 04, X4: Lemma L′3 for `A_η` (bounds on `αν² − η²`, `ν³ − η³`; the difference argument for `Δ₀`) | `E1η_bound`, `shiftη_bound`, `err_bound_eta` |
 | `EtaLower.lean` | Brief 04, X4: **`Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, `c`, `N₀` independent of `|η| ≤ 1/10`** | `X4_lower`, `X4_lower_segment`, `Leta` |
 | `EtaPopulation.lean` | Brief 04, X4 for the population loss: moment laws, Gaussian, compact support | `X4_lower_population`, `X4_lower_gaussian`, `X4_lower_compact` |
-| `PaperNames.lean` | Brief 05, R3: paper-facing aliases (`alias` only; same types and proofs) | `vector_shear_main_theorem`, `vector_shear_position_one_exact`, `vector_near_shear_lower` |
+| `EtaUpper.lean`, `EtaUpper/*.lean` | Proposition X5: Theorem M for `A_η` uniformly in `\|η\| ≤ 1/200` ((G↓), Lemmas M4, M5, row bound, assembly); raw coordinates, `N ≥ N₀` and `N ≥ 2` forms. Notes: `EtaUpper/NOTES_x5.md` | `X5_upper`, `X5_upper_two`, `X5_upper_gaussian`, `theoremM_eta` |
+| `IdentityGroup/Defs.lean` | Appendix A.1: `cubeSum`, `cubeSumSq` (`G_k`) and the interface `CubeSumUpper k` | `CubeSumUpper` |
+| `IdentityGroup/Cubes.lean`, `Cubes/*.lean` | Lemma A-cubes: upper half for `k = 1, 2, 3`, lower half for every `k`. Notes: `IdentityGroup/NOTES_cubes.md` | `cubeSumUpper_three`, `cubeSumLower` |
+| `IdentityGroup/Pairs.lean`, `Pairs/*.lean` | Proposition "non-shear rank one", Theorem "invertible active blocks" at every position, Lemma A-box upper half, each from `CubeSumUpper` | `paper_nonshear_pair`, `paper_invertible_pair`, `paper_lemAbox_upper` |
+| `IdentityGroup/Unconditional.lean` | The same with `CubeSumUpper 1, 2, 3` discharged: no hypothesis left. Notes: `IdentityGroup/NOTES_pairs.md` | `prop_nonshear_pair`, `thm_invertible_pair`, `lem_Abox_upper` |
+| `PaperNames.lean` | Brief 05, R3: paper-facing aliases (`alias` only; same types and proofs) | `vector_shear_main_theorem`, `vector_shear_position_one_exact`, `vector_near_shear_lower`, `vector_invertible_pair` |
 | `Gaussian.lean` | L′ and the separation for standard Gaussian inputs | `propLprime_gaussian`, `separation_gaussian` |
 | `Pairs.lean` | L4: C and D restated as Laplace lower halves; (K1) as a pair | `position_one_laplaceLower`, `ThmK.hasLaplacePair` |
 | `PolyModel.lean` | L5: the network as a degree-≤81 polynomial | `error_isPoly` |
@@ -78,14 +83,20 @@ Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 | Normalization (Theorem H §2) | `shear_normalize` | certified |
 | Separation `Z_{N,1}/Z_{N,4} ≥ c log⁴ N` | `separation_moments` | conditional on `ThmKUpper` |
 | Invertible contrast (O5): inverse criterion; separation through an invertible block, `σ > 0` | `inverse_criterion`, `rank_one_criterion`, `sepMap_injective`, `sepLin_lower`, `sep_absorb` | certified |
-| Invertible contrast: network-level placement independence at depths 4 and 5 | — | not formalized |
+| Theorem "invertible active blocks", depth four: pair (4,1) at every position, `det A ≠ 0` | `thm_invertible_pair` (`vector_invertible_pair`), `thm_invertible_upper` | certified |
+| Theorem "invertible active blocks", depth five | — | not formalized |
+| Proposition "non-shear rank one": pair (4,1) at position one, `A = a vᵀ`, `a₀ a₁ ≠ 0`, `v · a^{⊙3} ≠ 0` | `prop_nonshear_pair` (`vector_nonshear_pair`), `prop_nonshear_upper` | certified |
+| Lemma A-cubes, upper half, `k ≤ 3`: `∫_{‖u‖ ≤ r} e^{−cN G_k} ≤ C N^{−k/3}` | `cubeSumUpper_one`, `cubeSumUpper_two`, `cubeSumUpper_three` | certified (lower half for every `k`: `cubeSumLower`; four cubes not formalized) |
+| Lemma A-box, upper half, groups of `n ≤ 3` blocks: `∫_{‖W‖ ≤ r} e^{−cN J_n} ≤ C N^{−2n/3}` | `lem_Abox_upper` (`vector_identity_group_upper`) | certified (lower half and `n = 4` not formalized) |
 | E₀ identity | `bordered_det`, `null_direction` | certified |
 | X1 normal form (`β₀ > 0`), X2 coefficients | `normalize_Aeta`, `errPη_coeff_ne3`, `errPη_c2` | certified (the `β₀ < 0` swap is not formalized) |
 | X4: `Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, uniform in `\|η\| ≤ 1/10` | `X4_lower_population`, `X4_lower_gaussian` | certified |
-| X5, X6 | — | not formalized |
+| X5: `Z_N(A_η) ≤ C N⁻⁴ (log N)⁴` for `\|η\| ≤ 1/200`, `N ≥ 2`, `C` chosen before `η`, cutoff radius `1/400` | `X5_upper_two` (`vector_near_shear_upper`), `X5_upper`, `X5_upper_gaussian` | certified (transfer to general near-shear targets not formalized) |
+| X6 | — | not formalized |
 | Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN` | not formalized |
+| Anything at depth five | — | not formalized |
 | SLT layer (normal crossings, products, comparability) | `VectorSLT.SLT.*` | certified |
 
 `ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here.
 
-Every declaration in `VectorSLT/Audit.lean` (199) and `checks/PaperAudit.lean` (63) depends on exactly `propext`, `Classical.choice` and `Quot.sound`.
+Every declaration in `VectorSLT/Audit.lean` (594) and `checks/PaperAudit.lean` (82) depends only on `propext`, `Classical.choice` and `Quot.sound`: all three, except `IdentityGroup.Pairs.inact`, which depends on `propext` alone.
