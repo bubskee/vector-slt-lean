@@ -123,7 +123,7 @@ All of the following pass:
 Every declaration in both audits depends only on `propext`, `Classical.choice` and `Quot.sound`. All of them depend on all three, except `VectorSLT.IdentityGroup.Pairs.inact` (a lookup table, library audit only), which depends on `propext` alone. None depends on `sorryAx`, and none depends on any other axiom. The focused audit also prints the definitions that the statements rest on: `Z`, `LaplaceLower`, `LaplaceUpper`, `HasLaplacePair`, `layer`, `net`, `popLossA`, `Zpos`, `basePos`, `ShearTarget`, `ThmK`, `ThmKUpper`, `ThmN`, `Aeta`, `Meta`, `Leta`, `cubeSum`, `cubeSumSq`, `CubeSumUpper`, `CubeSumLower`, `NonShearTarget`, and the group-error functional `grpJ` with `grpBlocks`, `grpErr` and `grpPoly`.
 
 Evidence in `checks/`:
-- `lean-build.txt`: a clean rebuild of the library;
+- `lean-build.txt`: a clean rebuild of the library (`.lake/build` removed, then `time lake build`; mathlib is not rebuilt);
 - `PaperAudit.txt` and `Audit.txt`: the two audit outputs;
 - `lean-sources.sha256`: SHA-256 of every Lean source and the Lake configuration;
 - `declaration-types.txt`: the comparison of every `VectorSLT` declaration's type at the previous release (`c0b5eeb`) and after this pass. All 971 existing declarations are identical in module, kind, type hash and type text, and no declaration changed or was removed. There are 466 additions:
@@ -131,4 +131,4 @@ Evidence in `checks/`:
   - the 5 new aliases in `PaperNames.lean`, each with exactly its original's type;
   - 66 equation and matcher lemmas (`*.eq_1`, `*.match_1`) that Lean generates for definitions unfolded in the new modules.
 
-  The dumps come from `checks/TypeDump.lean` (`DUMP_OUT=<file> lake env lean checks/TypeDump.lean`). They are about 4.6 MB (before) and 7.2 MB (after), so only their SHA-256 hashes are stored.
+  The dumps come from `checks/TypeDump.lean` (`DUMP_OUT=<file> lake env lean checks/TypeDump.lean`). For the before dump, `VectorSLT.lean` and `VectorSLT/PaperNames.lean` were set to their `c0b5eeb` versions; every other Lean file the root imports is unchanged since `c0b5eeb`. That dump is byte-identical to the after dump of the previous release (same SHA-256). The dumps are about 4.6 MB (before) and 7.2 MB (after), so only their SHA-256 hashes are stored.

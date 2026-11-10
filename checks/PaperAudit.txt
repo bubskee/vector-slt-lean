@@ -46,6 +46,44 @@ def VectorSLT.Meta : ℝ → ℝ → ℝ :=
 fun η N => if η = 0 then N else min N |η|⁻¹
 def VectorSLT.Leta : ℝ → ℝ → ℝ :=
 fun η N => Real.log (VectorSLT.Meta η N)
+def VectorSLT.IdentityGroup.cubeSum : {k : ℕ} → (Fin k → ℝ × ℝ) → Fin 4 → ℝ :=
+fun {k} u => ![∑ i, (u i).1 ^ 3, ∑ i, (u i).1 ^ 2 * (u i).2, ∑ i, (u i).1 * (u i).2 ^ 2, ∑ i, (u i).2 ^ 3]
+def VectorSLT.IdentityGroup.cubeSumSq : {k : ℕ} → (Fin k → ℝ × ℝ) → ℝ :=
+fun {k} u => ∑ j, VectorSLT.IdentityGroup.cubeSum u j ^ 2
+def VectorSLT.IdentityGroup.CubeSumUpper : ℕ → Prop :=
+fun k =>
+  ∀ (r c : ℝ),
+    0 < r →
+      0 < c →
+        ∃ C,
+          ∀ (N : ℝ),
+            1 ≤ N →
+              ∫⁻ (u : Fin k → ℝ × ℝ) in Metric.closedBall 0 r,
+                  ENNReal.ofReal (Real.exp (-(c * N * VectorSLT.IdentityGroup.cubeSumSq u))) ≤
+                ENNReal.ofReal (C * N ^ (-↑k / 3))
+def VectorSLT.IdentityGroup.Cubes.CubeSumLower : ℕ → Prop :=
+fun k =>
+  ∀ (r c : ℝ),
+    0 < r →
+      0 < c →
+        ∃ C,
+          0 < C ∧
+            ∀ (N : ℝ),
+              1 ≤ N →
+                ENNReal.ofReal (C * N ^ (-↑k / 3)) ≤
+                  ∫⁻ (u : Fin k → ℝ × ℝ) in Metric.closedBall 0 r,
+                    ENNReal.ofReal (Real.exp (-(c * N * VectorSLT.IdentityGroup.cubeSumSq u)))
+def VectorSLT.IdentityGroup.Pairs.NonShearTarget : Matrix (Fin 2) (Fin 2) ℝ → Prop :=
+fun A => ∃ a v, (∀ (i j : Fin 2), A i j = a i * v j) ∧ a 0 ≠ 0 ∧ a 1 ≠ 0 ∧ v 0 * a 0 ^ 3 + v 1 * a 1 ^ 3 ≠ 0
+def VectorSLT.IdentityGroup.Pairs.grpPoly : (ℕ → Matrix (Fin 2) (Fin 2) ℝ) → ℕ → Fin 2 → MvPolynomial (Fin 2) ℝ :=
+fun B n k => VectorSLT.polyNet B n k - MvPolynomial.X k
+def VectorSLT.IdentityGroup.Pairs.grpErr : (ℕ → Matrix (Fin 2) (Fin 2) ℝ) →
+  (n : ℕ) → Fin 2 → VectorSLT.PolyBox (3 ^ n) :=
+fun B n k => VectorSLT.PolyBox.mk (VectorSLT.IdentityGroup.Pairs.grpPoly B n k) ⋯
+def VectorSLT.IdentityGroup.Pairs.grpBlocks : {n : ℕ} → (Fin n → Fin 2 → Fin 2 → ℝ) → ℕ → Matrix (Fin 2) (Fin 2) ℝ :=
+fun {n} W i => if h : i < n then Matrix.of (W ⟨i, h⟩) else 0
+def VectorSLT.IdentityGroup.Pairs.grpJ : {n : ℕ} → (Fin n → Fin 2 → Fin 2 → ℝ) → ℝ :=
+fun {n} W => ∑ k, ‖VectorSLT.IdentityGroup.Pairs.grpErr (VectorSLT.IdentityGroup.Pairs.grpBlocks W) n k‖ ^ 2
 @VectorSLT.mainTheorem_shear : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -622,6 +660,196 @@ VectorSLT.X4_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ �
             ENNReal.ofReal (∏ i, x i ^ h i))
           fun x => ∏ i, x i ^ (2 * k i))
         (VectorSLT.SLT.ncLam k h) (VectorSLT.SLT.ncMult k h)
+VectorSLT.X5_upper : ∃ η₀ r,
+  0 < η₀ ∧
+    0 < r ∧
+      ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+        (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+          ∀ {lo hi : Fin 2 → ℝ},
+            (∀ (i : Fin 2), lo i < hi i) →
+              ∀ {μ₀ : ℝ},
+                0 < μ₀ →
+                  ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                      0 ≤ π₁ →
+                        (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                          (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                            (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                              ∃ C N₀,
+                                ∀ (η : ℝ),
+                                  |η| ≤ η₀ →
+                                    ∀ (N : ℝ),
+                                      N₀ ≤ N →
+                                        VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N ≤
+                                          ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.X5_upper_two : ∃ η₀ r,
+  0 < η₀ ∧
+    0 < r ∧
+      ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+        (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+          ∀ {lo hi : Fin 2 → ℝ},
+            (∀ (i : Fin 2), lo i < hi i) →
+              ∀ {μ₀ : ℝ},
+                0 < μ₀ →
+                  ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                      0 ≤ π₁ →
+                        (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                          (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                            (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                              ∃ C,
+                                ∀ (η : ℝ),
+                                  |η| ≤ η₀ →
+                                    ∀ (N : ℝ),
+                                      2 ≤ N →
+                                        VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N ≤
+                                          ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.X5_upper_gaussian : ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+  0 ≤ π₁ →
+    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+        (∀ (θ : VectorSLT.Raw16), 1 / 400 < ‖θ‖ → χ θ = 0) →
+          ∃ C,
+            ∀ (η : ℝ),
+              |η| ≤ 1 / 200 →
+                ∀ (N : ℝ),
+                  2 ≤ N →
+                    VectorSLT.Zpos VectorSLT.stdGauss2 (VectorSLT.Aeta η) φ χ 0 N ≤
+                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.X5_upper_explicit : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∀ {π₁ : ℝ},
+                0 ≤ π₁ →
+                  ∃ C N₀,
+                    ∀ (η : ℝ),
+                      |η| ≤ 1 / 200 →
+                        ∀ (φ χ : VectorSLT.Raw16 → ENNReal),
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), 1 / 400 < ‖θ‖ → χ θ = 0) →
+                                ∀ (N : ℝ),
+                                  N₀ ≤ N →
+                                    VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N ≤
+                                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.X5_upper_explicit_two : ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+  (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+    ∀ {lo hi : Fin 2 → ℝ},
+      (∀ (i : Fin 2), lo i < hi i) →
+        ∀ {μ₀ : ℝ},
+          0 < μ₀ →
+            ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+              ∀ {π₁ : ℝ},
+                0 ≤ π₁ →
+                  ∃ C,
+                    ∀ (η : ℝ),
+                      |η| ≤ 1 / 200 →
+                        ∀ (φ χ : VectorSLT.Raw16 → ENNReal),
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), 1 / 400 < ‖θ‖ → χ θ = 0) →
+                                ∀ (N : ℝ),
+                                  2 ≤ N →
+                                    VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N ≤
+                                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.IdentityGroup.cubeSumUpper_one : VectorSLT.IdentityGroup.CubeSumUpper 1
+VectorSLT.IdentityGroup.cubeSumUpper_two : VectorSLT.IdentityGroup.CubeSumUpper 2
+VectorSLT.IdentityGroup.cubeSumUpper_three : VectorSLT.IdentityGroup.CubeSumUpper 3
+VectorSLT.IdentityGroup.cubeSumLower : ∀ (k : ℕ), VectorSLT.IdentityGroup.Cubes.CubeSumLower k
+@VectorSLT.IdentityGroup.prop_nonshear_upper : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.IdentityGroup.Pairs.NonShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                        0 ≤ π₁ →
+                          (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                            (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                              (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                ∃ C N₀, ∀ (N : ℝ), N₀ ≤ N → VectorSLT.Zpos μ A φ χ 0 N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)
+@VectorSLT.IdentityGroup.prop_nonshear_pair : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.IdentityGroup.Pairs.NonShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 0) 4 1
+@VectorSLT.IdentityGroup.thm_invertible_upper : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 →
+    ∀ (p : Fin 4),
+      ∃ r,
+        0 < r ∧
+          ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+            (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+              ∀ {lo hi : Fin 2 → ℝ},
+                (∀ (i : Fin 2), lo i < hi i) →
+                  ∀ {μ₀ : ℝ},
+                    0 < μ₀ →
+                      ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                          0 ≤ π₁ →
+                            (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                              (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                  ∃ C N₀, ∀ (N : ℝ), N₀ ≤ N → VectorSLT.Zpos μ A φ χ p N ≤ ENNReal.ofReal (C * N⁻¹ ^ 4)
+@VectorSLT.IdentityGroup.thm_invertible_pair : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 →
+    ∀ (p : Fin 4),
+      ∃ r,
+        0 < r ∧
+          ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+            (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+              ∀ {lo hi : Fin 2 → ℝ},
+                (∀ (i : Fin 2), lo i < hi i) →
+                  ∀ {μ₀ : ℝ},
+                    0 < μ₀ →
+                      ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                          0 < φ₀ →
+                            0 < χ₀ →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                  0 ≤ π₁ →
+                                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                          VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ p) 4 1
+@VectorSLT.IdentityGroup.lem_Abox_upper : ∀ {n : ℕ},
+  1 ≤ n →
+    n ≤ 3 →
+      ∀ {r c : ℝ},
+        0 < r →
+          0 < c →
+            ∃ C,
+              ∀ (N : ℝ),
+                1 ≤ N →
+                  ∫⁻ (W : Fin n → Fin 2 → Fin 2 → ℝ) in Metric.closedBall 0 r,
+                      ENNReal.ofReal (Real.exp (-(c * N * VectorSLT.IdentityGroup.Pairs.grpJ W))) ≤
+                    ENNReal.ofReal (C * N ^ (-(2 * ↑n) / 3))
 @VectorSLT.vector_shear_main_theorem : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A →
     ∃ r,
@@ -834,6 +1062,95 @@ VectorSLT.vector_near_shear_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → EN
 @VectorSLT.vector_shear_normal_form : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
   VectorSLT.ShearTarget A → ∃ d b, (∀ (i : Fin 2), d i ≠ 0) ∧ VectorSLT.actW d b A = VectorSLT.A0
 @VectorSLT.vector_E0_bordered_det : ∀ {n : ℕ} (a : Fin n → ℝ), -(VectorSLT.bordered a).det = (∏ i, a i) * ∑ i, a i ^ 3
+VectorSLT.vector_near_shear_upper : ∃ η₀ r,
+  0 < η₀ ∧
+    0 < r ∧
+      ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+        (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+          ∀ {lo hi : Fin 2 → ℝ},
+            (∀ (i : Fin 2), lo i < hi i) →
+              ∀ {μ₀ : ℝ},
+                0 < μ₀ →
+                  ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                    ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+                      0 ≤ π₁ →
+                        (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                          (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                            (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                              ∃ C,
+                                ∀ (η : ℝ),
+                                  |η| ≤ η₀ →
+                                    ∀ (N : ℝ),
+                                      2 ≤ N →
+                                        VectorSLT.Zpos μ (VectorSLT.Aeta η) φ χ 0 N ≤
+                                          ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+VectorSLT.vector_near_shear_upper_gaussian : ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {π₁ : ℝ},
+  0 ≤ π₁ →
+    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+        (∀ (θ : VectorSLT.Raw16), 1 / 400 < ‖θ‖ → χ θ = 0) →
+          ∃ C,
+            ∀ (η : ℝ),
+              |η| ≤ 1 / 200 →
+                ∀ (N : ℝ),
+                  2 ≤ N →
+                    VectorSLT.Zpos VectorSLT.stdGauss2 (VectorSLT.Aeta η) φ χ 0 N ≤
+                      ENNReal.ofReal (C * N⁻¹ ^ 4 * Real.log N ^ 4)
+@VectorSLT.vector_nonshear_pair : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  VectorSLT.IdentityGroup.Pairs.NonShearTarget A →
+    ∃ r,
+      0 < r ∧
+        ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+          (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+            ∀ {lo hi : Fin 2 → ℝ},
+              (∀ (i : Fin 2), lo i < hi i) →
+                ∀ {μ₀ : ℝ},
+                  0 < μ₀ →
+                    ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                      ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                        0 < φ₀ →
+                          0 < χ₀ →
+                            (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A 0), ENNReal.ofReal φ₀ ≤ φ θ) →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                0 ≤ π₁ →
+                                  (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                    (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                      (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                        VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ 0) 4 1
+@VectorSLT.vector_invertible_pair : ∀ {A : Matrix (Fin 2) (Fin 2) ℝ},
+  A.det ≠ 0 →
+    ∀ (p : Fin 4),
+      ∃ r,
+        0 < r ∧
+          ∀ (μ : MeasureTheory.Measure (Fin 2 → ℝ)) [MeasureTheory.IsFiniteMeasure μ],
+            (∀ (i : Fin 2), MeasureTheory.Integrable (fun x => |x i| ^ (2 * 81)) μ) →
+              ∀ {lo hi : Fin 2 → ℝ},
+                (∀ (i : Fin 2), lo i < hi i) →
+                  ∀ {μ₀ : ℝ},
+                    0 < μ₀ →
+                      ENNReal.ofReal μ₀ • MeasureTheory.volume.restrict (VectorSLT.cbox lo hi) ≤ μ →
+                        ∀ (φ χ : VectorSLT.Raw16 → ENNReal) {φ₀ χ₀ π₁ : ℝ},
+                          0 < φ₀ →
+                            0 < χ₀ →
+                              (∀ᶠ (θ : VectorSLT.Raw16) in nhds (VectorSLT.basePos A p), ENNReal.ofReal φ₀ ≤ φ θ) →
+                                (∀ᶠ (θ : VectorSLT.Raw16) in nhds 0, ENNReal.ofReal χ₀ ≤ χ θ) →
+                                  0 ≤ π₁ →
+                                    (∀ (θ : VectorSLT.Raw16), φ θ ≤ ENNReal.ofReal π₁) →
+                                      (∀ (θ : VectorSLT.Raw16), χ θ ≤ 1) →
+                                        (∀ (θ : VectorSLT.Raw16), r < ‖θ‖ → χ θ = 0) →
+                                          VectorSLT.SLT.HasLaplacePair (VectorSLT.Zpos μ A φ χ p) 4 1
+@VectorSLT.vector_identity_group_upper : ∀ {n : ℕ},
+  1 ≤ n →
+    n ≤ 3 →
+      ∀ {r c : ℝ},
+        0 < r →
+          0 < c →
+            ∃ C,
+              ∀ (N : ℝ),
+                1 ≤ N →
+                  ∫⁻ (W : Fin n → Fin 2 → Fin 2 → ℝ) in Metric.closedBall 0 r,
+                      ENNReal.ofReal (Real.exp (-(c * N * VectorSLT.IdentityGroup.Pairs.grpJ W))) ≤
+                    ENNReal.ofReal (C * N ^ (-(2 * ↑n) / 3))
 'VectorSLT.mainTheorem_shear' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.mainTheorem_shear_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.mainTheorem_shear_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -884,6 +1201,20 @@ VectorSLT.vector_near_shear_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → EN
 'VectorSLT.SLT.HasLaplacePair.prod' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.SLT.monomial_hasLaplacePair' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.SLT.normalCrossing_Z' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X5_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X5_upper_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X5_upper_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X5_upper_explicit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.X5_upper_explicit_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.cubeSumUpper_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.cubeSumUpper_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.cubeSumUpper_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.cubeSumLower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.prop_nonshear_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.prop_nonshear_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.thm_invertible_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.thm_invertible_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.IdentityGroup.lem_Abox_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_main_theorem_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -897,3 +1228,8 @@ VectorSLT.vector_near_shear_lower_gaussian : ∀ (φ χ : VectorSLT.Raw16 → EN
 'VectorSLT.vector_near_shear_normal_form' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_shear_normal_form' depends on axioms: [propext, Classical.choice, Quot.sound]
 'VectorSLT.vector_E0_bordered_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_near_shear_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_near_shear_upper_gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_nonshear_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_invertible_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VectorSLT.vector_identity_group_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
