@@ -253,4 +253,29 @@ theorem net_expansion_four (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
       (fun ε => by ring) fun ε => by ring
   exact (net_expansion A Δ p V x k).trans h
 
+/-- A term `ε³ c` that is `O(ε⁴)` at `0` has `c = 0`. -/
+theorem coeff_eq_zero_of_isBigO {c : ℝ}
+    (h : (fun ε : ℝ => ε ^ 3 * c) =O[𝓝 0] fun ε : ℝ => ε ^ 4) : c = 0 := by
+  by_contra hc
+  have h1 : (fun ε : ℝ => ε ^ 3) =O[𝓝 0] fun ε : ℝ => ε ^ 4 :=
+    (h.const_mul_left c⁻¹).congr_left fun ε => by field_simp
+  have h2 : (fun ε : ℝ => ε ^ 3) =o[𝓝 0] fun ε : ℝ => ε ^ 3 :=
+    h1.trans_isLittleO (isLittleO_pow_pow (by norm_num))
+  refine isLittleO_irrefl ?_ h2
+  rw [Filter.frequently_iff]
+  intro U hU
+  obtain ⟨r, hr, hball⟩ := Metric.mem_nhds_iff.mp hU
+  refine ⟨r / 2, hball (by simp [abs_of_pos hr]; linarith), ?_⟩
+  simp [hr.ne']
+
+/-- **`lead` is the `ε³` coefficient**: any `L` with
+`net θ_ε x k - F_A(x)_k - ε³ L = O(ε⁴)` equals `lead A p Δ V x k`. -/
+theorem lead_unique (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
+    (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2) {L : ℝ}
+    (h : (fun ε => net (thetaEps A Δ p V ε) x k - layer A x k - ε ^ 3 * L)
+      =O[𝓝 0] fun ε : ℝ => ε ^ 4) : L = lead A p Δ V x k := by
+  have h0 := coeff_eq_zero_of_isBigO (c := L - lead A p Δ V x k)
+    (((net_expansion_four A Δ p V x k).sub h).congr_left fun ε => by ring)
+  linarith
+
 end VectorSLT.LeadingMap

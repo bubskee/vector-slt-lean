@@ -28,6 +28,14 @@ theorem leading_expansion (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
       =O[𝓝 0] fun ε : ℝ => ε ^ 6 :=
   net_expansion A Δ p V x k
 
+/-- **Uniqueness of the `ε³` coefficient**: if `net θ_ε x k - F_A(x)_k - ε³ L = O(ε⁴)` then
+`L = lead A p Δ V x k`. -/
+theorem leading_term_unique (A Δ : Matrix (Fin 2) (Fin 2) ℝ) (p : Fin 4)
+    (V : Fin 3 → Matrix (Fin 2) (Fin 2) ℝ) (x : Fin 2 → ℝ) (k : Fin 2) {L : ℝ}
+    (h : (fun ε => net (thetaEps A Δ p V ε) x k - layer A x k - ε ^ 3 * L)
+      =O[𝓝 0] fun ε : ℝ => ε ^ 4) : L = lead A p Δ V x k :=
+  lead_unique A Δ p V x k h
+
 /-- **Proposition N1** (derived): for `A₀`, row `k` of the leading term is the N1 table
 polynomial in `s = x₀ - x₁`, `t = x₁`. -/
 theorem prop_N1_table (p : Fin 4) (Δ : Matrix (Fin 2) (Fin 2) ℝ)

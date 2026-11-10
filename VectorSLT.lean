@@ -42,4 +42,5 @@ import VectorSLT.EtaLower
 import VectorSLT.EtaPopulation
 import VectorSLT.EtaUpper
 import VectorSLT.IdentityGroup.Unconditional
+import VectorSLT.LeadingMap
 import VectorSLT.PaperNames

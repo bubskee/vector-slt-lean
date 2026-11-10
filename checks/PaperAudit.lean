@@ -31,6 +31,35 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print VectorSLT.IdentityGroup.Pairs.grpErr
 #print VectorSLT.IdentityGroup.Pairs.grpBlocks
 #print VectorSLT.IdentityGroup.Pairs.grpJ
+#print VectorSLT.LeadingMap.thetaEps
+#print VectorSLT.LeadingMap.scaledBlocks
+#print VectorSLT.LeadingMap.lead
+#print VectorSLT.LeadingMap.dLayer
+#print VectorSLT.LeadingMap.Spre
+#print VectorSLT.LeadingMap.Ssuf
+#print VectorSLT.LeadingMap.pre
+#print VectorSLT.LeadingMap.suf
+#print VectorSLT.LeadingMap.rowForm
+#print VectorSLT.LeadingMap.mom
+#print VectorSLT.LeadingMap.momD
+#print VectorSLT.LeadingMap.poly11
+#print VectorSLT.LeadingMap.n1Coeff
+#print VectorSLT.LeadingMap.cube
+#print VectorSLT.LeadingMap.twoCube
+#print VectorSLT.LeadingMap.rowCubic
+#print VectorSLT.LeadingMap.leadingMap
+#print VectorSLT.LeadingMap.generators
+#print VectorSLT.LeadingMap.R2
+#print VectorSLT.LeadingMap.R3
+#print VectorSLT.LeadingMap.w2
+#print VectorSLT.LeadingMap.w3
+#print VectorSLT.LeadingMap.w4
+#print VectorSLT.LeadingMap.activeLin
+#print VectorSLT.LeadingMap.activeCoords
+#print VectorSLT.LeadingMap.coeffMid
+#print VectorSLT.LeadingMap.LamMid
+#print VectorSLT.LeadingMap.coeffFour
+#print VectorSLT.LeadingMap.LamFour
 
 -- Principal declarations
 #check @VectorSLT.mainTheorem_shear
@@ -97,6 +126,15 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #check @VectorSLT.IdentityGroup.thm_invertible_upper
 #check @VectorSLT.IdentityGroup.thm_invertible_pair
 #check @VectorSLT.IdentityGroup.lem_Abox_upper
+#check @VectorSLT.LeadingMap.leading_expansion
+#check @VectorSLT.LeadingMap.leading_term_unique
+#check @VectorSLT.LeadingMap.prop_N1_table
+#check @VectorSLT.LeadingMap.lemma_N3_position_two
+#check @VectorSLT.LeadingMap.lemma_N3_position_three
+#check @VectorSLT.LeadingMap.eq_KR_position_four
+#check @VectorSLT.LeadingMap.lead_A0_eq_zero_iff
+#check @VectorSLT.LeadingMap.net_expansion_four
+#check @VectorSLT.LeadingMap.activeCoords_eq
 
 -- Paper-facing aliases (R3)
 #check @VectorSLT.vector_shear_main_theorem
@@ -183,6 +221,15 @@ paper-facing alias, and `#print axioms` for each. Run from the repository root w
 #print axioms VectorSLT.IdentityGroup.thm_invertible_upper
 #print axioms VectorSLT.IdentityGroup.thm_invertible_pair
 #print axioms VectorSLT.IdentityGroup.lem_Abox_upper
+#print axioms VectorSLT.LeadingMap.leading_expansion
+#print axioms VectorSLT.LeadingMap.leading_term_unique
+#print axioms VectorSLT.LeadingMap.prop_N1_table
+#print axioms VectorSLT.LeadingMap.lemma_N3_position_two
+#print axioms VectorSLT.LeadingMap.lemma_N3_position_three
+#print axioms VectorSLT.LeadingMap.eq_KR_position_four
+#print axioms VectorSLT.LeadingMap.lead_A0_eq_zero_iff
+#print axioms VectorSLT.LeadingMap.net_expansion_four
+#print axioms VectorSLT.LeadingMap.activeCoords_eq
 #print axioms VectorSLT.vector_shear_main_theorem
 #print axioms VectorSLT.vector_shear_main_theorem_ratio
 #print axioms VectorSLT.vector_shear_main_theorem_gaussian
