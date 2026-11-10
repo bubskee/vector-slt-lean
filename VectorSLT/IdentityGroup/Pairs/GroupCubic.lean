@@ -155,36 +155,41 @@ theorem cubeSumSq_le_rays {n : ℕ} (u : Fin n → ℝ × ℝ) :
 def grpRow (B : ℕ → Matrix (Fin 2) (Fin 2) ℝ) (n : ℕ) (k : Fin 2) : Fin n → ℝ × ℝ :=
   fun i => (B i k 0, B i k 1)
 
+/-- **Moments from ray cubics.** If the cubic coefficient of `p ∈ PolyBox d` along every ray `y`
+is `∑ᵢ ((uᵢ)₁ y₀ + (uᵢ)₂ y₁)³`, then `G(u) ≤ C ‖p‖²`, with `C` depending only on `d`. -/
+theorem cubeSumSq_le_of_rayCub (d n : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (u : Fin n → ℝ × ℝ) (p : PolyBox d),
+      (∀ y : Fin 2 → ℝ, rayCub d y p = ∑ i, ((u i).1 * y 0 + (u i).2 * y 1) ^ 3) →
+      cubeSumSq u ≤ C * ‖p‖ ^ 2 := by
+  obtain ⟨C1, hC1, h1⟩ := rayCub_bound d ![1, 0]
+  obtain ⟨C2, hC2, h2⟩ := rayCub_bound d ![0, 1]
+  obtain ⟨C3, hC3, h3⟩ := rayCub_bound d ![1, 1]
+  obtain ⟨C4, hC4, h4⟩ := rayCub_bound d ![1, -1]
+  refine ⟨2 * (C1 ^ 2 + C2 ^ 2 + C3 ^ 2 + C4 ^ 2), by positivity, fun u p hS => ?_⟩
+  have sq_le : ∀ (a C : ℝ), |a| ≤ C * ‖p‖ → 0 ≤ C → a ^ 2 ≤ C ^ 2 * ‖p‖ ^ 2 := by
+    intro a C h hC
+    have := pow_le_pow_left₀ (abs_nonneg a) h 2
+    rw [sq_abs, mul_pow] at this; exact this
+  have e1 := sq_le _ _ (h1 p) hC1
+  have e2 := sq_le _ _ (h2 p) hC2
+  have e3 := sq_le _ _ (h3 p) hC3
+  have e4 := sq_le _ _ (h4 p) hC4
+  rw [hS] at e1 e2 e3 e4
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
+    mul_one, mul_zero, add_zero, zero_add, mul_neg] at e1 e2 e3 e4
+  refine (cubeSumSq_le_rays _).trans ?_
+  simp only [← sub_eq_add_neg] at e4
+  nlinarith [e1, e2, e3, e4]
+
 /-- **Lemma A-box, upper half, algebraic part.** The squared sup norm of the group error of
 output `k` dominates the squared moment norm `G_n` of that row's sum of binary cubes:
 `G_n(B₀ k, …, B_{n-1} k) ≤ C ‖F_{B_{n-1}} ∘ ⋯ ∘ F_{B₀} - I‖²_k`, with `C` depending only on `n`. -/
 theorem cubeSumSq_le_grpErr (n : ℕ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ (B : ℕ → Matrix (Fin 2) (Fin 2) ℝ) (k : Fin 2),
       cubeSumSq (grpRow B n k) ≤ C * ‖grpErr B n k‖ ^ 2 := by
-  obtain ⟨C1, hC1, h1⟩ := rayCub_bound (3 ^ n) ![1, 0]
-  obtain ⟨C2, hC2, h2⟩ := rayCub_bound (3 ^ n) ![0, 1]
-  obtain ⟨C3, hC3, h3⟩ := rayCub_bound (3 ^ n) ![1, 1]
-  obtain ⟨C4, hC4, h4⟩ := rayCub_bound (3 ^ n) ![1, -1]
-  refine ⟨2 * (C1 ^ 2 + C2 ^ 2 + C3 ^ 2 + C4 ^ 2), by positivity, fun B k => ?_⟩
-  have hS : ∀ y : Fin 2 → ℝ, ∑ i ∈ range n, (B i k ⬝ᵥ y) ^ 3 =
-      ∑ i : Fin n, ((grpRow B n k i).1 * y 0 + (grpRow B n k i).2 * y 1) ^ 3 := by
-    intro y
-    rw [← Fin.sum_univ_eq_sum_range (fun i => (B i k ⬝ᵥ y) ^ 3)]
-    simp [grpRow, dotProduct, Fin.sum_univ_two]
-  have sq_le : ∀ (a C : ℝ) (p : PolyBox (3 ^ n)), |a| ≤ C * ‖p‖ → 0 ≤ C →
-      a ^ 2 ≤ C ^ 2 * ‖p‖ ^ 2 := by
-    intro a C p h hC
-    have := pow_le_pow_left₀ (abs_nonneg a) h 2
-    rw [sq_abs, mul_pow] at this; exact this
-  have e1 := sq_le _ _ _ (h1 (grpErr B n k)) hC1
-  have e2 := sq_le _ _ _ (h2 (grpErr B n k)) hC2
-  have e3 := sq_le _ _ _ (h3 (grpErr B n k)) hC3
-  have e4 := sq_le _ _ _ (h4 (grpErr B n k)) hC4
-  rw [rayCub_grpErr, hS] at e1 e2 e3 e4
-  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
-    mul_one, mul_zero, add_zero, zero_add, mul_neg] at e1 e2 e3 e4
-  refine (cubeSumSq_le_rays _).trans ?_
-  simp only [← sub_eq_add_neg] at e4
-  nlinarith [e1, e2, e3, e4]
+  obtain ⟨C, hC, h⟩ := cubeSumSq_le_of_rayCub (3 ^ n) n
+  refine ⟨C, hC, fun B k => h _ _ fun y => ?_⟩
+  rw [rayCub_grpErr, ← Fin.sum_univ_eq_sum_range (fun i => (B i k ⬝ᵥ y) ^ 3)]
+  simp [grpRow, dotProduct, Fin.sum_univ_two]
 
 end VectorSLT.IdentityGroup.Pairs
