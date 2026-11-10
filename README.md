@@ -86,12 +86,16 @@ Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 | Theorem "invertible active blocks", depth four: pair (4,1) at every position, `det A ≠ 0` | `thm_invertible_pair` (`vector_invertible_pair`), `thm_invertible_upper` | certified |
 | Theorem "invertible active blocks", depth five | — | not formalized |
 | Proposition "non-shear rank one": pair (4,1) at position one, `A = a vᵀ`, `a₀ a₁ ≠ 0`, `v · a^{⊙3} ≠ 0` | `prop_nonshear_pair` (`vector_nonshear_pair`), `prop_nonshear_upper` | certified |
-| Lemma A-cubes, upper half, `k ≤ 3`: `∫_{‖u‖ ≤ r} e^{−cN G_k} ≤ C N^{−k/3}` | `cubeSumUpper_one`, `cubeSumUpper_two`, `cubeSumUpper_three` | certified (lower half for every `k`: `cubeSumLower`; four cubes not formalized) |
-| Lemma A-box, upper half, groups of `n ≤ 3` blocks: `∫_{‖W‖ ≤ r} e^{−cN J_n} ≤ C N^{−2n/3}` | `lem_Abox_upper` (`vector_identity_group_upper`) | certified (lower half and `n = 4` not formalized) |
+| Lemma A-cubes, upper half, `k ≤ 3`: `∫_{‖u‖ ≤ r} e^{−cN G_k} ≤ C N^{−k/3}` | `cubeSumUpper_one`, `cubeSumUpper_two`, `cubeSumUpper_three` | certified |
+| Lemma A-cubes, lower half, every `k` | `cubeSumLower` | certified |
+| Lemma A-cubes, upper half, `k = 4` | — | not formalized |
+| Lemma A-box, upper half, groups of `1 ≤ n ≤ 3` blocks: `∫_{‖W‖ ≤ r} e^{−cN J_n} ≤ C N^{−2n/3}` | `lem_Abox_upper` (`vector_identity_group_upper`) | certified |
+| Lemma A-box, lower half; groups of four blocks | — | not formalized |
 | E₀ identity | `bordered_det`, `null_direction` | certified |
 | X1 normal form (`β₀ > 0`), X2 coefficients | `normalize_Aeta`, `errPη_coeff_ne3`, `errPη_c2` | certified (the `β₀ < 0` swap is not formalized) |
 | X4: `Z_N(A_η) ≥ c N⁻⁴ (1 + 𝓛_η(N))⁴`, uniform in `\|η\| ≤ 1/10` | `X4_lower_population`, `X4_lower_gaussian` | certified |
-| X5: `Z_N(A_η) ≤ C N⁻⁴ (log N)⁴` for `\|η\| ≤ 1/200`, `N ≥ 2`, `C` chosen before `η`, cutoff radius `1/400` | `X5_upper_two` (`vector_near_shear_upper`), `X5_upper`, `X5_upper_gaussian` | certified (transfer to general near-shear targets not formalized) |
+| X5: `Z_N(A_η) ≤ C N⁻⁴ (log N)⁴` for `\|η\| ≤ 1/200`, `N ≥ 2`, `C` chosen before `η`, cutoff radius `1/400` | `X5_upper_two` (`vector_near_shear_upper`), `X5_upper`, `X5_upper_gaussian` | certified |
+| X5 for general rank-one targets near a shear (transfer through `normalize_Aeta`) | — | not formalized |
 | X6 | — | not formalized |
 | Theorems K and N | enter only as `ThmK`/`ThmKUpper` and `ThmN` | not formalized |
 | Anything at depth five | — | not formalized |
@@ -100,3 +104,7 @@ Lean positions `p = 0, 1, 2, 3` are the paper's positions 1–4.
 `ThmK`, `ThmKUpper` and `ThmN` enter only as hypotheses. Each states the paper's bound on the common footing of `Separation.lean` (`Zpos`, `popLossA`, `φ · χ(θ − θ₀⁽ᵖ⁾)`), and none is proved here.
 
 Every declaration in `VectorSLT/Audit.lean` (594) and `checks/PaperAudit.lean` (82) depends only on `propext`, `Classical.choice` and `Quot.sound`: all three, except `IdentityGroup.Pairs.inact`, which depends on `propext` alone.
+
+## License
+
+The code is released under the Apache License 2.0 (see `LICENSE`), the licence mathlib uses.
